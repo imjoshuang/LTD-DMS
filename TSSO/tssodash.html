@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lancaster DMS - My Requests</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Oswald', sans-serif; }
+        .bg-maroon-ltd { background-color: #600000; }
+        .text-maroon-ltd { color: #600000; }
+        .bg-gold-ltd { background-color: #C19A6B; }
+        .text-gold-ltd { color: #C19A6B; }
+        .border-gold-ltd { border-color: #C19A6B; }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #C19A6B; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-gray-50 flex min-h-screen">
+
+    <aside class="w-64 bg-maroon-ltd text-white flex flex-col p-4 shadow-2xl shrink-0">
+        <div class="flex items-center gap-3 px-3 py-5 border-b border-white/10 mb-8">
+            <img src="../photos/gold.png" alt="LTD Logo" class="w-10 h-10 object-contain">
+            <div>
+                <h1 class="font-bold text-xl tracking-wide text-white uppercase leading-none">LANCASTER</h1>
+                <p class="text-[9px] uppercase tracking-[0.2em] text-white/60">Technology & Development</p>
+            </div>
+        </div>
+
+        <nav class="flex-grow space-y-2">
+            <a href="#" id="navRequests" class="nav-link flex items-center gap-4 px-5 py-3 rounded-xl bg-white/10 text-white font-medium tracking-wide">
+                <svg class="w-5 h-5 text-gold-ltd" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                MY REQUESTS
+            </a>
+            <a href="#" id="navNewSubmission" class="nav-link flex items-center gap-4 px-5 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-all tracking-wide">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"></path></svg>
+                NEW SUBMISSION
+            </a>
+            <a href="#" class="flex items-center gap-4 px-5 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-all tracking-wide">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                REVISION HISTORY
+            </a>
+            <a href="#" class="flex items-center gap-4 px-5 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-all tracking-wide">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                NOTIFICATIONS
+            </a>
+        </nav>
+
+        <div class="mt-auto border-t border-white/10 pt-4">
+            <button class="w-full flex items-center gap-4 px-5 py-3 rounded-xl text-white/60 hover:bg-red-900/50 hover:text-white transition-all tracking-widest text-xs font-bold uppercase">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                LOGOUT
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        
+        <header class="bg-white border-b border-gray-100 px-8 py-5 flex items-center justify-between">
+            <h2 id="pageTitle" class="text-3xl font-bold tracking-tight text-gray-900 uppercase">MY REQUESTS</h2>
+            <div class="flex items-center gap-4">
+                <div class="text-right">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase leading-none">Requestor:</p>
+                    <p class="text-xs font-bold text-gray-900 uppercase">MARIA REYES</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-maroon-ltd text-white font-bold flex items-center justify-center border-2 border-gold-ltd shadow-md">MR</div>
+            </div>
+        </header>
+
+        <div id="mainContent" class="flex-1 overflow-y-auto p-8 space-y-8 bg-gray-50/50">
+            
+            <div id="dashboardSection" class="space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="bg-maroon-ltd p-6 rounded-3xl shadow-lg relative overflow-hidden flex flex-col justify-between h-32">
+                        <p class="text-white text-[10px] font-bold tracking-widest uppercase">Submit New Document</p>
+                        <div class="flex items-center gap-3">
+                            <div class="bg-white/20 p-2 rounded-lg text-white font-bold text-2xl">+</div>
+                            <button class="bg-gold-ltd text-white px-4 py-1.5 rounded-lg text-[10px] font-bold tracking-widest uppercase shadow-inner">Upload Document (v1)</button>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-5">
+                        <div class="p-3 bg-red-50 text-maroon-ltd rounded-2xl"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></div>
+                        <div>
+                            <p class="text-[10px] font-bold text-gray-400 tracking-widest uppercase leading-none">Active Requests</p>
+                            <p class="text-3xl font-bold">2</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-5">
+                        <div class="p-3 bg-orange-50 text-gold-ltd rounded-2xl"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></div>
+                        <div>
+                            <p class="text-[10px] font-bold text-gray-400 tracking-widest uppercase leading-none">Drafts</p>
+                            <p class="text-3xl font-bold">3</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-5 relative">
+                        <div class="p-3 bg-yellow-50 text-yellow-600 rounded-2xl"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg></div>
+                        <div>
+                            <p class="text-[10px] font-bold text-gray-400 tracking-widest uppercase leading-none">Notifications (New)</p>
+                            <p class="text-3xl font-bold">1</p>
+                        </div>
+                        <span class="absolute top-4 right-6 w-5 h-5 bg-gold-ltd text-white rounded-full text-[10px] font-bold flex items-center justify-center">1</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <div class="lg:col-span-2 space-y-8">
+                        <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
+                            <div class="flex justify-between items-start mb-10">
+                                <div>
+                                    <h3 class="text-xl font-bold tracking-wide uppercase">Submission & Version Tracker</h3>
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Real-time visual progress bar tracker.</p>
+                                </div>
+                                <div class="w-48">
+                                    <p class="text-[9px] font-bold text-gray-400 uppercase mb-1 ml-1">Request ID</p>
+                                    <select class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold focus:ring-1 focus:ring-gold-ltd outline-none transition-all">
+                                        <option>Select REQUEST ID</option>
+                                        <option>#1023 (Budget v2)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="relative py-12 px-4">
+                                <div class="absolute h-1 bg-gray-200 w-[90%] top-[60px] left-[5%] -z-0"></div>
+                                <div class="absolute h-1 bg-maroon-ltd w-[45%] top-[60px] left-[5%] -z-0"></div>
+                                
+                                <div class="relative flex justify-between">
+                                    <div class="flex flex-col items-center">
+                                        <div class="w-5 h-5 bg-maroon-ltd rounded-full border-4 border-white ring-1 ring-maroon-ltd"></div>
+                                        <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Submitted</span>
+                                    </div>
+                                    <div class="flex flex-col items-center">
+                                        <span class="bg-red-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-full mb-1">v2</span>
+                                        <div class="w-5 h-5 bg-red-600 rounded-full border-4 border-white ring-1 ring-red-600 animate-pulse"></div>
+                                        <span class="text-[10px] font-bold mt-2 uppercase tracking-tighter text-red-600">AGM Review</span>
+                                        <span class="text-[8px] font-bold text-gray-400 italic text-center w-24">Clarification required on Budget v2</span>
+                                    </div>
+                                    <div class="flex flex-col items-center opacity-100">
+                                        <span class="bg-green-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-full mb-1">v1</span>
+                                        <div class="w-5 h-5 bg-green-600 rounded-full border-4 border-white ring-1 ring-green-600"></div>
+                                        <span class="text-[10px] font-bold mt-2 uppercase tracking-tighter">AFD Review</span>
+                                    </div>
+                                    <div class="flex flex-col items-center opacity-30">
+                                        <div class="w-5 h-5 bg-gray-400 rounded-full border-4 border-white ring-1 ring-gray-400"></div>
+                                        <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Approved</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
+                            <h3 class="text-xl font-bold tracking-wide uppercase mb-6">Version History</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs">
+                                    <thead class="bg-gray-50 text-gray-400 border-b border-gray-100">
+                                        <tr>
+                                            <th class="px-6 py-4 font-bold uppercase tracking-widest">Version</th>
+                                            <th class="px-6 py-4 font-bold uppercase tracking-widest">Status</th>
+                                            <th class="px-6 py-4 font-bold uppercase tracking-widest">Date</th>
+                                            <th class="px-6 py-4 font-bold uppercase tracking-widest">Submitted By</th>
+                                            <th class="px-6 py-4 font-bold uppercase tracking-widest text-right">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-50">
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                                            <td class="px-6 py-4 font-bold">v1</td>
+                                            <td class="px-6 py-4"><span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full font-bold text-[9px] uppercase">Pending</span></td>
+                                            <td class="px-6 py-4 text-gray-500 font-medium">June 21, 2023</td>
+                                            <td class="px-6 py-4 text-gray-500 font-medium">Administrator</td>
+                                            <td class="px-6 py-4 text-right">
+                                                <a href="#" class="text-blue-600 font-bold hover:underline">View Feedback</a>
+                                                <span class="mx-2 text-gray-300">|</span>
+                                                <a href="#" class="text-blue-600 font-bold hover:underline">Edit</a>
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                                            <td class="px-6 py-4 font-bold">v2</td>
+                                            <td class="px-6 py-4"><span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full font-bold text-[9px] uppercase">Pending</span></td>
+                                            <td class="px-6 py-4 text-gray-500 font-medium">June 23, 2023</td>
+                                            <td class="px-6 py-4 text-gray-500 font-medium">Maria Reyes</td>
+                                            <td class="px-6 py-4 text-right">
+                                                <a href="#" class="text-blue-600 font-bold hover:underline">View Feedback</a>
+                                                <span class="mx-2 text-gray-300">|</span>
+                                                <a href="#" class="text-blue-600 font-bold hover:underline">Edit</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-8 shrink-0">
+                        <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
+                            <h3 class="text-lg font-bold tracking-wide uppercase mb-6 leading-none">Recent Submissions & Status</h3>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between gap-3 border-b border-gray-50 pb-3">
+                                    <span class="text-[9px] font-bold text-gray-300">#1023</span>
+                                    <p class="text-[10px] font-bold text-gray-700 truncate flex-1">Request #1023 (Budget v2)</p>
+                                    <span class="bg-gray-400 text-white text-[9px] px-3 py-1 rounded-full font-bold uppercase">Draft</span>
+                                </div>
+                                <div class="flex items-center justify-between gap-3 border-b border-gray-50 pb-3">
+                                    <span class="text-[9px] font-bold text-gray-300">#1023</span>
+                                    <p class="text-[10px] font-bold text-green-700 truncate flex-1">Request #1023 (Budget v1)</p>
+                                    <span class="bg-green-600 text-white text-[9px] px-3 py-1 rounded-full font-bold uppercase">Submitted</span>
+                                </div>
+                                <div class="flex items-center justify-between gap-3 border-b border-gray-50 pb-3">
+                                    <span class="text-[9px] font-bold text-gray-300">#1024</span>
+                                    <p class="text-[10px] font-bold text-orange-700 truncate flex-1">Pending AGM v2</p>
+                                    <span class="bg-orange-400 text-white text-[9px] px-3 py-1 rounded-full font-bold uppercase">Pending</span>
+                                </div>
+                                <div class="flex items-center justify-between gap-3">
+                                    <span class="text-[9px] font-bold text-gray-300">#1026</span>
+                                    <p class="text-[10px] font-bold text-green-700 truncate flex-1">Request #1023 (Approved)</p>
+                                    <span class="bg-green-600 text-white text-[9px] px-3 py-1 rounded-full font-bold uppercase">Approved</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-maroon-ltd p-8 rounded-[2.5rem] shadow-2xl shadow-maroon-ltd/30 text-white min-h-[300px]">
+                            <h3 class="text-lg font-bold tracking-widest uppercase mb-6 border-b border-white/10 pb-4">Notification Hub</h3>
+                            <div class="space-y-6">
+                                <div class="flex gap-4">
+                                    <div class="bg-gold-ltd/20 p-2 rounded-lg h-fit"><svg class="w-4 h-4 text-gold-ltd" fill="currentColor" viewBox="0 0 20 20"><path d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"></path></svg></div>
+                                    <div class="flex-1">
+                                        <p class="text-xs font-bold leading-tight mb-2 uppercase tracking-wide">Alert: AGM (CJ) has requested clarification on Request #1023 (Budget v2).</p>
+                                        <a href="#" class="text-[10px] font-bold text-gold-ltd hover:underline uppercase tracking-widest">Click to view</a>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4 opacity-70">
+                                    <div class="bg-white/10 p-2 rounded-lg h-fit"><svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"></path></svg></div>
+                                    <div class="flex-1">
+                                        <p class="text-xs font-bold leading-tight mb-2 uppercase tracking-wide">Alert: New Revision needed for Request #1020.</p>
+                                        <a href="#" class="text-[10px] font-bold text-gold-ltd hover:underline uppercase tracking-widest">Click to view</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TSSO New Submission Section -->
+            <div id="tssoSubmissionSection" class="hidden space-y-8">
+                <!-- Hero Upload Card -->
+                <div class="bg-[#4E0B0B] text-white p-8 rounded-2xl shadow-sm border border-maroon-ltd/20 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="flex items-center gap-6">
+                        <div class="p-4 bg-white/10 rounded-2xl backdrop-blur-md">
+                            <svg class="w-10 h-10 text-gold-ltd" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold tracking-tight uppercase">Upload Document (V1)</h3>
+                            <p class="text-white/60 text-sm tracking-wide">Ready to submit a new technical report? Drag and drop your files here.</p>
+                        </div>
+                    </div>
+                    <button class="bg-[#C29B6D] hover:bg-[#b08a5d] text-white px-10 py-4 rounded-xl font-bold text-xs tracking-[0.2em] transition-all shadow-lg flex items-center gap-3 group">
+                        START NEW SUBMISSION
+                        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                    <!-- Templates Grid -->
+                    <div class="lg:col-span-3 space-y-6">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-xl font-bold tracking-tight text-gray-900 uppercase">Available Templates</h4>
+                            <span class="text-[10px] font-bold text-gray-400 tracking-widest uppercase bg-gray-100 px-3 py-1 rounded-full">4 Forms Ready</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Technical Service Request -->
+                            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group">
+                                <div class="flex items-start justify-between mb-4">
+                                    <div class="p-3 bg-gray-50 rounded-xl group-hover:bg-maroon-ltd/5 transition-colors text-maroon-ltd">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                                    </div>
+                                    <span class="px-2 py-1 bg-red-50 text-red-600 text-[9px] font-bold rounded-lg uppercase">PDF</span>
+                                </div>
+                                <h5 class="font-bold text-gray-800 text-sm mb-1 uppercase tracking-tight">Technical Service Request</h5>
+                                <p class="text-[10px] text-gray-400 uppercase tracking-widest mb-4">Standard Service Protocol v2.1</p>
+                                <button class="w-full py-2.5 bg-[#C29B6D] hover:bg-[#b08a5d] text-white rounded-xl text-[10px] font-bold uppercase tracking-[0.15em] transition-colors">Use Template</button>
+                            </div>
+
+                            <!-- Equipment Maintenance Log -->
+                            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group">
+                                <div class="flex items-start justify-between mb-4">
+                                    <div class="p-3 bg-gray-50 rounded-xl group-hover:bg-maroon-ltd/5 transition-colors text-maroon-ltd">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+                                    </div>
+                                    <span class="px-2 py-1 bg-blue-50 text-blue-600 text-[9px] font-bold rounded-lg uppercase">DOCX</span>
+                                </div>
+                                <h5 class="font-bold text-gray-800 text-sm mb-1 uppercase tracking-tight">Equipment Maintenance Log</h5>
+                                <p class="text-[10px] text-gray-400 uppercase tracking-widest mb-4">Monthly Equipment Checklist</p>
+                                <button class="w-full py-2.5 bg-[#C29B6D] hover:bg-[#b08a5d] text-white rounded-xl text-[10px] font-bold uppercase tracking-[0.15em] transition-colors">Use Template</button>
+                            </div>
+
+                            <!-- System Access Form -->
+                            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group">
+                                <div class="flex items-start justify-between mb-4">
+                                    <div class="p-3 bg-gray-50 rounded-xl group-hover:bg-maroon-ltd/5 transition-colors text-maroon-ltd">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
+                                    </div>
+                                    <span class="px-2 py-1 bg-red-50 text-red-600 text-[9px] font-bold rounded-lg uppercase">PDF</span>
+                                </div>
+                                <h5 class="font-bold text-gray-800 text-sm mb-1 uppercase tracking-tight">System Access Form</h5>
+                                <p class="text-[10px] text-gray-400 uppercase tracking-widest mb-4">Privileged Account Request</p>
+                                <button class="w-full py-2.5 bg-[#C29B6D] hover:bg-[#b08a5d] text-white rounded-xl text-[10px] font-bold uppercase tracking-[0.15em] transition-colors">Use Template</button>
+                            </div>
+
+                            <!-- Incident Report -->
+                            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group">
+                                <div class="flex items-start justify-between mb-4">
+                                    <div class="p-3 bg-gray-50 rounded-xl group-hover:bg-maroon-ltd/5 transition-colors text-maroon-ltd">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                    </div>
+                                    <span class="px-2 py-1 bg-blue-50 text-blue-600 text-[9px] font-bold rounded-lg uppercase">DOCX</span>
+                                </div>
+                                <h5 class="font-bold text-gray-800 text-sm mb-1 uppercase tracking-tight">Incident Report</h5>
+                                <p class="text-[10px] text-gray-400 uppercase tracking-widest mb-4">Security & Technical Breach Log</p>
+                                <button class="w-full py-2.5 bg-[#C29B6D] hover:bg-[#b08a5d] text-white rounded-xl text-[10px] font-bold uppercase tracking-[0.15em] transition-colors">Use Template</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar: My Draft Submissions -->
+                    <div class="lg:col-span-1 space-y-6">
+                        <h4 class="text-lg font-bold tracking-tight text-gray-900 uppercase">My Draft Submissions</h4>
+                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 divide-y divide-gray-50 overflow-hidden">
+                            <div class="p-4 hover:bg-gray-50 transition-colors cursor-pointer group">
+                                <div class="flex justify-between items-start mb-1">
+                                    <span class="text-[9px] font-bold text-maroon-ltd tracking-tighter">REQ-2024-001</span>
+                                    <span class="px-2 py-0.5 bg-blue-50 text-blue-600 text-[8px] font-bold rounded-full uppercase">Reviewing</span>
+                                </div>
+                                <p class="text-xs font-bold text-gray-800 uppercase truncate">Server Rack Maintenance</p>
+                                <p class="text-[9px] text-gray-400 font-medium">Updated 2 hours ago</p>
+                            </div>
+                            <div class="p-4 hover:bg-gray-50 transition-colors cursor-pointer group">
+                                <div class="flex justify-between items-start mb-1">
+                                    <span class="text-[9px] font-bold text-maroon-ltd tracking-tighter">REQ-2024-042</span>
+                                    <span class="px-2 py-0.5 bg-gray-100 text-gray-500 text-[8px] font-bold rounded-full uppercase">Draft</span>
+                                </div>
+                                <p class="text-xs font-bold text-gray-800 uppercase truncate">Network Upgrade Plan</p>
+                                <p class="text-[9px] text-gray-400 font-medium">Created Yesterday</p>
+                            </div>
+                        </div>
+                        <button class="w-full py-3 border-2 border-dashed border-gray-200 rounded-2xl text-[10px] font-bold text-gray-400 uppercase tracking-widest hover:border-gold-ltd hover:text-gold-ltd transition-all">
+                            View All Drafts
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navRequests = document.getElementById('navRequests');
+            const navNewSubmission = document.getElementById('navNewSubmission');
+            const dashboardSection = document.getElementById('dashboardSection');
+            const tssoSubmissionSection = document.getElementById('tssoSubmissionSection');
+            const pageTitle = document.getElementById('pageTitle');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            function setActiveLink(activeLink) {
+                navLinks.forEach(link => {
+                    link.classList.remove('bg-white/10', 'text-white', 'font-medium');
+                    link.classList.add('text-white/70');
+                    // Reset icon color for others
+                    const icon = link.querySelector('svg');
+                    if (icon) icon.classList.remove('text-gold-ltd');
+                });
+
+                activeLink.classList.add('bg-white/10', 'text-white', 'font-medium');
+                activeLink.classList.remove('text-white/70');
+                const activeIcon = activeLink.querySelector('svg');
+                if (activeIcon) activeIcon.classList.add('text-gold-ltd');
+            }
+
+            navRequests.addEventListener('click', (e) => {
+                e.preventDefault();
+                dashboardSection.classList.remove('hidden');
+                tssoSubmissionSection.classList.add('hidden');
+                pageTitle.textContent = 'MY REQUESTS';
+                setActiveLink(navRequests);
+            });
+
+            navNewSubmission.addEventListener('click', (e) => {
+                e.preventDefault();
+                dashboardSection.classList.add('hidden');
+                tssoSubmissionSection.classList.remove('hidden');
+                pageTitle.textContent = 'NEW SUBMISSION';
+                setActiveLink(navNewSubmission);
+            });
+        });
+    </script>
+</body>
+</html>

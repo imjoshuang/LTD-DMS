@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lancaster DMS - Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FIXED: Correct Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="bg-gray-50 flex min-h-screen">
+
+    <!-- Toast Notification - Make sure this structure matches your JS -->
+    <div id="toast" class="fixed top-4 right-4 z-50 translate-x-full opacity-0 transition-all duration-300 pointer-events-none">
+        <div id="toastBg" class="flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl border-l-4">
+            <div id="toastIconBox" class="p-2 rounded-full">
+                <svg id="toastIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"></svg>
+            </div>
+            <div>
+                <p id="toastTitle" class="text-xs font-bold tracking-widest uppercase mb-0.5"></p>
+                <p id="toastMessage" class="text-sm font-medium"></p>
+            </div>
+        </div>
+    </div>
+            
+
+    <aside class="w-64 bg-maroon-ltd text-white flex flex-col p-4 shadow-2xl">
+        <div class="flex items-center gap-3 px-3 py-5 border-b border-white/10 mb-8">
+            <img src="../photos/gold.png" alt="LTD Logo" class="w-10 h-10 object-contain">
+            <div>
+                <h1 class="font-bold text-xl tracking-wide text-white">LANCASTER</h1>
+                <p class="text-[10px] uppercase tracking-[0.2em] text-white/60">DMS ADMIN PORTAL</p>
+            </div>
+        </div>
+
+        <nav class="flex-grow space-y-3">
+            <a href="#" id="dashboardLink" class="flex items-center gap-4 px-5 py-3 rounded-lg bg-white/10 text-white font-medium tracking-wide">
+                <svg class="w-5 h-5 text-gold-ltd" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                DASHBOARD
+            </a>
+            <a href="#" id="userManagementLink" class="flex items-center gap-4 px-5 py-3 rounded-lg text-white/70 hover:bg-white/5 hover:text-white transition-all tracking-wide">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                USER MANAGEMENT
+            </a>
+            <a href="#" id="documentsLink" class="flex items-center gap-4 px-5 py-3 rounded-lg text-white/70 hover:bg-white/5 hover:text-white transition-all tracking-wide">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                DOCUMENTS
+            </a>
+            <a href="#" id="settingsLink" class="flex items-center gap-4 px-5 py-3 rounded-lg text-white/70 hover:bg-white/5 hover:text-white transition-all tracking-wide">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+                SETTINGS
+            </a>
+        </nav>
+
+        <div class="mt-auto border-t border-white/10 pt-4">
+            <button id="logoutBtn" class="w-full flex items-center gap-4 px-5 py-3 rounded-lg text-white/60 hover:bg-red-900/50 hover:text-white transition-all tracking-widest">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                LOGOUT
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        
+        <header class="bg-white border-b border-gray-100 px-8 py-5 flex items-center justify-between">
+            <h2 id="pageTitle" class="text-3xl font-bold tracking-tight text-gray-900 uppercase">DASHBOARD</h2>
+            
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-3 pl-6 border-l border-gray-100">
+                    <div class="text-right">
+                        <p class="text-xs font-bold leading-none">ADMINISTRATOR</p>
+                        <p class="text-[10px] text-gray-400 tracking-tighter uppercase">Christian Joshua</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-maroon-ltd text-white font-bold flex items-center justify-center border-2 border-gold-ltd shadow-md">CJ</div>
+                </div>
+            </div>
+        </header>
+
+        <div id="mainContent" class="flex-1 overflow-y-auto p-8 bg-gray-50/50">
+            
+            <div id="dashboardSection" class="space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-5">
+                        <div class="p-4 bg-maroon-ltd/5 text-maroon-ltd rounded-2xl">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-400 tracking-widest uppercase">Total Users</p>
+                            <p class="text-3xl font-bold" id="totalUsersCount">0</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-5">
+                        <div class="p-4 bg-gold-ltd/10 text-gold-ltd rounded-2xl">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-400 tracking-widest uppercase">Documents</p>
+                            <p class="text-3xl font-bold" id="totalDocumentsCount">0</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-5">
+                        <div class="p-4 bg-blue-50 text-blue-600 rounded-2xl">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-400 tracking-widest uppercase">Storage Used</p>
+                            <p class="text-3xl font-bold">1.2 TB</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-5">
+                        <div class="p-4 bg-green-50 text-green-600 rounded-2xl">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-400 tracking-widest uppercase">Active Now</p>
+                            <p class="text-3xl font-bold">156</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2 bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-bold tracking-wide">DOCUMENT UPLOAD TREND</h3>
+                            <select id="trendFilter" class="text-[10px] font-bold uppercase tracking-widest bg-gray-50 border border-gray-100 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-maroon-ltd/20 cursor-pointer hover:border-maroon-ltd/30 transition-all">
+                                <option value="weekly">Weekly View</option>
+                                <option value="monthly">Monthly View</option>
+                            </select>
+                        </div>
+                        <div class="h-64">
+                            <canvas id="lineChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col">
+                        <h3 class="text-xl font-bold mb-6 tracking-wide">USER ROLE DISTRIBUTION</h3>
+                        <div class="h-64 flex items-center justify-center">
+                            <canvas id="donutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="userManagementSection" class="hidden space-y-6">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-2xl font-bold tracking-wide">MANAGE USERS</h3>
+                    <button id="addUserBtn" class="bg-gold-ltd text-white px-6 py-2 rounded-full font-bold text-sm tracking-widest hover:scale-105 transition-all shadow-lg">
+                        + ADD NEW USER
+                    </button>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-4 mb-6">
+                    <div class="w-full max-w-xs">
+                        <label for="deptFilter" class="block text-[10px] font-bold text-gray-400 tracking-widest uppercase mb-2 ml-1">Filter by Department</label>
+                        <select id="deptFilter" 
+                                onchange="loadUsersByDept(this.value)" 
+                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-maroon-ltd/20 outline-none text-xs font-bold text-gray-700 cursor-pointer shadow-sm transition-all hover:border-maroon-ltd/30">
+                            <option value="" disabled selected>SELECT DEPARTMENT</option>
+                            <option value="AFD">AFD</option>
+                            <option value="HR">HR</option>
+                            <option value="ED">ED</option>
+                            <option value="AGM">AGM</option>
+                            <option value="AGSD">AGSD</option>
+                            <option value="PMO">PMO</option>
+                            <option value="TSD">TSD</option>
+                            <option value="TSSO">TSSO</option>
+                            <option value="OPCEO">OPCEO</option>
+                            <option value="OGM">OGM</option>
+                            <option value="LAS">LAS</option>
+                            <option value="COS">COS</option>
+                            <option value="CLO">CLO</option>
+                        </select>
+                    </div>
+
+                    <div class="flex-grow max-w-md">
+                        <label for="userSearch" class="block text-[10px] font-bold text-gray-400 tracking-widest uppercase mb-2 ml-1">Search User</label>
+                        <div class="relative">
+                            <input type="text" id="userSearch" placeholder="Search by name or email..." 
+                                   class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-maroon-ltd/20 outline-none text-xs font-bold text-gray-700 shadow-sm transition-all hover:border-maroon-ltd/30">
+                            <svg class="w-4 h-4 absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-50 border-b border-gray-100">
+                            <tr>
+                                <th class="px-6 py-4 text-xs font-bold tracking-widest text-gray-400 uppercase">User Info</th>
+                                <th class="px-6 py-4 text-xs font-bold tracking-widest text-gray-400 uppercase">Department</th>
+                                <th class="px-6 py-4 text-xs font-bold tracking-widest text-gray-400 uppercase">Role</th>
+                                <th class="px-6 py-4 text-xs font-bold tracking-widest text-gray-400 uppercase text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTableBody">
+                            <!-- Users will be loaded here dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="documentsSection" class="hidden space-y-6">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-2xl font-bold tracking-wide uppercase">Document Management</h3>
+                        <div class="relative inline-block text-left">
+                            <button id="uploadDropdownBtn" class="bg-gold-ltd text-white px-6 py-2.5 rounded-full font-bold text-sm tracking-widest hover:scale-105 transition-all shadow-lg flex items-center gap-2">
+                                + CREATE / UPLOAD
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+
+                            <div id="uploadMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-2xl border border-gray-100 z-[100] py-2 overflow-hidden transform origin-top-right transition-all">
+                                <button id="menuUploadFile" class="w-full text-left px-5 py-3 text-xs font-bold uppercase tracking-widest text-gray-700 hover:bg-[#600000] hover:text-white transition-colors flex items-center gap-3">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0l-4-4m4 4V4"></path></svg>
+                                    Upload File
+                                </button>
+                                <button id="menuNewFolder" class="w-full text-left px-5 py-3 text-xs font-bold uppercase tracking-widest text-gray-700 hover:bg-[#600000] hover:text-white transition-colors flex items-center gap-3">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path></svg>
+                                    New Folder
+                                </button>
+                            </div>
+                        </div>
+                </div>
+                
+                <div id="documentsList" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                    <!-- Templates will be loaded here dynamically -->
+                </div>
+            </div>
+
+            <div id="settingsSection" class="hidden space-y-6">
+                <h3 class="text-2xl font-bold tracking-wide uppercase mb-6">System Settings</h3>
+
+                <!-- Audit Log Section -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <h4 class="text-xl font-bold tracking-wide mb-4">Audit Log</h4>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full text-left border-collapse">
+                            <thead class="bg-gray-50 border-b border-gray-100">
+                                <tr>
+                                    <th class="px-4 py-3 text-xs font-bold tracking-widest text-gray-400 uppercase">Action</th>
+                                    <th class="px-4 py-3 text-xs font-bold tracking-widest text-gray-400 uppercase">Performed By</th>
+                                    <th class="px-4 py-3 text-xs font-bold tracking-widest text-gray-400 uppercase text-right">Timestamp</th>
+                                </tr>
+                            </thead>
+                            <tbody id="auditLogBody">
+                                <!-- Audit logs will be loaded here dynamically -->
+                                <tr><td colspan="3" class="text-center py-4 text-gray-400">Loading logs...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Advanced Settings Section -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <h4 class="text-xl font-bold tracking-wide mb-4">Advanced Settings</h4>
+                    <div class="flex items-center justify-between py-3 border-b border-gray-100 last:border-b-0">
+                        <div>
+                            <p class="font-bold text-gray-800">Maintenance Mode</p>
+                            <p class="text-xs text-gray-500">Temporarily disable user access to the system.</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" value="" id="maintenanceModeToggle" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-maroon-ltd/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-maroon-ltd"></div>
+                        </label>
+                    </div>
+                    <div class="flex items-center justify-between py-3 border-b border-gray-100 last:border-b-0 mt-4">
+                        <div>
+                            <p class="font-bold text-gray-800">Enable User Registration</p>
+                            <p class="text-xs text-gray-500">Allow new users to register themselves.</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" value="" id="userRegistrationToggle" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-maroon-ltd/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-maroon-ltd"></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add User Modal -->
+    <div id="addUserModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl p-8 m-4 transform scale-95 transition-transform duration-300">
+            
+            <div class="flex items-center justify-between mb-8 border-b border-gray-100 pb-4">
+                <h3 class="text-2xl font-bold tracking-tight text-gray-950">ADD NEW USER</h3>
+                <button id="closeModalBtn" class="text-gray-400 hover:text-maroon-ltd transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <form id="addUserForm" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 tracking-widest uppercase mb-1">First Name</label>
+                    <input type="text" name="firstName" required class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-gold-ltd/20 outline-none text-sm">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 tracking-widest uppercase mb-1">Last Name</label>
+                    <input type="text" name="lastName" required class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-gold-ltd/20 outline-none text-sm">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 tracking-widest uppercase mb-1">Department</label>
+                    <select name="department" required class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-gold-ltd/20 outline-none text-sm bg-gray-50 cursor-pointer">
+                        <option value="" disabled selected>Select Department</option>
+                        <option value="AFD">AFD</option>
+                        <option value="HR">HR</option>
+                        <option value="ED">ED</option>
+                        <option value="AGM">AGM</option>
+                        <option value="AGSD">AGSD</option>
+                        <option value="PMO">PMO</option>
+                        <option value="TSD">TSD</option>
+                        <option value="TSSO">TSSO</option>
+                        <option value="OPCEO">OPCEO</option>
+                        <option value="OGM">OGM</option>
+                        <option value="LAS">LAS</option>
+                        <option value="COS">COS</option>
+                        <option value="CLO">CLO</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 tracking-widest uppercase mb-1">Email Address</label>
+                    <input type="email" id="modalEmail" name="email" required placeholder="name@lancastertechdev.com" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-gold-ltd/20 outline-none text-sm">
+                    <p id="emailError" class="text-xs text-red-600 mt-1 hidden">Email must end with @lancastertechdev.com</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 tracking-widest uppercase mb-1">Password</label>
+                        <input type="password" id="modalPassword" name="password" required class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-gold-ltd/20 outline-none text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 tracking-widest uppercase mb-1">Confirm Password</label>
+                        <input type="password" id="modalConfirmPassword" name="confirmPassword" required class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-gold-ltd/20 outline-none text-sm">
+                    </div>
+                    <p id="passwordError" class="text-xs text-red-600 col-span-2 hidden">Passwords do not match.</p>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-6 border-t border-gray-100 mt-8">
+                    <button type="button" id="cancelModalBtn" class="px-6 py-2.5 text-xs font-bold text-gray-500 hover:text-gray-700 transition-colors uppercase tracking-widest">CANCEL</button>
+                    <button type="submit" id="submitUserBtn" class="px-8 py-2.5 bg-maroon-ltd text-white text-xs font-bold rounded-xl hover:bg-black transition-colors uppercase tracking-widest shadow-md disabled:opacity-50 disabled:cursor-not-allowed">SAVE USER</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Share to People Modal -->
+    <div id="shareModal" class="fixed inset-0 bg-black/50 z-[80] flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-8 m-4 transform scale-95 transition-transform duration-300">
+            
+            <div class="flex items-center justify-between mb-6 border-b border-gray-100 pb-4">
+                <h3 id="shareModalTitle" class="text-xl font-bold tracking-tight text-gray-950 uppercase font-oswald">Share Document</h3>
+                <button id="closeShareModalBtn" class="text-gray-400 hover:text-maroon-ltd transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Search Section -->
+                <div class="relative">
+                    <label class="block text-[10px] font-bold text-gray-400 tracking-widest uppercase mb-2 ml-1">Search Employee (All Departments)</label>
+                    <input type="text" id="userSearchInput" placeholder="Enter name or email..." class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-maroon-ltd/20 outline-none text-sm transition-all shadow-sm">
+                    <div id="searchResults" class="absolute left-0 right-0 mt-2 bg-white border border-gray-100 rounded-2xl shadow-2xl z-[90] hidden max-h-56 overflow-y-auto p-2 space-y-1"></div>
+                </div>
+
+                <!-- Access List -->
+                <div>
+                    <h4 class="text-[10px] font-bold text-gray-400 tracking-widest uppercase mb-3 ml-1">People with access</h4>
+                    <div id="accessList" class="space-y-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+                        <!-- People will be listed here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-6 border-t border-gray-100 mt-6">
+                <button type="button" id="doneShareBtn" class="px-8 py-2.5 bg-maroon-ltd text-white text-xs font-bold rounded-xl hover:bg-black transition-colors uppercase tracking-widest shadow-md">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Folder Modal -->
+    <div id="addFolderModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-8 m-4 transform scale-95 transition-transform duration-300">
+            
+            <div class="flex items-center justify-between mb-8 border-b border-gray-100 pb-4">
+                <h3 class="text-2xl font-bold tracking-tight text-gray-950 uppercase">Create New Folder</h3>
+                <button id="closeFolderModalBtn" class="text-gray-400 hover:text-maroon-ltd transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <form id="addFolderForm" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 tracking-widest uppercase mb-1">Folder Name</label>
+                    <input type="text" name="folderName" required placeholder="Enter folder name..." class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-gold-ltd/20 outline-none text-sm">
+                </div>
+
+                <div class="flex justify-end gap-3 pt-6 border-t border-gray-100 mt-8">
+                    <button type="button" id="cancelFolderModalBtn" class="px-6 py-2.5 text-xs font-bold text-gray-500 hover:text-gray-700 transition-colors uppercase tracking-widest">CANCEL</button>
+                    <button type="submit" id="submitFolderBtn" class="px-8 py-2.5 bg-maroon-ltd text-white text-xs font-bold rounded-xl hover:bg-black transition-colors uppercase tracking-widest shadow-md">CREATE FOLDER</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Template Modal -->
+    <div id="addTemplateModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl p-8 m-4 transform scale-95 transition-transform duration-300">
+            
+            <div class="flex items-center justify-between mb-8 border-b border-gray-100 pb-4">
+                <h3 class="text-2xl font-bold tracking-tight text-gray-950 uppercase">Add New File</h3>
+                <button id="closeTemplateModalBtn" class="text-gray-400 hover:text-maroon-ltd transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <form id="addTemplateForm" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 tracking-widest uppercase mb-1">File Name</label>
+                    <input type="text" name="templateName" required class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-gold-ltd/20 outline-none text-sm">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 tracking-widest uppercase mb-1">Upload File</label>
+                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-2xl hover:border-maroon-ltd transition-all cursor-pointer group" 
+                         onclick="document.getElementById('templateFile').click()">
+                        <div class="space-y-1 text-center">
+                            <svg class="mx-auto h-12 w-12 text-gray-300 group-hover:text-maroon-ltd transition-colors" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <div class="flex text-sm text-gray-600">
+                                <span class="relative cursor-pointer bg-white rounded-md font-bold text-gold-ltd hover:text-maroon-ltd focus-within:outline-none">
+                                    Click to upload
+                                </span>
+                                <p class="pl-1">or drag and drop</p>
+                            </div>
+                            <p class="text-[10px] text-gray-400 uppercase tracking-tighter">PDF, DOCX, or XLSX up to 10MB</p>
+                        </div>
+                        <input id="templateFile" name="templateFile" type="file" class="hidden" accept=".pdf,.doc,.docx">
+                    </div>
+                    <p id="templateFileName" class="text-[10px] text-maroon-ltd mt-2 font-bold uppercase italic text-center"></p>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-6 border-t border-gray-100 mt-8">
+                    <button type="button" id="cancelTemplateModalBtn" class="px-6 py-2.5 text-xs font-bold text-gray-500 hover:text-gray-700 transition-colors uppercase tracking-widest">CANCEL</button>
+                    <button type="submit" id="submitTemplateBtn" class="px-8 py-2.5 bg-maroon-ltd text-white text-xs font-bold rounded-xl hover:bg-black transition-colors uppercase tracking-widest shadow-md">SAVE TEMPLATE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="fixed inset-0 bg-black/80 z-[60] flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white w-full max-w-5xl h-[90vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden m-4">
+            <div class="flex items-center justify-between p-6 border-b border-gray-100">
+                <h3 class="text-xl font-bold tracking-tight text-gray-950 uppercase">Document Preview</h3>
+                <div class="flex items-center gap-4">
+                    <a id="downloadPreviewBtn" href="#" target="_blank" class="text-xs font-bold text-blue-600 hover:text-blue-800 uppercase tracking-widest flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Download
+                    </a>
+                    <button id="closePreviewBtn" class="text-gray-400 hover:text-maroon-ltd transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-1 bg-gray-100">
+                <iframe id="previewFrame" class="w-full h-[80vh] rounded-xl border-none"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Details Modal -->
+    <div id="detailsModal" class="fixed inset-0 bg-black/50 z-[70] flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-8 m-4 transform scale-95 transition-transform duration-300">
+            <div class="flex items-center justify-between mb-6 border-b border-gray-100 pb-4">
+                <h3 class="text-2xl font-bold tracking-tight text-gray-950 uppercase">Document Details</h3>
+                <button id="closeDetailsModalBtn" class="text-gray-400 hover:text-maroon-ltd transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div id="detailsContent" class="space-y-4">
+                <!-- Details will be injected here -->
+            </div>
+            <div class="flex justify-end pt-6 border-t border-gray-100 mt-6">
+                <button type="button" id="closeDetailsBtn" class="px-8 py-2.5 bg-maroon-ltd text-white text-xs font-bold rounded-xl hover:bg-black transition-colors uppercase tracking-widest shadow-md">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+/* Applying Oswald as the global font */
+body { font-family: 'Oswald', sans-serif; }
+
+.bg-maroon-ltd { background-color: #600000; }
+.text-maroon-ltd { color: #600000; }
+.bg-gold-ltd { background-color: #C19A6B; }
+.text-gold-ltd { color: #C19A6B; }
+
+/* Custom scrollbar para malinis tingnan */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #C19A6B; border-radius: 10px; }

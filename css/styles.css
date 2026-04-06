@@ -1,0 +1,38 @@
+body { font-family: 'Inter', sans-serif; }
+
+
+/* Para sa Chrome, Edge, at Safari */
+input::-ms-reveal,
+input::-ms-clear {
+    display: none;
+}
+
+input::-webkit-contacts-auto-fill-button,
+input::-webkit-credentials-auto-fill-button {
+    visibility: hidden;
+    display: none !important;
+    pointer-events: none;
+}
+
+/* Toast Notification Styles */
+#toast {
+    transition: opacity 0.3s ease-in-out;
+    z-index: 9999;
+}
+
+#toast.opacity-100 {
+    opacity: 1;
+}
+
+#toast.opacity-0 {
+    opacity: 0;
+}
+
+/* Toast color variants */
+#toast.bg-\[\#600000\] {
+    background-color: #600000;
+}
+
+#toast.bg-red-600 {
+    background-color: #dc2626;
+}
