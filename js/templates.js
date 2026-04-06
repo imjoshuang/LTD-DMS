@@ -1,13 +1,12 @@
 import { getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp, doc, deleteDoc, updateDoc, arrayUnion, arrayRemove, where } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
-import { getCurrentUser } from './auth.js';
-
-const db = getFirestore();
+import { getCurrentUser, db } from './auth.js';
 
 let currentFolderId = null;
 let currentFolderName = "Document Management";
 
 const CLOUD_NAME = "dnch13q6f";
 const UPLOAD_PRESET = "pdfs_dms";
+const API_KEY = "rPmHgHmJ44keF5Y5JjNPVMPaWaQ";
 
 /**
  * Share Modal Functionality
@@ -123,6 +122,7 @@ export async function saveTemplate(templateName, file) {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', UPLOAD_PRESET);
+        formData.append('api_key', API_KEY);
 
         // GAMITIN ANG 'auto' ENDPOINT para suportahan ang Word at PDF
         const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`, {

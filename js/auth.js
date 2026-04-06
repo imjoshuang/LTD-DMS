@@ -3,6 +3,7 @@
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-analytics.js";
   import { getDatabase, ref, set, get, update, remove } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-database.js";
   import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -19,14 +20,17 @@
   };
 
   // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
+  export const app = initializeApp(firebaseConfig);
+  export const analytics = getAnalytics(app);
   
   // Initialize Realtime Database
-  const database = getDatabase(app);
+  export const database = getDatabase(app);
+
+  // Initialize Firestore
+  export const db = getFirestore(app);
   
   // Initialize Firebase Authentication
-  const auth = getAuth(app);
+  export const auth = getAuth(app);
 
   // Database helper functions
   export async function writeData(path, data) {

@@ -1,7 +1,5 @@
-import { loginUser, logoutUser } from './auth.js';
+import { loginUser, logoutUser, db } from './auth.js';
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
-
-const db = getFirestore();
 
 // Function para makuha ang tamang path depende sa department
 function getRedirectPath(department) {

@@ -1,7 +1,5 @@
 import { getFirestore, collection, getDocs, query, orderBy, limit, serverTimestamp, addDoc, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
-import { getCurrentUser } from './auth.js';
-
-const db = getFirestore();
+import { getCurrentUser, db } from './auth.js';
 
 /**
  * Logs an action to the Firestore audit_logs collection

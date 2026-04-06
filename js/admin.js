@@ -1,11 +1,8 @@
-import { logoutUser, getCurrentUser } from './auth.js';
+import { logoutUser, getCurrentUser, db, auth } from './auth.js';
 import { getFirestore, doc, setDoc, serverTimestamp, collection, getDocs, query, where, deleteDoc, updateDoc, getDoc, addDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 import { getAuth, createUserWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
 import { saveTemplate, loadTemplatesUI, createFolder } from './templates.js';
 import { loadAuditLogs, initAdvancedSettings } from './settings.js';
-
-const db = getFirestore();
-const auth = getAuth();
 
 // Global variable to track if we're editing a user
 let editUserId = null;
