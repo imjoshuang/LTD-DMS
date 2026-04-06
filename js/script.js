@@ -4,21 +4,21 @@ import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12
 // Function para makuha ang tamang path depende sa department
 function getRedirectPath(department) {
     switch (department) {
-        case 'ADMIN': return 'dboard.html';
-        case 'AFD':   return '../afd.html';
-        case 'HR':    return '../hr.html';
-        case 'ED':    return '../ed.html';
-        case 'AGM':   return '../agmdash.html';
-        case 'AGSD':  return '../agsd.html';
-        case 'PMO':   return '../pmo.html';
-        case 'TSD':   return '../tsd.html';
-        case 'TSSO':  return '../TSSO/tssodash.html';
-        case 'OPCEO': return '../opceo.html';
-        case 'OGM':   return '../ogm.html';
-        case 'LAS':   return '../las.html';
-        case 'COS':   return '../cos.html';
-        case 'CLO':   return '../clo.html';
-        default:      return '../user-portal.html';
+        case 'ADMIN': return 'admin/dboard.html';
+        case 'AFD':   return 'afd.html';
+        case 'HR':    return 'hr.html';
+        case 'ED':    return 'ed.html';
+        case 'AGM':   return 'agmdash.html';
+        case 'AGSD':  return 'agsd.html';
+        case 'PMO':   return 'pmo.html';
+        case 'TSD':   return 'tsd.html';
+        case 'TSSO':  return 'TSSO/tssodash.html';
+        case 'OPCEO': return 'opceo.html';
+        case 'OGM':   return 'ogm.html';
+        case 'LAS':   return 'las.html';
+        case 'COS':   return 'cos.html';
+        case 'CLO':   return 'clo.html';
+        default:      return 'user-portal.html';
     }
 }
 
