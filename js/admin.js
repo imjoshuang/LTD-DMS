@@ -326,7 +326,7 @@ if (logoutBtn) {
             window.onpopstate = function() {
                 window.history.pushState(null, null, window.location.href);
             };
-            window.location.replace('../admin/index.html');
+            window.location.replace('../index.html');
         }
     });
 }
