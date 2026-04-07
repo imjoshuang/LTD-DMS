@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pre-Deployment Report | Lancaster Technology</title>
+    <link rel="stylesheet" href="/css/pre_deployment_styles.css">
+    <style>
+        /* Sinisigurado na lilitaw ang grey backgrounds sa print */
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <!-- ══════════════════════════════════════════════
+         HEADER ROW 1: Logo + Company Name (A1:G1)
+    ══════════════════════════════════════════════ -->
+    <table class="header-table">
+        <tr>
+            <td class="logo-cell">
+                <div class="ltd-logo">
+                    <svg viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="54" height="54" fill="#fff"/>
+                        <rect x="5"  y="5"  width="9"  height="30" fill="#6b1a1a"/>
+                        <rect x="5"  y="29" width="22" height="9"  fill="#6b1a1a"/>
+                        <rect x="20" y="5"  width="24" height="9"  fill="#6b1a1a"/>
+                        <rect x="28" y="5"  width="9"  height="30" fill="#6b1a1a"/>
+                        <rect x="5"  y="38" width="9"  height="11" fill="#6b1a1a"/>
+                        <rect x="5"  y="38" width="26" height="5"  fill="#6b1a1a"/>
+                        <rect x="5"  y="44" width="26" height="5"  fill="#6b1a1a"/>
+                        <rect x="28" y="38" width="9"  height="11" fill="#6b1a1a"/>
+                        <rect x="14" y="40" width="15" height="8"  fill="#fff"/>
+                    </svg>
+                </div>
+            </td>
+            <td class="company-cell">
+                <div class="company-name">LANCASTER TECHNOLOGY AND DEVELOPMENT CORPORATION</div>
+                <div class="company-addr">Suite 3201 High Street South Corporate Plaza Tower 2, 11th Ave., corner 26th St., Bonifacio Global City, Taguig City 1634</div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- ══════════════════════════════════════════════
+         HEADER ROW 2: PRE-DEPLOYMENT REPORT + No./Date
+         A2:E3 merged left | F2:G2 No. | F3:G3 Date
+    ══════════════════════════════════════════════ -->
+    <table class="title-row-table">
+        <tr>
+            <td class="pdr-title-cell" rowspan="2">PRE-DEPLOYMENT REPORT</td>
+            <td class="nd-label-cell">No.:</td>
+            <td class="nd-value-cell"><input type="text" id="pdrNo" placeholder=""></td>
+        </tr>
+        <tr>
+            <td class="nd-label-cell">Date:</td>
+            <td class="nd-value-cell"><input type="text" id="pdrDate" placeholder="e.g. Nov. 21, 2025"></td>
+        </tr>
+    </table>
+
+    <!-- ══════════════════════════════════════════════
+         PROJECT DETAILS SECTION
+    ══════════════════════════════════════════════ -->
+    <table class="form-table">
+        <tr>
+            <td colspan="7" class="section-hdr">PROJECT DETAILS</td>
+        </tr>
+        <tr>
+            <td class="lbl" colspan="3">PROJECT NAME/TITLE:</td>
+            <td colspan="4"><input type="text" id="projName" placeholder=""></td>
+        </tr>
+        <tr>
+            <td class="lbl" colspan="3">DOCUMENT REFERENCE CODE:</td>
+            <td colspan="4"><input type="text" id="docRefCode" placeholder=""></td>
+        </tr>
+        <tr>
+            <td class="lbl" colspan="3">DEPLOYMENT DURATION DATE:</td>
+            <td colspan="4"><input type="text" id="deployDuration" placeholder="e.g. Nov. 24-28, 2025"></td>
+        </tr>
+        <tr>
+            <td class="lbl" colspan="3">VENUE:</td>
+            <td colspan="4"><input type="text" id="venue" placeholder=""></td>
+        </tr>
+    </table>
+
+    <!-- ══════════════════════════════════════════════
+         DEPLOYMENT OVERVIEW
+    ══════════════════════════════════════════════ -->
+    <table class="form-table">
+        <tr>
+            <td colspan="7" class="section-hdr">DEPLOYMENT OVERVIEW</td>
+        </tr>
+        <tr>
+            <td colspan="7" class="overview-cell">
+                <textarea id="deployOverview" rows="3" placeholder="Enter deployment overview..."></textarea>
+            </td>
+        </tr>
+    </table>
+
+    <!-- ══════════════════════════════════════════════
+         ITINERARY
+    ══════════════════════════════════════════════ -->
+    <table class="form-table">
+        <tr>
+            <td colspan="7" class="section-hdr">ITINERARY</td>
+        </tr>
+        <tr>
+            <td class="col-day itin-hdr">Day</td>
+            <td class="col-activity itin-hdr" colspan="4">General Scope of Activity</td>
+            <td class="col-personnel itin-hdr" colspan="2">TSSO Resource Personnel</td>
+        </tr>
+
+        <!-- Day 1 -->
+        <tr class="itin-row">
+            <td class="day-cell">
+                <div class="day-label">Day 1</div>
+                <input type="text" class="day-date-input" placeholder="[Date]">
+            </td>
+            <td class="activity-cell" colspan="4">
+                <textarea class="activity-input" rows="3" placeholder="- Activity..."></textarea>
+            </td>
+            <td class="personnel-cell" colspan="2">
+                <textarea class="personnel-input" rows="3" placeholder="Name | Name&#10;| Name"></textarea>
+            </td>
+        </tr>
+
+        <!-- Day 2 -->
+        <tr class="itin-row">
+            <td class="day-cell">
+                <div class="day-label">Day 2</div>
+                <input type="text" class="day-date-input" placeholder="[Date]">
+            </td>
+            <td class="activity-cell" colspan="4">
+                <textarea class="activity-input" rows="3" placeholder="- Activity..."></textarea>
+            </td>
+            <td class="personnel-cell" colspan="2">
+                <textarea class="personnel-input" rows="3" placeholder="Name | Name&#10;| Name"></textarea>
+            </td>
+        </tr>
+
+        <!-- Day 3 -->
+        <tr class="itin-row">
+            <td class="day-cell">
+                <div class="day-label">Day 3</div>
+                <input type="text" class="day-date-input" placeholder="[Date]">
+            </td>
+            <td class="activity-cell" colspan="4">
+                <textarea class="activity-input" rows="3" placeholder="- Activity..."></textarea>
+            </td>
+            <td class="personnel-cell" colspan="2">
+                <textarea class="personnel-input" rows="3" placeholder="Name | Name&#10;| Name"></textarea>
+            </td>
+        </tr>
+
+        <!-- Day 4 -->
+        <tr class="itin-row">
+            <td class="day-cell">
+                <div class="day-label">Day 4</div>
+                <input type="text" class="day-date-input" placeholder="[Date]">
+            </td>
+            <td class="activity-cell" colspan="4">
+                <textarea class="activity-input" rows="3" placeholder="- Activity..."></textarea>
+            </td>
+            <td class="personnel-cell" colspan="2">
+                <textarea class="personnel-input" rows="3" placeholder="Name | Name&#10;| Name"></textarea>
+            </td>
+        </tr>
+
+        <!-- Day 5 -->
+        <tr class="itin-row">
+            <td class="day-cell">
+                <div class="day-label">Day 5</div>
+                <input type="text" class="day-date-input" placeholder="[Date]">
+            </td>
+            <td class="activity-cell" colspan="4">
+                <textarea class="activity-input" rows="3" placeholder="- Activity..."></textarea>
+            </td>
+            <td class="personnel-cell" colspan="2">
+                <textarea class="personnel-input" rows="3" placeholder="Name | Name&#10;| Name"></textarea>
+            </td>
+        </tr>
+    </table>
+
+    <!-- ══════════════════════════════════════════════
+         SIGNATURE BLOCK — A18:G22
+         3 columns: Prepared | Reviewed | Approved
+    ══════════════════════════════════════════════ -->
+    <table class="form-table sig-table">
+        <!-- Labels row -->
+        <tr>
+            <td class="sig-spacer section-hdr-gray"></td>
+            <td class="sig-col section-hdr-gray"><strong>A. Prepared by:</strong></td>
+            <td class="sig-col section-hdr-gray"><strong>B. Reviewed by:</strong></td>
+            <td class="sig-col section-hdr-gray"><strong>C. Approved by:</strong></td>
+        </tr>
+        <!-- Signature row -->
+        <tr>
+            <td class="sig-row-lbl">Signature:</td>
+            <td class="sig-val sig-space"></td>
+            <td class="sig-val sig-space"></td>
+            <td class="sig-val sig-space"></td>
+        </tr>
+        <!-- Name row -->
+        <tr>
+            <td class="sig-row-lbl">Name:</td>
+            <td class="sig-val"><input type="text" id="preparedName" placeholder=""></td>
+            <td class="sig-val"><input type="text" id="reviewedName" placeholder=""></td>
+            <td class="sig-val"><input type="text" id="approvedName" placeholder=""></td>
+        </tr>
+        <!-- Position row -->
+        <tr>
+            <td class="sig-row-lbl">Position:</td>
+            <td class="sig-val"><input type="text" id="preparedPos" placeholder=""></td>
+            <td class="sig-val"><input type="text" id="reviewedPos" placeholder=""></td>
+            <td class="sig-val"><input type="text" id="approvedPos" placeholder=""></td>
+        </tr>
+        <!-- Date row -->
+        <tr>
+            <td class="sig-row-lbl">Date:</td>
+            <td class="sig-val"><input type="text" id="preparedDate" placeholder=""></td>
+            <td class="sig-val"><input type="text" id="reviewedDate" placeholder=""></td>
+            <td class="sig-val"><input type="text" id="approvedDate" placeholder=""></td>
+        </tr>
+    </table>
+
+    <!-- ══════════════════════════════════════════════
+         ACTION BUTTONS (hidden on print)
+    ══════════════════════════════════════════════ -->
+    <div class="btn-row no-print">
+        <button class="reset-btn" onclick="resetForm()">Reset Form</button>
+        <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
+    </div>
+
+</div>
+<script src="/js/pre_deployment_scripts.js"></script>
+</body>
+</html>

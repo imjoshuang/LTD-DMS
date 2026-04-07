@@ -4,8 +4,8 @@
   margin: 0;
   padding: 0;
   /* Sinisigurado na laging lalabas ang background colors kahit sa preview o print */
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
 }
 
 body {

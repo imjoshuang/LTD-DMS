@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Expense Breakdown | Lancaster Technology</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'maroon-ltd': '#600000',
+                        'gold-ltd': '#C19A6B',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        body {
+            background: #d1d5db;
+            font-family: "Times New Roman", Times, serif;
+            font-size: 10px;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .page {
+            width: 1280px;
+            background: white;
+            border: 1px solid #999;
+            padding: 16px 20px 20px;
+        }
+
+        /* ── HEADER ── */
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px solid #000;
+            margin-bottom: 0;
+        }
+        .header-table td { border: 0; padding: 0; vertical-align: middle; }
+        .logo-cell {
+            width: 88px;
+            border-right: 2px solid #000;
+            text-align: center;
+            padding: 8px 10px;
+            vertical-align: middle;
+        }
+        .logo-cell img {
+            max-height: 55px;
+            width: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .company-cell { padding: 6px 88px 6px 12px; text-align: center; vertical-align: middle; }
+        .company-name { font-size: 14px; font-weight: 900; }
+        .company-addr { font-size: 8px; color: #333; margin-top: 2px; }
+
+        .title-row {
+            border: 2px solid #000;
+            border-top: none;
+            text-align: center;
+            padding: 5px;
+            font-size: 15px;
+            font-weight: 900;
+            background: #e0e0e0;
+            margin-bottom: 10px;
+        }
+
+        /* ── DATE & LOCATION BAR ── */
+        .date-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+        .date-bar input {
+            border: 1px solid #aaa;
+            border-radius: 3px;
+            padding: 2px 5px;
+            font-size: 10px;
+            font-family: "Times New Roman", Times, serif;
+            font-weight: 700;
+            text-align: center;
+            background: #fff;
+        }
+
+        /* ── SECTION TITLE ── */
+        .section-title {
+            font-weight: 900;
+            font-size: 10.5px;
+            background: #c0c0c0;
+            padding: 4px 6px;
+            border: 1px solid #000;
+            border-bottom: none;
+        }
+
+        /* ── GENERIC TABLE ── */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 8.5px;
+            font-family: "Times New Roman", Times, serif;
+            margin-bottom: 14px;
+            table-layout: fixed;
+        }
+        td, th {
+            border: 1px solid #000;
+            padding: 3px 2px;
+            vertical-align: middle;
+            overflow: hidden;
+        }
+        th {
+            background: #d0d0d0;
+            font-weight: 700;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 8px;
+            line-height: 1.2;
+            padding: 3px 1px;
+        }
+
+        /* ── DATE HEADER CELLS ── */
+        .date-th {
+            font-weight: 700;
+            font-size: 7.5px;
+            text-align: center;
+            line-height: 1.3;
+            padding: 2px 1px;
+        }
+        .day-label { font-size: 8px; font-weight: 700; display: block; }
+        .date-label {
+            font-size: 7px;
+            display: block;
+            color: #111;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        /* Editable date label */
+        .date-input-th {
+            font-size: 7px;
+            font-weight: 700;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: center;
+            outline: none;
+            font-family: "Times New Roman", Times, serif;
+            padding: 0;
+            color: #111;
+            cursor: pointer;
+        }
+        .date-input-th:focus { background: #fffde7; border-radius: 2px; }
+
+        /* ── NAME COLUMN ── */
+        .name-col { width: 110px; text-align: left; }
+        .name-input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 8.5px;
+            font-family: "Times New Roman", Times, serif;
+            font-weight: 700;
+            background: transparent;
+            padding: 1px 2px;
+            text-align: left;
+        }
+        .name-input:focus { background: #fffde7; }
+        .name-cell {
+            font-size: 8.5px;
+            font-weight: 700;
+            text-align: left;
+            padding-left: 3px;
+        }
+
+        /* ── NUMBER INPUTS ── */
+        .num-input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 8px;
+            font-family: "Times New Roman", Times, serif;
+            background: transparent;
+            text-align: right;
+            padding: 1px 2px;
+        }
+        .num-input:focus { background: #fffde7; }
+
+        /* ── TOTAL ROWS ── */
+        .total-row td { background: #e8e8e8; font-weight: 700; font-size: 8.5px; text-align: right; }
+        .total-row td:first-child { text-align: left; }
+        .grand-row td { background: #d0d0d0; font-weight: 900; font-size: 9px; text-align: right; }
+        .grand-row td:first-child { text-align: right; }
+
+        /* ── SUMMARY TABLE ── */
+        .summary-table { width: 420px; margin-bottom: 14px; table-layout: auto; }
+        .summary-table td { font-size: 9.5px; padding: 4px 8px; }
+        .summary-grand td { background: #d0d0d0; font-weight: 900; }
+
+        /* ── BUTTONS ── */
+        .btn-row { text-align: right; margin-top: 14px; }
+        .print-btn { background: #1e3a5f; color: white; border: none; padding: 8px 20px; font-size: 12px; font-weight: 700; cursor: pointer; border-radius: 4px; margin-left: 8px; }
+        .reset-btn { background: #555; color: white; border: none; padding: 8px 20px; font-size: 12px; font-weight: 700; cursor: pointer; border-radius: 4px; }
+        .reset-btn:focus, .print-btn:focus { outline: none; }
+        .print-btn:hover, .reset-btn:hover { opacity: 0.88; }
+
+        /* ── PRINT ── */
+        @media print {
+            body { background: white; padding: 0; }
+            .page { border: none; width: 100%; padding: 6px; }
+            .no-print { display: none; }
+            table { page-break-inside: avoid; font-size: 7pt !important; }
+            .date-input-th { font-size: 6.5pt !important; }
+            .name-input { font-size: 7pt !important; }
+            .num-input { font-size: 7pt !important; }
+            input { border: none !important; background: transparent !important; }
+        }
+
+        @media screen and (max-width: 1300px) {
+            .page { width: 100%; overflow-x: auto; }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <!-- ══ HEADER ══ -->
+    <table class="header-table">
+        <tr>
+            <td class="logo-cell">
+                <img src="photos/ltd.png" alt="LTD Logo">
+            </td>
+            <td class="company-cell">
+                <div class="company-name">LANCASTER TECHNOLOGY AND DEVELOPMENT CORPORATION</div>
+                <div class="company-addr">Suite 3201 High Street South Corporate Plaza Tower 2, 11th Ave., corner 26th St., Bonifacio Global City, Taguig City 1634</div>
+            </td>
+        </tr>
+    </table>
+    <div class="title-row">TRAVEL EXPENSE BREAKDOWN</div>
+
+    <!-- ══ DATE / LOCATION BAR ══ -->
+    <div class="date-bar">
+        <span>Period:</span>
+        <input type="text" id="startDate" value="February 16, 2026" style="width:130px;">
+        <span>—</span>
+        <input type="text" id="endDate"   value="February 28, 2026" style="width:130px;">
+        <span>&nbsp;|&nbsp; Destination:</span>
+        <input type="text" id="destination" value="Romblon State University (RSU)" style="width:230px;">
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════
+         I. MEAL ALLOWANCE  — 13 day columns (Feb 16–28)
+    ══════════════════════════════════════════════════════════ -->
+    <div class="section-title">I. MEAL ALLOWANCE (₱1,000 per day per person)</div>
+    <table id="mealTable">
+        <colgroup>
+            <col style="width:110px">
+            <!-- 13 day cols — evenly split remaining space -->
+            <col><col><col><col><col><col><col><col><col><col><col><col><col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="name-col">NAME</th>
+                <th class="date-th"><span class="day-label">Mon</span><input class="date-input-th" value="16-FEB-26" data-col="meal-0"></th>
+                <th class="date-th"><span class="day-label">Tue</span><input class="date-input-th" value="17-FEB-26" data-col="meal-1"></th>
+                <th class="date-th"><span class="day-label">Wed</span><input class="date-input-th" value="18-FEB-26" data-col="meal-2"></th>
+                <th class="date-th"><span class="day-label">Thu</span><input class="date-input-th" value="19-FEB-26" data-col="meal-3"></th>
+                <th class="date-th"><span class="day-label">Fri</span><input class="date-input-th" value="20-FEB-26" data-col="meal-4"></th>
+                <th class="date-th"><span class="day-label">Sat</span><input class="date-input-th" value="21-FEB-26" data-col="meal-5"></th>
+                <th class="date-th"><span class="day-label">Sun</span><input class="date-input-th" value="22-FEB-26" data-col="meal-6"></th>
+                <th class="date-th"><span class="day-label">Mon</span><input class="date-input-th" value="23-FEB-26" data-col="meal-7"></th>
+                <th class="date-th"><span class="day-label">Tue</span><input class="date-input-th" value="24-FEB-26" data-col="meal-8"></th>
+                <th class="date-th"><span class="day-label">Wed</span><input class="date-input-th" value="25-FEB-26" data-col="meal-9"></th>
+                <th class="date-th"><span class="day-label">Thu</span><input class="date-input-th" value="26-FEB-26" data-col="meal-10"></th>
+                <th class="date-th"><span class="day-label">Fri</span><input class="date-input-th" value="27-FEB-26" data-col="meal-11"></th>
+                <th class="date-th"><span class="day-label">Sat</span><input class="date-input-th" value="28-FEB-26" data-col="meal-12"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="text" class="name-input meal-name" data-row="0" value="Hanzel Recuelo"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td><td><input type="number" class="num-input meal" value="1000"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td><td><input type="number" class="num-input meal" value="1000"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td><td><input type="number" class="num-input meal" value="1000"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td><td><input type="number" class="num-input meal" value="1000"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td><td><input type="number" class="num-input meal" value="1000"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td><td><input type="number" class="num-input meal" value="1000"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="name-input meal-name" data-row="1" value="Floter Foronda"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td><td><input type="number" class="num-input meal" value="1000"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td><td><input type="number" class="num-input meal" value="1000"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td><td><input type="number" class="num-input meal" value="1000"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td><td><input type="number" class="num-input meal" value="1000"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td><td><input type="number" class="num-input meal" value="1000"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td><td><input type="number" class="num-input meal" value="1000"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="name-input meal-name" data-row="2" value="Manolito Bautista"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td><td><input type="number" class="num-input meal" value="1000"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td><td><input type="number" class="num-input meal" value="1000"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td><td><input type="number" class="num-input meal" value="1000"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td><td><input type="number" class="num-input meal" value="1000"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td><td><input type="number" class="num-input meal" value="1000"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td><td><input type="number" class="num-input meal" value="1000"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="name-input meal-name" data-row="3" value="Chris Tinson"></td>
+                <td><input type="number" class="num-input meal" value="0"></td><td><input type="number" class="num-input meal" value="0"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td><td><input type="number" class="num-input meal" value="1000"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td><td><input type="number" class="num-input meal" value="1000"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td><td><input type="number" class="num-input meal" value="1000"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td><td><input type="number" class="num-input meal" value="1000"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td><td><input type="number" class="num-input meal" value="1000"></td>
+                <td><input type="number" class="num-input meal" value="1000"></td>
+            </tr>
+            <tr class="total-row">
+                <td><strong>DAILY TOTAL</strong></td>
+                <td>₱ <span id="mD0">0</span></td><td>₱ <span id="mD1">0</span></td><td>₱ <span id="mD2">0</span></td><td>₱ <span id="mD3">0</span></td><td>₱ <span id="mD4">0</span></td><td>₱ <span id="mD5">0</span></td><td>₱ <span id="mD6">0</span></td>
+                <td>₱ <span id="mD7">0</span></td><td>₱ <span id="mD8">0</span></td><td>₱ <span id="mD9">0</span></td><td>₱ <span id="mD10">0</span></td><td>₱ <span id="mD11">0</span></td><td>₱ <span id="mD12">0</span></td>
+            </tr>
+            <tr class="grand-row">
+                <td colspan="13" style="text-align:right; padding-right:8px;"><strong>MEAL ALLOWANCE SECTION TOTAL:</strong></td>
+                <td style="text-align:right;">₱ <span id="mealGrand">0</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ══════════════════════════════════════════════════════════
+         II. LODGING — 11 night columns (Feb 17–27)
+    ══════════════════════════════════════════════════════════ -->
+    <div class="section-title">II. LODGING / HOTEL ACCOMMODATION (₱1,500 per room per night)</div>
+    <table id="lodgingTable">
+        <colgroup>
+            <col style="width:110px">
+            <col><col><col><col><col><col><col><col><col><col><col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="name-col">NAME</th>
+                <th class="date-th"><span class="day-label">Tue</span><input class="date-input-th" value="17-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Wed</span><input class="date-input-th" value="18-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Thu</span><input class="date-input-th" value="19-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Fri</span><input class="date-input-th" value="20-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Sat</span><input class="date-input-th" value="21-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Sun</span><input class="date-input-th" value="22-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Mon</span><input class="date-input-th" value="23-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Tue</span><input class="date-input-th" value="24-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Wed</span><input class="date-input-th" value="25-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Thu</span><input class="date-input-th" value="26-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Fri</span><input class="date-input-th" value="27-FEB-26"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="name-cell lodging-name" data-row="0">Hanzel Recuelo</td>
+                <td><input type="number" class="num-input lodging" value="1500"></td><td><input type="number" class="num-input lodging" value="1500"></td>
+                <td><input type="number" class="num-input lodging" value="1500"></td><td><input type="number" class="num-input lodging" value="1500"></td>
+                <td><input type="number" class="num-input lodging" value="1500"></td><td><input type="number" class="num-input lodging" value="1500"></td>
+                <td><input type="number" class="num-input lodging" value="1500"></td><td><input type="number" class="num-input lodging" value="1500"></td>
+                <td><input type="number" class="num-input lodging" value="1500"></td><td><input type="number" class="num-input lodging" value="1500"></td>
+                <td><input type="number" class="num-input lodging" value="0"></td>
+            </tr>
+            <tr>
+                <td class="name-cell lodging-name" data-row="1">Floter Foronda</td>
+                <td><input type="number" class="num-input lodging" value="1500"></td><td><input type="number" class="num-input lodging" value="1500"></td>
+                <td><input type="number" class="num-input lodging" value="1500"></td><td><input type="number" class="num-input lodging" value="1500"></td>
+                <td><input type="number" class="num-input lodging" value="1500"></td><td><input type="number" class="num-input lodging" value="1500"></td>
+                <td><input type="number" class="num-input lodging" value="1500"></td><td><input type="number" class="num-input lodging" value="1500"></td>
+                <td><input type="number" class="num-input lodging" value="1500"></td><td><input type="number" class="num-input lodging" value="1500"></td>
+                <td><input type="number" class="num-input lodging" value="0"></td>
+            </tr>
+            <tr>
+                <td class="name-cell lodging-name" data-row="2">Manolito Bautista</td>
+                <td><input type="number" class="num-input lodging" value="1500"></td><td><input type="number" class="num-input lodging" value="1500"></td>
+                <td><input type="number" class="num-input lodging" value="1500"></td><td><input type="number" class="num-input lodging" value="1500"></td>
+                <td><input type="number" class="num-input lodging" value="1500"></td><td><input type="number" class="num-input lodging" value="1500"></td>
+                <td><input type="number" class="num-input lodging" value="1500"></td><td><input type="number" class="num-input lodging" value="1500"></td>
+                <td><input type="number" class="num-input lodging" value="1500"></td><td><input type="number" class="num-input lodging" value="1500"></td>
+                <td><input type="number" class="num-input lodging" value="0"></td>
+            </tr>
+            <tr>
+                <td class="name-cell lodging-name" data-row="3">Chris Tinson</td>
+                <td><input type="number" class="num-input lodging" value="0"></td><td><input type="number" class="num-input lodging" value="0"></td>
+                <td><input type="number" class="num-input lodging" value="1500"></td><td><input type="number" class="num-input lodging" value="1500"></td>
+                <td><input type="number" class="num-input lodging" value="1500"></td><td><input type="number" class="num-input lodging" value="1500"></td>
+                <td><input type="number" class="num-input lodging" value="1500"></td><td><input type="number" class="num-input lodging" value="1500"></td>
+                <td><input type="number" class="num-input lodging" value="1500"></td><td><input type="number" class="num-input lodging" value="1500"></td>
+                <td><input type="number" class="num-input lodging" value="0"></td>
+            </tr>
+            <tr class="total-row">
+                <td><strong>DAILY TOTAL</strong></td>
+                <td>₱ <span id="lD0">0</span></td><td>₱ <span id="lD1">0</span></td><td>₱ <span id="lD2">0</span></td><td>₱ <span id="lD3">0</span></td><td>₱ <span id="lD4">0</span></td><td>₱ <span id="lD5">0</span></td>
+                <td>₱ <span id="lD6">0</span></td><td>₱ <span id="lD7">0</span></td><td>₱ <span id="lD8">0</span></td><td>₱ <span id="lD9">0</span></td><td>₱ <span id="lD10">0</span></td>
+            </tr>
+            <tr class="grand-row">
+                <td colspan="11" style="text-align:right; padding-right:8px;"><strong>LODGING / HOTEL SECTION TOTAL:</strong></td>
+                <td style="text-align:right;">₱ <span id="lodgingGrand">0</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ══════════════════════════════════════════════════════════
+         III. TRANSPORTATION BREAKDOWN
+    ══════════════════════════════════════════════════════════ -->
+    <div class="section-title">III. TRANSPORTATION BREAKDOWN</div>
+    <table id="transportTable" style="table-layout:auto;">
+        <thead>
+            <tr>
+                <th style="width:110px; text-align:left; padding-left:3px;">NAME</th>
+                <th>BUS<br>(2-Way)</th>
+                <th>Terminal Fee<br>(Passenger)</th>
+                <th>RORO<br>(Passenger)</th>
+                <th>Upgrade</th>
+                <th>Terminal Fee<br>(RORO)</th>
+                <th>RORO<br>(Van)</th>
+                <th>Upgrade<br>(Van)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="name-cell trans-name" data-row="0">Hanzel Recuelo</td>
+                <td><input type="number" class="num-input trans" value="0"></td>
+                <td><input type="number" class="num-input trans" value="100"></td>
+                <td><input type="number" class="num-input trans" value="3400"></td>
+                <td><input type="number" class="num-input trans" value="0"></td>
+                <td><input type="number" class="num-input trans" value="0"></td>
+                <td><input type="number" class="num-input trans" value="0"></td>
+                <td><input type="number" class="num-input trans" value="0"></td>
+            </tr>
+            <tr>
+                <td class="name-cell trans-name" data-row="1">Floter Foronda</td>
+                <td><input type="number" class="num-input trans" value="0"></td>
+                <td><input type="number" class="num-input trans" value="100"></td>
+                <td><input type="number" class="num-input trans" value="3400"></td>
+                <td><input type="number" class="num-input trans" value="0"></td>
+                <td><input type="number" class="num-input trans" value="0"></td>
+                <td><input type="number" class="num-input trans" value="0"></td>
+                <td><input type="number" class="num-input trans" value="0"></td>
+            </tr>
+            <tr>
+                <td class="name-cell trans-name" data-row="2">Manolito Bautista</td>
+                <td><input type="number" class="num-input trans" value="0"></td>
+                <td><input type="number" class="num-input trans" value="0"></td>
+                <td><input type="number" class="num-input trans" value="0"></td>
+                <td><input type="number" class="num-input trans" value="0"></td>
+                <td><input type="number" class="num-input trans" value="600"></td>
+                <td><input type="number" class="num-input trans" value="24000"></td>
+                <td><input type="number" class="num-input trans" value="1000"></td>
+            </tr>
+            <tr>
+                <td class="name-cell trans-name" data-row="3">Chris Tinson</td>
+                <td><input type="number" class="num-input trans" value="1000"></td>
+                <td><input type="number" class="num-input trans" value="100"></td>
+                <td><input type="number" class="num-input trans" value="3400"></td>
+                <td><input type="number" class="num-input trans" value="0"></td>
+                <td><input type="number" class="num-input trans" value="0"></td>
+                <td><input type="number" class="num-input trans" value="0"></td>
+                <td><input type="number" class="num-input trans" value="0"></td>
+            </tr>
+            <tr class="total-row">
+                <td><strong>COLUMN TOTAL</strong></td>
+                <td>₱ <span id="tC0">0</span></td><td>₱ <span id="tC1">0</span></td><td>₱ <span id="tC2">0</span></td><td>₱ <span id="tC3">0</span></td><td>₱ <span id="tC4">0</span></td><td>₱ <span id="tC5">0</span></td><td>₱ <span id="tC6">0</span></td>
+            </tr>
+            <tr class="grand-row">
+                <td colspan="7" style="text-align:right; padding-right:8px;"><strong>TRANSPORTATION SECTION TOTAL:</strong></td>
+                <td style="text-align:right;">₱ <span id="transGrand">0</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ══════════════════════════════════════════════════════════
+         IV. LAUNDRY — 13 day columns
+    ══════════════════════════════════════════════════════════ -->
+    <div class="section-title">IV. LAUNDRY EXPENSES (₱200 per batch)</div>
+    <table id="laundryTable">
+        <colgroup>
+            <col style="width:110px">
+            <col><col><col><col><col><col><col><col><col><col><col><col><col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="name-col">NAME</th>
+                <th class="date-th"><span class="day-label">Mon</span><input class="date-input-th" value="16-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Tue</span><input class="date-input-th" value="17-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Wed</span><input class="date-input-th" value="18-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Thu</span><input class="date-input-th" value="19-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Fri</span><input class="date-input-th" value="20-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Sat</span><input class="date-input-th" value="21-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Sun</span><input class="date-input-th" value="22-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Mon</span><input class="date-input-th" value="23-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Tue</span><input class="date-input-th" value="24-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Wed</span><input class="date-input-th" value="25-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Thu</span><input class="date-input-th" value="26-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Fri</span><input class="date-input-th" value="27-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Sat</span><input class="date-input-th" value="28-FEB-26"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="name-cell laundry-name" data-row="0">Hanzel Recuelo</td>
+                <td><input type="number" class="num-input laundry" value="0"></td><td><input type="number" class="num-input laundry" value="0"></td>
+                <td><input type="number" class="num-input laundry" value="0"></td><td><input type="number" class="num-input laundry" value="0"></td>
+                <td><input type="number" class="num-input laundry" value="200"></td><td><input type="number" class="num-input laundry" value="0"></td>
+                <td><input type="number" class="num-input laundry" value="0"></td><td><input type="number" class="num-input laundry" value="0"></td>
+                <td><input type="number" class="num-input laundry" value="0"></td><td><input type="number" class="num-input laundry" value="0"></td>
+                <td><input type="number" class="num-input laundry" value="0"></td><td><input type="number" class="num-input laundry" value="200"></td>
+                <td><input type="number" class="num-input laundry" value="0"></td>
+            </tr>
+            <tr>
+                <td class="name-cell laundry-name" data-row="1">Floter Foronda</td>
+                <td><input type="number" class="num-input laundry" value="0"></td><td><input type="number" class="num-input laundry" value="0"></td>
+                <td><input type="number" class="num-input laundry" value="0"></td><td><input type="number" class="num-input laundry" value="0"></td>
+                <td><input type="number" class="num-input laundry" value="200"></td><td><input type="number" class="num-input laundry" value="0"></td>
+                <td><input type="number" class="num-input laundry" value="0"></td><td><input type="number" class="num-input laundry" value="0"></td>
+                <td><input type="number" class="num-input laundry" value="0"></td><td><input type="number" class="num-input laundry" value="0"></td>
+                <td><input type="number" class="num-input laundry" value="0"></td><td><input type="number" class="num-input laundry" value="200"></td>
+                <td><input type="number" class="num-input laundry" value="0"></td>
+            </tr>
+            <tr>
+                <td class="name-cell laundry-name" data-row="2">Manolito Bautista</td>
+                <td><input type="number" class="num-input laundry" value="0"></td><td><input type="number" class="num-input laundry" value="0"></td>
+                <td><input type="number" class="num-input laundry" value="0"></td><td><input type="number" class="num-input laundry" value="0"></td>
+                <td><input type="number" class="num-input laundry" value="200"></td><td><input type="number" class="num-input laundry" value="0"></td>
+                <td><input type="number" class="num-input laundry" value="0"></td><td><input type="number" class="num-input laundry" value="0"></td>
+                <td><input type="number" class="num-input laundry" value="0"></td><td><input type="number" class="num-input laundry" value="0"></td>
+                <td><input type="number" class="num-input laundry" value="0"></td><td><input type="number" class="num-input laundry" value="200"></td>
+                <td><input type="number" class="num-input laundry" value="0"></td>
+            </tr>
+            <tr>
+                <td class="name-cell laundry-name" data-row="3">Chris Tinson</td>
+                <td><input type="number" class="num-input laundry" value="0"></td><td><input type="number" class="num-input laundry" value="0"></td>
+                <td><input type="number" class="num-input laundry" value="0"></td><td><input type="number" class="num-input laundry" value="0"></td>
+                <td><input type="number" class="num-input laundry" value="200"></td><td><input type="number" class="num-input laundry" value="0"></td>
+                <td><input type="number" class="num-input laundry" value="0"></td><td><input type="number" class="num-input laundry" value="0"></td>
+                <td><input type="number" class="num-input laundry" value="0"></td><td><input type="number" class="num-input laundry" value="0"></td>
+                <td><input type="number" class="num-input laundry" value="0"></td><td><input type="number" class="num-input laundry" value="200"></td>
+                <td><input type="number" class="num-input laundry" value="0"></td>
+            </tr>
+            <tr class="total-row">
+                <td><strong>DAILY TOTAL</strong></td>
+                <td>₱ <span id="ldD0">0</span></td><td>₱ <span id="ldD1">0</span></td><td>₱ <span id="ldD2">0</span></td><td>₱ <span id="ldD3">0</span></td><td>₱ <span id="ldD4">0</span></td><td>₱ <span id="ldD5">0</span></td><td>₱ <span id="ldD6">0</span></td>
+                <td>₱ <span id="ldD7">0</span></td><td>₱ <span id="ldD8">0</span></td><td>₱ <span id="ldD9">0</span></td><td>₱ <span id="ldD10">0</span></td><td>₱ <span id="ldD11">0</span></td><td>₱ <span id="ldD12">0</span></td>
+            </tr>
+            <tr class="grand-row">
+                <td colspan="13" style="text-align:right; padding-right:8px;"><strong>LAUNDRY EXPENSE SECTION TOTAL:</strong></td>
+                <td style="text-align:right;">₱ <span id="laundryGrand">0</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ══════════════════════════════════════════════════════════
+         V. REPRESENTATION EXPENSE — 13 day columns
+    ══════════════════════════════════════════════════════════ -->
+    <div class="section-title">V. REPRESENTATION EXPENSE</div>
+    <table id="repTable">
+        <colgroup>
+            <col style="width:110px">
+            <col><col><col><col><col><col><col><col><col><col><col><col><col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="name-col">NAME</th>
+                <th class="date-th"><span class="day-label">Mon</span><input class="date-input-th" value="16-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Tue</span><input class="date-input-th" value="17-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Wed</span><input class="date-input-th" value="18-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Thu</span><input class="date-input-th" value="19-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Fri</span><input class="date-input-th" value="20-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Sat</span><input class="date-input-th" value="21-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Sun</span><input class="date-input-th" value="22-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Mon</span><input class="date-input-th" value="23-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Tue</span><input class="date-input-th" value="24-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Wed</span><input class="date-input-th" value="25-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Thu</span><input class="date-input-th" value="26-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Fri</span><input class="date-input-th" value="27-FEB-26"></th>
+                <th class="date-th"><span class="day-label">Sat</span><input class="date-input-th" value="28-FEB-26"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="name-cell rep-name" data-row="0">Hanzel Recuelo</td>
+                <td><input type="number" class="num-input rep" value="0"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="0"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="5000"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="0"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="0"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="0"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="0"></td>
+            </tr>
+            <tr>
+                <td class="name-cell rep-name" data-row="1">Floter Foronda</td>
+                <td><input type="number" class="num-input rep" value="0"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="0"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="0"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="0"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="0"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="0"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="0"></td>
+            </tr>
+            <tr>
+                <td class="name-cell rep-name" data-row="2">Manolito Bautista</td>
+                <td><input type="number" class="num-input rep" value="0"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="0"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="0"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="0"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="0"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="0"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="0"></td>
+            </tr>
+            <tr>
+                <td class="name-cell rep-name" data-row="3">Chris Tinson</td>
+                <td><input type="number" class="num-input rep" value="0"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="0"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="0"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="0"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="0"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="0"></td><td><input type="number" class="num-input rep" value="0"></td>
+                <td><input type="number" class="num-input rep" value="0"></td>
+            </tr>
+            <tr class="total-row">
+                <td><strong>DAILY TOTAL</strong></td>
+                <td>₱ <span id="rD0">0</span></td><td>₱ <span id="rD1">0</span></td><td>₱ <span id="rD2">0</span></td><td>₱ <span id="rD3">0</span></td><td>₱ <span id="rD4">0</span></td><td>₱ <span id="rD5">0</span></td><td>₱ <span id="rD6">0</span></td>
+                <td>₱ <span id="rD7">0</span></td><td>₱ <span id="rD8">0</span></td><td>₱ <span id="rD9">0</span></td><td>₱ <span id="rD10">0</span></td><td>₱ <span id="rD11">0</span></td><td>₱ <span id="rD12">0</span></td>
+            </tr>
+            <tr class="grand-row">
+                <td colspan="13" style="text-align:right; padding-right:8px;"><strong>REPRESENTATION SECTION TOTAL:</strong></td>
+                <td style="text-align:right;">₱ <span id="repGrand">0</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ══════════════════════════════════════════════════════════
+         VI. SUMMARY
+    ══════════════════════════════════════════════════════════ -->
+    <div class="section-title">VI. SUMMARY OF TOTAL EXPENSES</div>
+    <table class="summary-table" style="table-layout:auto; margin-bottom:14px;">
+        <tr><td style="font-weight:700;">I. Meal Allowance Total</td><td style="text-align:right;">₱ <span id="sumMeal">0.00</span></td></tr>
+        <tr><td style="font-weight:700;">II. Lodging / Hotel Total</td><td style="text-align:right;">₱ <span id="sumLodging">0.00</span></td></tr>
+        <tr><td style="font-weight:700;">III. Transportation Total</td><td style="text-align:right;">₱ <span id="sumTrans">0.00</span></td></tr>
+        <tr><td style="font-weight:700;">IV. Laundry Total</td><td style="text-align:right;">₱ <span id="sumLaundry">0.00</span></td></tr>
+        <tr><td style="font-weight:700;">V. Representation Total</td><td style="text-align:right;">₱ <span id="sumRep">0.00</span></td></tr>
+        <tr class="summary-grand">
+            <td style="font-weight:900; padding:5px 8px;">GRAND TOTAL (All Expenses)</td>
+            <td style="text-align:right; font-weight:900; padding:5px 8px;">₱ <span id="sumGrand">0.00</span></td>
+        </tr>
+    </table>
+
+    <!-- FOOTER -->
+    <div style="text-align:right; margin-top:8px;">
+        <span style="background:#000; color:#fff; font-size:8px; font-weight:700; padding:2px 8px; letter-spacing:1px;">
+            CONFIDENTIAL &nbsp;&nbsp; BTA_BREAKDOWN_v1
+        </span>
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="btn-row no-print">
+        <button class="reset-btn" onclick="resetForm()">Reset Form</button>
+        <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
+    </div>
+
+</div>
+
+<script>
+'use strict';
+
+function fmt(n) {
+    return n.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function v(el) { return parseFloat(el.value) || 0; }
+
+/* ── Recalculate all sections ── */
+function recalcAll() {
+    // I. Meal (13 cols)
+    let mealGrand = 0;
+    let mealCols  = Array(13).fill(0);
+    document.querySelectorAll('#mealTable tbody tr:not(.total-row):not(.grand-row)').forEach(tr => {
+        tr.querySelectorAll('.meal').forEach((inp, i) => {
+            const val = v(inp);
+            mealCols[i] += val;
+            mealGrand   += val;
+        });
+    });
+    mealCols.forEach((c,i) => { const el=document.getElementById('mD'+i); if(el) el.textContent=fmt(c); });
+    document.getElementById('mealGrand').textContent = fmt(mealGrand);
+
+    // II. Lodging (11 cols)
+    let lodgGrand = 0;
+    let lodgCols  = Array(11).fill(0);
+    document.querySelectorAll('#lodgingTable tbody tr:not(.total-row):not(.grand-row)').forEach(tr => {
+        tr.querySelectorAll('.lodging').forEach((inp, i) => {
+            const val = v(inp);
+            lodgCols[i] += val;
+            lodgGrand   += val;
+        });
+    });
+    lodgCols.forEach((c,i) => { const el=document.getElementById('lD'+i); if(el) el.textContent=fmt(c); });
+    document.getElementById('lodgingGrand').textContent = fmt(lodgGrand);
+
+    // III. Transport (7 cols)
+    let transGrand = 0;
+    let transCols  = Array(7).fill(0);
+    document.querySelectorAll('#transportTable tbody tr:not(.total-row):not(.grand-row)').forEach(tr => {
+        tr.querySelectorAll('.trans').forEach((inp, i) => {
+            const val = v(inp);
+            transCols[i] += val;
+            transGrand   += val;
+        });
+    });
+    transCols.forEach((c,i) => { const el=document.getElementById('tC'+i); if(el) el.textContent=fmt(c); });
+    document.getElementById('transGrand').textContent = fmt(transGrand);
+
+    // IV. Laundry (13 cols)
+    let laundGrand = 0;
+    let laundCols  = Array(13).fill(0);
+    document.querySelectorAll('#laundryTable tbody tr:not(.total-row):not(.grand-row)').forEach(tr => {
+        tr.querySelectorAll('.laundry').forEach((inp, i) => {
+            const val = v(inp);
+            laundCols[i] += val;
+            laundGrand   += val;
+        });
+    });
+    laundCols.forEach((c,i) => { const el=document.getElementById('ldD'+i); if(el) el.textContent=fmt(c); });
+    document.getElementById('laundryGrand').textContent = fmt(laundGrand);
+
+    // V. Representation (13 cols)
+    let repGrand = 0;
+    let repCols  = Array(13).fill(0);
+    document.querySelectorAll('#repTable tbody tr:not(.total-row):not(.grand-row)').forEach(tr => {
+        tr.querySelectorAll('.rep').forEach((inp, i) => {
+            const val = v(inp);
+            repCols[i] += val;
+            repGrand   += val;
+        });
+    });
+    repCols.forEach((c,i) => { const el=document.getElementById('rD'+i); if(el) el.textContent=fmt(c); });
+    document.getElementById('repGrand').textContent = fmt(repGrand);
+
+    // VI. Summary
+    document.getElementById('sumMeal').textContent    = fmt(mealGrand);
+    document.getElementById('sumLodging').textContent = fmt(lodgGrand);
+    document.getElementById('sumTrans').textContent   = fmt(transGrand);
+    document.getElementById('sumLaundry').textContent = fmt(laundGrand);
+    document.getElementById('sumRep').textContent     = fmt(repGrand);
+    document.getElementById('sumGrand').textContent   = fmt(mealGrand + lodgGrand + transGrand + laundGrand + repGrand);
+}
+
+/* ── Sync names from meal table → other tables ── */
+function syncNames() {
+    const mealNames = document.querySelectorAll('.meal-name');
+    mealNames.forEach((inp, i) => {
+        const name = inp.value;
+        const selectors = [
+            `#lodgingTable .lodging-name[data-row="${i}"]`,
+            `#transportTable .trans-name[data-row="${i}"]`,
+            `#laundryTable .laundry-name[data-row="${i}"]`,
+            `#repTable .rep-name[data-row="${i}"]`,
+        ];
+        selectors.forEach(sel => {
+            const el = document.querySelector(sel);
+            if (el) el.textContent = name;
+        });
+    });
+}
+
+/* ── Modal Confirmation ── */
+window.showConfirm = function(title, message) {
+    return new Promise((resolve) => {
+        const confirmModal = document.createElement('div');
+        confirmModal.className = 'fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all duration-300';
+        confirmModal.innerHTML = `
+            <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full transform transition-all scale-95 opacity-0" id="confirmContent">
+                <div class="p-6 text-center">
+                    <div class="w-16 h-16 bg-maroon-ltd/10 text-maroon-ltd rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-maroon-ltd tracking-tight mb-2 uppercase font-oswald">${title}</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">${message}</p>
+                    <div class="flex gap-3">
+                        <button id="cancelBtn" class="flex-1 px-4 py-3 text-xs font-bold text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-colors border border-gray-100 rounded-xl uppercase tracking-widest">Cancel</button>
+                        <button id="proceedBtn" class="flex-1 px-4 py-3 text-xs font-bold bg-maroon-ltd text-white hover:bg-black transition-colors rounded-xl uppercase tracking-widest shadow-lg shadow-maroon-ltd/20">Confirm Action</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(confirmModal);
+        requestAnimationFrame(() => {
+            const content = document.getElementById('confirmContent');
+            if (content) content.classList.remove('scale-95', 'opacity-0');
+        });
+        const close = (result) => {
+            const content = document.getElementById('confirmContent');
+            if (content) content.classList.add('scale-95', 'opacity-0');
+            confirmModal.classList.add('opacity-0');
+            setTimeout(() => confirmModal.remove(), 300);
+            resolve(result);
+        };
+        document.getElementById('cancelBtn').onclick = () => close(false);
+        document.getElementById('proceedBtn').onclick = () => close(true);
+    });
+};
+
+/* ── Reset ── */
+async function resetForm() {
+    const confirmed = await window.showConfirm('Reset Form', 'Are you sure you want to reset all fields? This action cannot be undone.');
+    if (!confirmed) return;
+    document.querySelectorAll('input[type="number"]').forEach(el => el.value = '0');
+    document.querySelectorAll('input[type="text"].num-input').forEach(el => el.value = '');
+    recalcAll();
+}
+
+/* ── Attach events ── */
+window.addEventListener('load', () => {
+    document.querySelectorAll('input').forEach(inp => {
+        inp.addEventListener('input', () => {
+            syncNames();
+            recalcAll();
+        });
+    });
+    syncNames();
+    recalcAll();
+});
+</script>
+</body>
+</html>

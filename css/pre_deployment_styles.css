@@ -1,0 +1,328 @@
+/* ============================================================
+   PRE-DEPLOYMENT REPORT — Stylesheet
+   File: pre_deployment_styles.css
+   ============================================================ */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background: #d1d5db;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 10.5px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.page {
+    width: 750px;
+    background: white;
+    border: 1px solid #999;
+    padding: 16px 20px 20px;
+}
+
+/* ── HEADER: Logo + Company ── */
+.header-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1.5px solid #000;
+}
+.header-table td {
+    border: 0;
+    padding: 0;
+    vertical-align: middle;
+}
+.logo-cell {
+    width: 80px;
+    border-right: 1.5px solid #000;
+    text-align: center;
+    padding: 8px 10px;
+    vertical-align: middle;
+}
+.ltd-logo {
+    display: inline-block;
+    border: 3px solid #6b1a1a;
+    border-radius: 6px;
+    width: 52px;
+    height: 52px;
+    overflow: hidden;
+}
+.ltd-logo svg {
+    width: 100%;
+    height: 100%;
+}
+.company-cell {
+    padding: 6px 12px;
+    text-align: center;
+    vertical-align: middle;
+}
+.company-name {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 900;
+    color: #000;
+    letter-spacing: 0.3px;
+}
+.company-addr {
+    font-family: Arial, sans-serif;
+    font-size: 8px;
+    color: #333;
+    margin-top: 2px;
+}
+
+/* ── TITLE ROW: PRE-DEPLOYMENT REPORT + No./Date ── */
+.title-row-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1.5px solid #000;
+    border-top: 0;
+}
+.title-row-table td {
+    border: 0;
+}
+.pdr-title-cell {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+    vertical-align: middle;
+    padding: 6px 12px;
+    border-right: 1.5px solid #000;
+    /* rowspan=2, so no border-bottom needed — handled by border of table */
+}
+.nd-label-cell {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 10px;
+    font-weight: 400;
+    white-space: nowrap;
+    padding: 3px 6px;
+    width: 40px;
+    border-left: 0;
+    vertical-align: middle;
+}
+.nd-value-cell {
+    padding: 2px 4px;
+    width: 130px;
+    vertical-align: middle;
+}
+/* Border between No. and Date rows */
+.title-row-table tr:first-child .nd-label-cell,
+.title-row-table tr:first-child .nd-value-cell {
+    border-bottom: 1px solid #000;
+}
+
+/* ── GENERIC FORM TABLE ── */
+.form-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1.5px solid #000;
+    border-top: 0;
+    font-size: 10px;
+    font-family: 'Times New Roman', Times, serif;
+}
+.form-table td {
+    border: 1px solid #000;
+    padding: 3px 6px;
+    vertical-align: middle;
+}
+
+/* ── SECTION HEADERS ── */
+.section-hdr {
+    background: #d7d7d7;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 700;
+    font-size: 10.5px;
+    text-align: center;
+    padding: 3px 6px;
+    letter-spacing: 0.5px;
+    border: 1px solid #000;
+}
+.section-hdr-gray {
+    background: #d7d7d7;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 700;
+    font-size: 10px;
+    padding: 4px 6px;
+}
+
+/* ── LABEL CELLS ── */
+.lbl {
+    background: #d7d7d7;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 700;
+    font-size: 10.5px;
+    white-space: nowrap;
+    padding: 3px 6px;
+    vertical-align: middle;
+}
+
+/* ── INPUTS ── */
+input[type="text"],
+textarea {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 10px;
+    font-family: 'Palatino Linotype', Palatino, serif;
+    background: transparent;
+    padding: 1px 2px;
+    resize: none;
+}
+input[type="text"]:focus,
+textarea:focus {
+    background: #fffde7;
+}
+
+/* ── OVERVIEW CELL ── */
+.overview-cell {
+    padding: 4px 6px;
+}
+.overview-cell textarea {
+    width: 100%;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 10px;
+}
+
+/* ── ITINERARY ── */
+.itin-hdr {
+    background: #f1f1f1;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 700;
+    font-size: 10.5px;
+    padding: 4px 6px;
+    vertical-align: top;
+}
+.col-day       { width: 100px; text-align: center; }
+.col-activity  { }
+.col-personnel { width: 160px; }
+
+.itin-row .day-cell {
+    background: #f1f1f1;
+    text-align: center;
+    vertical-align: middle;
+    padding: 5px 4px;
+    width: 100px;
+}
+.day-label {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 3px;
+}
+.day-date-input {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 10px;
+    text-align: center;
+    border: none;
+    border-bottom: 1px solid #888;
+    background: transparent;
+    width: 88px;
+    outline: none;
+    padding: 1px 2px;
+}
+.day-date-input:focus { background: #fffde7; }
+
+.activity-cell {
+    vertical-align: middle;
+    padding: 4px 6px;
+}
+.activity-input {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 10px;
+    width: 100%;
+    min-height: 52px;
+}
+
+.personnel-cell {
+    vertical-align: middle;
+    padding: 4px 6px;
+    text-align: center;
+    width: 160px;
+}
+.personnel-input {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 10px;
+    width: 100%;
+    text-align: center;
+    min-height: 52px;
+}
+
+/* ── SIGNATURE TABLE ── */
+.sig-table {
+    border-top: 0;
+}
+.sig-table td {
+    border: 1px solid #000;
+    padding: 4px 6px;
+    vertical-align: top;
+}
+.sig-spacer {
+    width: 70px;
+}
+.sig-col {
+    width: calc((100% - 70px) / 3);
+    text-align: left;
+    font-size: 10.5px;
+}
+.sig-row-lbl {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 10.5px;
+    vertical-align: top;
+    white-space: nowrap;
+    padding: 4px 6px;
+    width: 70px;
+}
+.sig-val {
+    vertical-align: middle;
+    padding: 3px 6px;
+}
+.sig-val input {
+    font-family: Georgia, serif;
+    font-size: 9px;
+    text-align: center;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #aaa;
+    outline: none;
+    background: transparent;
+}
+.sig-val input:focus { background: #fffde7; }
+.sig-space {
+    height: 36px;
+}
+
+/* ── ACTION BUTTONS ── */
+.btn-row {
+    margin-top: 14px;
+    text-align: right;
+}
+.print-btn {
+    background: #1e3a5f;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-left: 8px;
+}
+.reset-btn {
+    background: #555;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.print-btn:hover,
+.reset-btn:hover { opacity: 0.88; }
+
+/* ── PRINT ── */
+@media print {
+    body  { background: white; padding: 0; }
+    .page { border: none; width: 100%; }
+    .no-print { display: none; }
+}
