@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Expense Breakdown | Lancaster Technology</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #d1d5db;
+            font-family: "Times New Roman", Times, serif;
+            font-size: 10px;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .page {
+            width: 1200px;
+            background: white;
+            border: 1px solid #999;
+            padding: 16px 20px 20px;
+        }
+
+        /* HEADER */
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px solid #000;
+            margin-bottom: 16px;
+        }
+
+        .header-table td {
+            border: 0;
+            padding: 0;
+            vertical-align: middle;
+        }
+
+        .logo-cell {
+            width: 90px;
+            border-right: 2px solid #000;
+            text-align: center;
+            padding: 8px 10px;
+        }
+
+        .logo-cell img {
+            max-height: 55px;
+            width: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .company-cell {
+            padding: 6px 12px;
+            text-align: center;
+        }
+
+        .company-name {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 14px;
+            font-weight: 900;
+            letter-spacing: 0.3px;
+        }
+
+        .company-addr {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 8px;
+            color: #333;
+            margin-top: 2px;
+        }
+
+        .title-row {
+            border: 2px solid #000;
+            border-top: none;
+            text-align: center;
+            padding: 6px;
+            font-size: 16px;
+            font-weight: 900;
+            background: #e0e0e0;
+        }
+
+        /* TABLES */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9px;
+            font-family: "Times New Roman", Times, serif;
+            margin-bottom: 16px;
+        }
+
+        td, th {
+            border: 1px solid #000;
+            padding: 4px 6px;
+            vertical-align: middle;
+        }
+
+        th {
+            background: #d0d0d0;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .section-title {
+            font-weight: 900;
+            font-size: 11px;
+            background: #c0c0c0;
+            padding: 5px;
+            border: 1px solid #000;
+            margin-top: 12px;
+            margin-bottom: 0;
+        }
+
+        .subtitle {
+            font-weight: 700;
+            background: #e8e8e8;
+            text-align: center;
+        }
+
+        input, textarea {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 9px;
+            font-family: "Times New Roman", Times, serif;
+            background: transparent;
+            padding: 2px;
+            text-align: center;
+        }
+
+        /* Editable text fields styling */
+        input[type="text"].editable-name, input.editable-date, input.editable-location {
+            border: 1px solid #ccc;
+            background: transparent;
+            border-radius: 2px;
+            text-align: center;
+            font-weight: 700;
+        }
+        input.editable-date {
+            width: auto;
+            min-width: 180px;
+            display: inline-block;
+            font-size: 10px;
+        }
+        .date-range-wrapper {
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .date-range-wrapper span {
+            font-size: 10px;
+        }
+        .location-input {
+            width: 200px;
+        }
+
+        input:focus {
+            background: transparent;
+        }
+
+        .amt {
+            text-align: right;
+        }
+
+        .total-row {
+            background: #e8e8e8;
+            font-weight: 700;
+        }
+
+        .total-row td {
+            font-weight: 700;
+        }
+
+        .print-btn, .reset-btn {
+            background: #1e3a5f;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 4px;
+            margin: 12px 4px;
+        }
+
+        .reset-btn {
+            background: #555;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .page {
+                border: none;
+                width: 100%;
+            }
+            .no-print {
+                display: none;
+            }
+            input.editable-name, input.editable-date, input.editable-location {
+                border: none;
+                background: transparent;
+            }
+        }
+
+        .confidential {
+            text-align: right;
+            font-size: 8px;
+            font-weight: 700;
+            margin-top: 10px;
+            background: #000;
+            color: #fff;
+            padding: 2px 8px;
+            display: inline-block;
+            float: right;
+        }
+
+        .breakdown-header {
+            font-weight: 700;
+            font-size: 12px;
+            text-align: center;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <!-- HEADER -->
+    <table class="header-table">
+        <tr>
+            <td class="logo-cell">
+                <img src="photos/ltd.png" alt="LTD Logo" onerror="this.style.display='none'; this.outerHTML='<div style=\'font-size:20px; font-weight:bold;\'>LTD</div>'">
+            </td>
+            <td class="company-cell">
+                <div class="company-name">LANCASTER TECHNOLOGY AND DEVELOPMENT CORPORATION</div>
+                <div class="company-addr">Suite 3201 High Street South Corporate Plaza Tower 2, 11th Ave., corner 26th St., Bonifacio Global City, Taguig City 1634</div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="title-row">TRAVEL EXPENSE BREAKDOWN</div>
+    
+    <!-- FILLABLE DATE & LOCATION SECTION -->
+    <div class="date-range-wrapper">
+        <span>Period:</span>
+        <input type="text" id="startDate" class="editable-date" value="February 16, 2026" style="width:130px;">
+        <span>—</span>
+        <input type="text" id="endDate" class="editable-date" value="February 28, 2026" style="width:130px;">
+        <span>|</span>
+        <span> Destination:</span>
+        <input type="text" id="destination" class="editable-date location-input" value="Romblon State University (RSU)" style="width:220px;">
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- 1. MEAL ALLOWANCE BREAKDOWN with FILLABLE NAMES -->
+    <!-- ================================================================ -->
+    <div class="section-title">I. MEAL ALLOWANCE (₱1,000 per day per person)</div>
+    <table id="mealTable">
+        <thead>
+            <tr>
+                <th style="width:140px;">NAME <span style="font-size:8px;">(click to edit)</span></th>
+                <th>Mon<br>16</th><th>Tue<br>17</th><th>Wed<br>18</th><th>Thu<br>19</th><th>Fri<br>20</th>
+                <th>Sat<br>21</th><th>Sun<br>22</th><th>Mon<br>23</th><th>Tue<br>24</th><th>Wed<br>25</th>
+                <th>Thu<br>26</th><th>Fri<br>27</th><th>Sat<br>28</th>
+                <th style="width:80px;">TOTAL</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="text" class="editable-name" data-name-row="0" value="Hanzel Recuelo" style="font-weight:bold;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td class="mealTotal" style="text-align:right; font-weight:700;">0</td>
+            </tr>
+            <tr>
+                <td><input type="text" class="editable-name" data-name-row="1" value="Floter Foronda" style="font-weight:bold;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td class="mealTotal" style="text-align:right; font-weight:700;">0</td>
+            </tr>
+            <tr>
+                <td><input type="text" class="editable-name" data-name-row="2" value="Manolito Bautista" style="font-weight:bold;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td class="mealTotal" style="text-align:right; font-weight:700;">0</td>
+            </tr>
+            <tr>
+                <td><input type="text" class="editable-name" data-name-row="3" value="Chris Tinson" style="font-weight:bold;"></td>
+                <td><input type="number" class="meal" value="0" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="0" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td><input type="number" class="meal" value="1000" step="any" style="width:55px;"></td>
+                <td class="mealTotal" style="text-align:right; font-weight:700;">0</td>
+            </tr>
+            <tr class="total-row">
+                <td><strong>DAILY TOTAL</strong></td>
+                <td id="mealDay1">0</td><td id="mealDay2">0</td><td id="mealDay3">0</td><td id="mealDay4">0</td>
+                <td id="mealDay5">0</td><td id="mealDay6">0</td><td id="mealDay7">0</td><td id="mealDay8">0</td>
+                <td id="mealDay9">0</td><td id="mealDay10">0</td><td id="mealDay11">0</td><td id="mealDay12">0</td><td id="mealDay13">0</td>
+                <td id="mealGrandTotal" style="text-align:right; font-weight:700;">0</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ================================================================ -->
+    <!-- 2. LODGING BREAKDOWN (HOTEL) editable names sync -->
+    <!-- ================================================================ -->
+    <div class="section-title">II. LODGING / HOTEL ACCOMMODATION (₱1,500 per room per night)</div>
+    <table id="lodgingTable">
+        <thead>
+            <tr><th style="width:140px;">NAME</th><th>Tue<br>17</th><th>Wed<br>18</th><th>Thu<br>19</th><th>Fri<br>20</th>
+            <th>Sat<br>21</th><th>Sun<br>22</th><th>Mon<br>23</th><th>Tue<br>24</th><th>Wed<br>25</th>
+            <th>Thu<br>26</th><th>Fri<br>27</th><th style="width:80px;">TOTAL</th></tr>
+        </thead>
+        <tbody>
+            <tr><td class="lodging-name-cell" data-lodging-row="0">Hanzel Recuelo</td>
+                <td><input type="number" class="lodging" value="1500" step="any"></td><td><input type="number" class="lodging" value="1500" step="any"></td>
+                <td><input type="number" class="lodging" value="1500" step="any"></td><td><input type="number" class="lodging" value="1500" step="any"></td>
+                <td><input type="number" class="lodging" value="1500" step="any"></td><td><input type="number" class="lodging" value="1500" step="any"></td>
+                <td><input type="number" class="lodging" value="1500" step="any"></td><td><input type="number" class="lodging" value="1500" step="any"></td>
+                <td><input type="number" class="lodging" value="1500" step="any"></td><td><input type="number" class="lodging" value="1500" step="any"></td>
+                <td><input type="number" class="lodging" value="0" step="any"></td>
+                <td class="lodgingTotal" style="text-align:right;">0</td>
+            </tr>
+            <tr><td class="lodging-name-cell" data-lodging-row="1">Floter Foronda</td>
+                <td><input type="number" class="lodging" value="1500" step="any"></td><td><input type="number" class="lodging" value="1500" step="any"></td>
+                <td><input type="number" class="lodging" value="1500" step="any"></td><td><input type="number" class="lodging" value="1500" step="any"></td>
+                <td><input type="number" class="lodging" value="1500" step="any"></td><td><input type="number" class="lodging" value="1500" step="any"></td>
+                <td><input type="number" class="lodging" value="1500" step="any"></td><td><input type="number" class="lodging" value="1500" step="any"></td>
+                <td><input type="number" class="lodging" value="1500" step="any"></td><td><input type="number" class="lodging" value="1500" step="any"></td>
+                <td><input type="number" class="lodging" value="0" step="any"></td>
+                <td class="lodgingTotal" style="text-align:right;">0</td>
+            </tr>
+            <tr><td class="lodging-name-cell" data-lodging-row="2">Manolito Bautista</td>
+                <td><input type="number" class="lodging" value="1500" step="any"></td><td><input type="number" class="lodging" value="1500" step="any"></td>
+                <td><input type="number" class="lodging" value="1500" step="any"></td><td><input type="number" class="lodging" value="1500" step="any"></td>
+                <td><input type="number" class="lodging" value="1500" step="any"></td><td><input type="number" class="lodging" value="1500" step="any"></td>
+                <td><input type="number" class="lodging" value="1500" step="any"></td><td><input type="number" class="lodging" value="1500" step="any"></td>
+                <td><input type="number" class="lodging" value="1500" step="any"></td><td><input type="number" class="lodging" value="1500" step="any"></td>
+                <td><input type="number" class="lodging" value="0" step="any"></td>
+                <td class="lodgingTotal" style="text-align:right;">0</td>
+            </tr>
+            <tr><td class="lodging-name-cell" data-lodging-row="3">Chris Tinson</td>
+                <td><input type="number" class="lodging" value="0" step="any"></td><td><input type="number" class="lodging" value="0" step="any"></td>
+                <td><input type="number" class="lodging" value="1500" step="any"></td><td><input type="number" class="lodging" value="1500" step="any"></td>
+                <td><input type="number" class="lodging" value="1500" step="any"></td><td><input type="number" class="lodging" value="1500" step="any"></td>
+                <td><input type="number" class="lodging" value="1500" step="any"></td><td><input type="number" class="lodging" value="1500" step="any"></td>
+                <td><input type="number" class="lodging" value="1500" step="any"></td><td><input type="number" class="lodging" value="1500" step="any"></td>
+                <td><input type="number" class="lodging" value="0" step="any"></td>
+                <td class="lodgingTotal" style="text-align:right;">0</td>
+            </tr>
+            <tr class="total-row"><td><strong>DAILY TOTAL</strong></td>
+                <td id="lodgingDay1">0</td><td id="lodgingDay2">0</td><td id="lodgingDay3">0</td><td id="lodgingDay4">0</td>
+                <td id="lodgingDay5">0</td><td id="lodgingDay6">0</td><td id="lodgingDay7">0</td><td id="lodgingDay8">0</td>
+                <td id="lodgingDay9">0</td><td id="lodgingDay10">0</td><td id="lodgingDay11">0</td>
+                <td id="lodgingGrandTotal" style="text-align:right;">0</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- TRANSPORT, LAUNDRY, REPRESENTATION sections (unchanged but recalc will work) -->
+    <div class="section-title">III. TRANSPORTATION BREAKDOWN</div>
+    <table id="transportTable"><thead><tr><th style="width:140px;">NAME</th><th>BUS<br>(2-Way)</th><th>Terminal Fee<br>(Passenger)</th><th>RORO<br>(Passenger)</th><th>Upgrade</th><th>Terminal Fee<br>(RORO)</th><th>RORO<br>(Van)</th><th>Upgrade</th><th>TOTAL</th></tr></thead>
+    <tbody><tr><td class="trans-name-cell">Hanzel Recuelo</td><td><input type="number" class="trans" id="bus1" value="0"></td><td><input type="number" class="trans" id="termPass1" value="100"></td><td><input type="number" class="trans" id="roroPass1" value="3400"></td><td><input type="number" class="trans" id="upgrade1" value="0"></td><td><input type="number" class="trans" id="termRoro1" value="0"></td><td><input type="number" class="trans" id="roroVan1" value="0"></td><td><input type="number" class="trans" id="upgradeVan1" value="0"></td><td class="transTotal" style="text-align:right;">0</td></tr>
+    <tr><td class="trans-name-cell">Floter Foronda</td><td><input type="number" class="trans" id="bus2" value="0"></td><td><input type="number" class="trans" id="termPass2" value="100"></td><td><input type="number" class="trans" id="roroPass2" value="3400"></td><td><input type="number" class="trans" id="upgrade2" value="0"></td><td><input type="number" class="trans" id="termRoro2" value="0"></td><td><input type="number" class="trans" id="roroVan2" value="0"></td><td><input type="number" class="trans" id="upgradeVan2" value="0"></td><td class="transTotal" style="text-align:right;">0</td></tr>
+    <tr><td class="trans-name-cell">Manolito Bautista</td><td><input type="number" class="trans" id="bus3" value="0"></td><td><input type="number" class="trans" id="termPass3" value="0"></td><td><input type="number" class="trans" id="roroPass3" value="0"></td><td><input type="number" class="trans" id="upgrade3" value="0"></td><td><input type="number" class="trans" id="termRoro3" value="600"></td><td><input type="number" class="trans" id="roroVan3" value="24000"></td><td><input type="number" class="trans" id="upgradeVan3" value="1000"></td><td class="transTotal" style="text-align:right;">0</td></tr>
+    <tr><td class="trans-name-cell">Chris Tinson</td><td><input type="number" class="trans" id="bus4" value="1000"></td><td><input type="number" class="trans" id="termPass4" value="100"></td><td><input type="number" class="trans" id="roroPass4" value="3400"></td><td><input type="number" class="trans" id="upgrade4" value="0"></td><td><input type="number" class="trans" id="termRoro4" value="0"></td><td><input type="number" class="trans" id="roroVan4" value="0"></td><td><input type="number" class="trans" id="upgradeVan4" value="0"></td><td class="transTotal" style="text-align:right;">0</td></tr>
+    <tr class="total-row"><td><strong>COLUMN TOTAL</strong></td><td id="transBusTotal">0</td><td id="transTermPassTotal">0</td><td id="transRoroPassTotal">0</td><td id="transUpgradeTotal">0</td><td id="transTermRoroTotal">0</td><td id="transRoroVanTotal">0</td><td id="transUpgradeVanTotal">0</td><td id="transGrandTotal" style="text-align:right;">0</td></tr></tbody></table>
+
+    <div class="section-title">IV. LAUNDRY EXPENSES (₱200 per batch)</div>
+    <table id="laundryTable"><thead><tr><th style="width:140px;">NAME</th><th>Fri<br>20</th><th>Fri<br>27</th><th>TOTAL</th></tr></thead>
+    <tbody><tr><td class="laundry-name-cell">Hanzel Recuelo</td><td><input type="number" class="laundry" value="200"></td><td><input type="number" class="laundry" value="200"></td><td class="laundryTotal" style="text-align:right;">0</td></tr>
+    <tr><td class="laundry-name-cell">Floter Foronda</td><td><input type="number" class="laundry" value="200"></td><td><input type="number" class="laundry" value="200"></td><td class="laundryTotal" style="text-align:right;">0</td></tr>
+    <tr><td class="laundry-name-cell">Manolito Bautista</td><td><input type="number" class="laundry" value="200"></td><td><input type="number" class="laundry" value="200"></td><td class="laundryTotal" style="text-align:right;">0</td></tr>
+    <tr><td class="laundry-name-cell">Chris Tinson</td><td><input type="number" class="laundry" value="200"></td><td><input type="number" class="laundry" value="200"></td><td class="laundryTotal" style="text-align:right;">0</td></tr>
+    <tr class="total-row"><td><strong>DAILY TOTAL</strong></td><td id="laundryDay1">0</td><td id="laundryDay2">0</td><td id="laundryGrandTotal" style="text-align:right;">0</td></tr></tbody></table>
+
+    <div class="section-title">V. REPRESENTATION EXPENSE</div>
+    <table id="repTable"><thead><tr><th style="width:140px;">NAME</th><th>Fri<br>20</th><th>TOTAL</th></tr></thead>
+    <tbody><tr><td class="rep-name-cell">Hanzel Recuelo</td><td><input type="number" id="rep1" value="5000"></td><td id="repTotal1" style="text-align:right;">0</td></tr>
+    <tr><td class="rep-name-cell">Floter Foronda</td><td><input type="number" id="rep2" value="0"></td><td id="repTotal2" style="text-align:right;">0</td></tr>
+    <tr><td class="rep-name-cell">Manolito Bautista</td><td><input type="number" id="rep3" value="0"></td><td id="repTotal3" style="text-align:right;">0</td></tr>
+    <tr><td class="rep-name-cell">Chris Tinson</td><td><input type="number" id="rep4" value="0"></td><td id="repTotal4" style="text-align:right;">0</td></tr>
+    <tr class="total-row"><td><strong>GRAND TOTAL</strong></td><td id="repDayTotal">0</td><td id="repGrandTotal" style="text-align:right;">0</td></tr></tbody></table>
+
+    <div class="section-title">VI. SUMMARY OF TOTAL EXPENSES</div>
+    <table style="width: 400px;"><tr><td style="font-weight:700;">Meal Allowance Total</td><td style="text-align:right;">₱ <span id="summaryMeal">0.00</span></td></tr>
+    <tr><td style="font-weight:700;">Lodging / Hotel Total</td><td style="text-align:right;">₱ <span id="summaryLodging">0.00</span></td></tr>
+    <tr><td style="font-weight:700;">Transportation Total</td><td style="text-align:right;">₱ <span id="summaryTransport">0.00</span></td></tr>
+    <tr><td style="font-weight:700;">Laundry Total</td><td style="text-align:right;">₱ <span id="summaryLaundry">0.00</span></td></tr>
+    <tr><td style="font-weight:700;">Representation Total</td><td style="text-align:right;">₱ <span id="summaryRep">0.00</span></td></tr>
+    <tr style="background:#e0e0e0; font-weight:900;"><td style="font-weight:900;">GRAND TOTAL (All Expenses)</td><td style="text-align:right; font-weight:900;">₱ <span id="summaryGrand">0.00</span></td></tr></table>
+
+    <div style="text-align:right; margin-top: 16px;"><span style="background:#000; color:#fff; font-size:8px; font-weight:700; padding:2px 8px;">CONFIDENTIAL &nbsp;&nbsp; BTA_BREAKDOWN_v1</span></div>
+    <div class="no-print" style="margin-top: 16px; text-align:right;"><button class="reset-btn" onclick="resetForm()">Reset Form</button><button class="print-btn" onclick="window.print()">Print / Save as PDF</button></div>
+</div>
+
+<script>
+    function formatNumber(n) { return n.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+    function recalcAll() {
+        // Meals
+        const mealRows = document.querySelectorAll('#mealTable tbody tr');
+        let mealCounts = Array(13).fill(0);
+        let mealGrandTotal = 0;
+        for (let r = 0; r < mealRows.length - 1; r++) {
+            let rowTotal = 0;
+            const inputs = mealRows[r].querySelectorAll('.meal');
+            inputs.forEach((inp, idx) => { let v = parseFloat(inp.value)||0; rowTotal+=v; mealCounts[idx]+=v; });
+            const totalCell = mealRows[r].querySelector('.mealTotal');
+            if(totalCell) totalCell.innerText = formatNumber(rowTotal);
+            mealGrandTotal += rowTotal;
+        }
+        for(let i=0;i<13;i++) { let cell = document.getElementById(`mealDay${i+1}`); if(cell) cell.innerText = formatNumber(mealCounts[i]); }
+        document.getElementById('mealGrandTotal').innerText = formatNumber(mealGrandTotal);
+        // Lodging
+        const lodgingRows = document.querySelectorAll('#lodgingTable tbody tr');
+        let lodgingCounts = Array(11).fill(0);
+        let lodgingGrandTotal = 0;
+        for (let r = 0; r < lodgingRows.length - 1; r++) {
+            let rowTotal = 0;
+            const inputs = lodgingRows[r].querySelectorAll('.lodging');
+            inputs.forEach((inp, idx) => { let v = parseFloat(inp.value)||0; rowTotal+=v; lodgingCounts[idx]+=v; });
+            lodgingRows[r].querySelector('.lodgingTotal').innerText = formatNumber(rowTotal);
+            lodgingGrandTotal += rowTotal;
+        }
+        for(let i=0;i<11;i++) { let cell = document.getElementById(`lodgingDay${i+1}`); if(cell) cell.innerText = formatNumber(lodgingCounts[i]); }
+        document.getElementById('lodgingGrandTotal').innerText = formatNumber(lodgingGrandTotal);
+        // Transport
+        const transRows = document.querySelectorAll('#transportTable tbody tr');
+        let transCols = Array(7).fill(0);
+        let transGrandTotal = 0;
+        for (let r = 0; r < transRows.length - 1; r++) {
+            let rowTotal = 0;
+            const inputs = transRows[r].querySelectorAll('.trans');
+            inputs.forEach((inp, idx) => { let v = parseFloat(inp.value)||0; rowTotal+=v; transCols[idx]+=v; });
+            transRows[r].querySelector('.transTotal').innerText = formatNumber(rowTotal);
+            transGrandTotal += rowTotal;
+        }
+        const transLabels = ['transBusTotal','transTermPassTotal','transRoroPassTotal','transUpgradeTotal','transTermRoroTotal','transRoroVanTotal','transUpgradeVanTotal'];
+        transLabels.forEach((id,i)=> { let el = document.getElementById(id); if(el) el.innerText = formatNumber(transCols[i]); });
+        document.getElementById('transGrandTotal').innerText = formatNumber(transGrandTotal);
+        // Laundry
+        const laundryRows = document.querySelectorAll('#laundryTable tbody tr');
+        let laundryCounts = [0,0];
+        let laundryGrand = 0;
+        for(let r=0; r<laundryRows.length-1; r++) {
+            let rowTotal = 0;
+            const inputs = laundryRows[r].querySelectorAll('.laundry');
+            inputs.forEach((inp,i)=>{ let v=parseFloat(inp.value)||0; rowTotal+=v; laundryCounts[i]+=v; });
+            laundryRows[r].querySelector('.laundryTotal').innerText = formatNumber(rowTotal);
+            laundryGrand += rowTotal;
+        }
+        document.getElementById('laundryDay1').innerText = formatNumber(laundryCounts[0]);
+        document.getElementById('laundryDay2').innerText = formatNumber(laundryCounts[1]);
+        document.getElementById('laundryGrandTotal').innerText = formatNumber(laundryGrand);
+        // Representation
+        let repTotal = 0;
+        for(let i=1;i<=4;i++) { let v = parseFloat(document.getElementById(`rep${i}`)?.value)||0; document.getElementById(`repTotal${i}`).innerText = formatNumber(v); repTotal+=v; }
+        document.getElementById('repDayTotal').innerText = formatNumber(repTotal);
+        document.getElementById('repGrandTotal').innerText = formatNumber(repTotal);
+        // Summary
+        document.getElementById('summaryMeal').innerText = formatNumber(mealGrandTotal);
+        document.getElementById('summaryLodging').innerText = formatNumber(lodgingGrandTotal);
+        document.getElementById('summaryTransport').innerText = formatNumber(transGrandTotal);
+        document.getElementById('summaryLaundry').innerText = formatNumber(laundryGrand);
+        document.getElementById('summaryRep').innerText = formatNumber(repTotal);
+        document.getElementById('summaryGrand').innerText = formatNumber(mealGrandTotal+lodgingGrandTotal+transGrandTotal+laundryGrand+repTotal);
+    }
+    function syncNames() {
+        const nameInputs = document.querySelectorAll('.editable-name');
+        const lodgingNameCells = document.querySelectorAll('.lodging-name-cell');
+        const transNameCells = document.querySelectorAll('.trans-name-cell');
+        const laundryNameCells = document.querySelectorAll('.laundry-name-cell');
+        const repNameCells = document.querySelectorAll('.rep-name-cell');
+        nameInputs.forEach((inp, idx) => {
+            let newName = inp.value;
+            if(lodgingNameCells[idx]) lodgingNameCells[idx].innerText = newName;
+            if(transNameCells[idx]) transNameCells[idx].innerText = newName;
+            if(laundryNameCells[idx]) laundryNameCells[idx].innerText = newName;
+            if(repNameCells[idx]) repNameCells[idx].innerText = newName;
+        });
+        recalcAll();
+    }
+    function attachEvents() {
+        document.querySelectorAll('input').forEach(inp => inp.addEventListener('input', recalcAll));
+        document.querySelectorAll('.editable-name').forEach(inp => inp.addEventListener('input', syncNames));
+        document.getElementById('startDate')?.addEventListener('input', function(){});
+        document.getElementById('endDate')?.addEventListener('input', function(){});
+        document.getElementById('destination')?.addEventListener('input', function(){});
+    }
+    function resetForm() {
+        if(!confirm('Reset all fields to default values?')) return;
+        const mealDef = [[1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000],[1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000],[1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000],[0,0,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000]];
+        const mealInputs = document.querySelectorAll('#mealTable .meal');
+        mealInputs.forEach((inp,i)=>{ let r=Math.floor(i/13), c=i%13; if(mealDef[r] && mealDef[r][c]!==undefined) inp.value=mealDef[r][c]; });
+        const lodgDef = [[1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,0],[1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,0],[1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,0],[0,0,1500,1500,1500,1500,1500,1500,1500,1500,0]];
+        const lodgingInputs = document.querySelectorAll('#lodgingTable .lodging');
+        lodgingInputs.forEach((inp,i)=>{ let r=Math.floor(i/11), c=i%11; if(lodgDef[r] && lodgDef[r][c]!==undefined) inp.value=lodgDef[r][c]; });
+        document.getElementById('bus1').value=0; document.getElementById('termPass1').value=100; document.getElementById('roroPass1').value=3400; document.getElementById('upgrade1').value=0; document.getElementById('termRoro1').value=0; document.getElementById('roroVan1').value=0; document.getElementById('upgradeVan1').value=0;
+        document.getElementById('bus2').value=0; document.getElementById('termPass2').value=100; document.getElementById('roroPass2').value=3400; document.getElementById('upgrade2').value=0; document.getElementById('termRoro2').value=0; document.getElementById('roroVan2').value=0; document.getElementById('upgradeVan2').value=0;
+        document.getElementById('bus3').value=0; document.getElementById('termPass3').value=0; document.getElementById('roroPass3').value=0; document.getElementById('upgrade3').value=0; document.getElementById('termRoro3').value=600; document.getElementById('roroVan3').value=24000; document.getElementById('upgradeVan3').value=1000;
+        document.getElementById('bus4').value=1000; document.getElementById('termPass4').value=100; document.getElementById('roroPass4').value=3400; document.getElementById('upgrade4').value=0; document.getElementById('termRoro4').value=0; document.getElementById('roroVan4').value=0; document.getElementById('upgradeVan4').value=0;
+        document.querySelectorAll('#laundryTable .laundry').forEach(inp=>inp.value=200);
+        document.getElementById('rep1').value=5000; document.getElementById('rep2').value=0; document.getElementById('rep3').value=0; document.getElementById('rep4').value=0;
+        document.querySelectorAll('.editable-name').forEach((inp,idx)=>{ const defaults=["Hanzel Recuelo","Floter Foronda","Manolito Bautista","Chris Tinson"]; if(defaults[idx]) inp.value=defaults[idx]; });
+        document.getElementById('startDate').value="February 16, 2026";
+        document.getElementById('endDate').value="February 28, 2026";
+        document.getElementById('destination').value="Romblon State University (RSU)";
+        syncNames();
+        recalcAll();
+    }
+    window.addEventListener('load', ()=>{ attachEvents(); syncNames(); recalcAll(); });
+</script>
+</body>
+</html>

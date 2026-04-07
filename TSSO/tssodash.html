@@ -39,7 +39,7 @@
         </nav>
 
         <div class="mt-auto border-t border-white/10 pt-4">
-            <button class="w-full flex items-center gap-4 px-5 py-3 rounded-xl text-white/60 hover:bg-red-900/50 hover:text-white transition-all tracking-widest text-xs font-bold uppercase">
+            <button id="logoutBtn" class="w-full flex items-center gap-4 px-5 py-3 rounded-xl text-white/60 hover:bg-red-900/50 hover:text-white transition-all tracking-widest text-xs font-bold uppercase">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                 LOGOUT
             </button>
@@ -348,8 +348,23 @@
         </div>
     </main>
 
-    <script>
+    <script type="module">
+        import { logoutUser } from '../js/auth.js';
+
         document.addEventListener('DOMContentLoaded', () => {
+            // --- SESSION PROTECTION ---
+            // I-check kung naka-login at kung TSSO ang department
+            const isLoggedIn = sessionStorage.getItem('userLoggedIn') === 'true';
+            const userDept = sessionStorage.getItem('userDept');
+
+            if (!isLoggedIn || userDept !== 'TSSO') {
+                console.log("Unauthorized access. Redirecting to login...");
+                window.location.replace('../index.html');
+                return;
+            }
+
+            // UI Elements
+            const logoutBtn = document.getElementById('logoutBtn');
             const navRequests = document.getElementById('navRequests');
             const navNewSubmission = document.getElementById('navNewSubmission');
             const dashboardSection = document.getElementById('dashboardSection');
@@ -387,6 +402,25 @@
                 pageTitle.textContent = 'NEW SUBMISSION';
                 setActiveLink(navNewSubmission);
             });
+
+            // --- LOGOUT LOGIC ---
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async () => {
+                    const result = await logoutUser();
+                    
+                    if (result.success) {
+                        // Linisin ang lahat ng session data
+                        sessionStorage.clear();
+                        localStorage.clear();
+                        // Push state para hindi na makabalik gamit ang back button
+                        window.history.pushState(null, null, window.location.href);
+                        window.onpopstate = function() {
+                            window.history.pushState(null, null, window.location.href);
+                        };
+                        window.location.replace('../index.html');
+                    }
+                });
+            }
         });
     </script>
 </body>

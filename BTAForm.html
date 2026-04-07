@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Travel Authority | Lancaster Technology</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/btaf.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'maroon-ltd': '#600000',
+                        'gold-ltd': '#C19A6B',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Ginagawang black ang kulay ng checkboxes at radio buttons */
+        input[type="checkbox"],
+        input[type="radio"] {
+            accent-color: #000;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <!-- HEADER ROW 1: Logo + Company Name -->
+    <table class="header-table">
+        <tr>
+            <td class="logo-cell">
+                <img src="photos/ltd.png" alt="LTD Logo">
+            </td>
+            <td class="company-cell">
+                <div class="company-name">LANCASTER TECHNOLOGY AND DEVELOPMENT CORPORATION</div>
+                <div class="company-addr">Suite 3201 High Street South Corporate Plaza Tower 2, 11th Ave., corner 26th St., Bonifacio Global City, Taguig City 1634</div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- HEADER ROW 2: BTA Title + No/Date (same row, matching screenshot) -->
+    <table class="bta-row-table">
+        <tr>
+            <td class="bta-title-cell">BUSINESS TRAVEL AUTHORITY</td>
+            <td class="bta-nodate-cell">
+                <table>
+                    <tr>
+                        <td class="nd-label">No.:</td>
+                        <td><input type="text" id="btaNo" placeholder="" style="width:100%; font-size:10px; border:none; outline:none; font-family:'Times New Roman', Times, serif;"></td>
+                    </tr>
+                    <tr>
+                        <td class="nd-label">Date:</td>
+                        <td><input type="text" id="btaDate" value="February 13, 2026" style="width:100%; font-size:10px; border:none; outline:none; font-family:'Times New Roman', Times, serif;"></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <!-- EMPLOYEE INFO -->
+    <table style="border-top:0; margin-top:0;">
+        <tr>
+            <td class="lbl" style="width:120px;">EMPLOYEE NAME:</td>
+            <td colspan="3"><input type="text" id="empName" value="Hanzel Recuelo | Floter Foronda | Chris Tinson | Manolito Bautista"></td>
+            <td class="lbl" style="width:90px;">PC CODE:</td>
+            <td colspan="2"><input type="text" id="pcCode" value="PH-2000-00-00"></td>
+        </tr>
+        <tr>
+            <td class="lbl">DESIGNATION:</td>
+            <td colspan="3"><input type="text" id="designation" value="System Support Engineer"></td>
+            <td class="lbl">CC CODE:</td>
+            <td colspan="2"><input type="text" id="ccCode"></td>
+        </tr>
+        <tr>
+            <td class="lbl">DIV./DEPT.:</td>
+            <td colspan="3"><input type="text" id="dept" value="TSSO | PMO"></td>
+            <td class="lbl">CR CARD NO.:</td>
+            <td colspan="2"><input type="text" id="crCardNo"></td>
+        </tr>
+        <tr>
+            <td class="lbl">COM. CODE:</td>
+            <td colspan="3"><input type="text" id="comCode"></td>
+            <td class="lbl">PROJ. CODE:</td>
+            <td colspan="2"><input type="text" id="projCode" value="PUB0003-01 &amp; 02"></td>
+        </tr>
+    </table>
+
+    <!-- TYPE OF TRAVEL / REASON -->
+    <table>
+        <tr>
+            <td class="lbl" style="width:120px;">TYPE OF TRAVEL:</td>
+            <td style="width:220px;">
+                <label class="check-label"><input type="radio" name="travelType" value="Local" checked> Local Travel</label>
+                <label class="check-label"><input type="radio" name="travelType" value="Foreign"> Foreign Travel</label>
+            </td>
+            <td class="lbl" style="width:130px;">REASON FOR TRAVEL:</td>
+            <td>
+                <label class="check-label"><input type="checkbox" id="rMeeting"> Meeting/Conference</label>
+                <label class="check-label"><input type="checkbox" id="rTech"> Technical/Management Support</label><br>
+                <label class="check-label"><input type="checkbox" id="rTraining"> Training/Seminar</label>
+                <label class="check-label"><input type="checkbox" id="rInvite"> 3rd Party Invitation</label><br>
+                <label class="check-label"><input type="checkbox" id="rField"> Field Work/Assignment</label>
+                <label class="check-label"><input type="checkbox" id="rOthers"> Others: <input type="text" style="width:80px; border-bottom:1px solid #555; border-top:none; border-left:none; border-right:none;"></label>
+            </td>
+        </tr>
+        <tr>
+            <td class="lbl">ADDITIONAL DETAILS:</td>
+            <td colspan="3"><textarea id="additionalDetails" rows="2">Travel to Romblon State University for COA AOM assistance and resolution of system-related technical issues in preparation for the COA re-audit.</textarea></td>
+        </tr>
+    </table>
+
+    <!-- SHORT ITINERARY -->
+    <table id="itineraryTable">
+        <tr class="section-header"><td colspan="7">SHORT ITINERARY DETAILS</td></tr>
+        <tr>
+            <th style="width:95px;">DATE</th>
+            <th style="width:75px;">DAY</th>
+            <th style="width:65px;">TIME</th>
+            <th style="width:85px;">FLIGHT NO.</th>
+            <th>DEST. FROM</th>
+            <th>DEST. TO</th>
+            <th>REMARKS</th>
+        </tr>
+        <tr>
+            <td><input type="date" value="2026-02-16"></td>
+            <td><input type="text" value="Monday"></td>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="text" value="BGC Office"></td>
+            <td><input type="text" value="RSU"></td>
+            <td><textarea rows="1"></textarea></td>
+        </tr>
+        <tr>
+            <td><input type="date" value="2026-02-28"></td>
+            <td><input type="text" value="Saturday"></td>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="text" value="RSU"></td>
+            <td><input type="text" value="BGC Office"></td>
+            <td><textarea rows="1"></textarea></td>
+        </tr>
+        <tr>
+            <td><input type="date"></td>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><textarea rows="1"></textarea></td>
+        </tr>
+    </table>
+    <div class="no-print" style="margin-top: 5px; margin-bottom: 15px; display: flex; gap: 8px;">
+        <button type="button" onclick="addItineraryRow()" style="width: 22px; height: 22px; background: #b7b7b7; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center;">+</button>
+        <button type="button" onclick="removeItineraryRow()" style="width: 22px; height: 22px; background: #b7b7b7; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center;">-</button>
+    </div>
+
+    <!-- TRAVEL EXPENSE ITEMS -->
+    <table>
+        <tr class="section-header"><td colspan="5">TRAVEL ARRANGEMENT DETAILS</td></tr>
+        <tr class="section-header"><td colspan="5">TRAVEL EXPENSE ITEMS</td></tr>
+        <tr>
+            <th style="width:240px;">ITEM</th>
+            <th style="width:50px;">QTY</th>
+            <th style="width:90px;">UOM</th>
+            <th style="width:90px;">UNIT COST (₱)</th>
+            <th style="width:90px;">AMOUNT (₱)</th>
+        </tr>
+
+        <!-- I. AIRFARE -->
+        <tr>
+            <td>
+                <strong>I. AIRFARE PLANE TICKET (Standard: Economy):</strong><br>
+                <label class="check-label"><input type="checkbox" id="airEconomy"> Economy</label>
+                <label class="check-label"><input type="checkbox" id="airBusiness"> Business</label>
+                <label class="check-label"><input type="checkbox" id="airOthers"> Others:</label>
+                <br>
+                <label class="check-label"><input type="checkbox" id="airPremium"> Prem. Economy</label>
+                <label class="check-label"><input type="checkbox" id="airFirst"> First Class</label>
+            </td>
+            <td><input type="number" id="airQty" value="1" step="1"></td>
+            <td><input type="text" value="Per Head"></td>
+            <td><input type="number" id="airUnit" value="0" step="any"></td>
+            <td class="amt"><input type="number" id="airAmt" readonly value="0"></td>
+        </tr>
+
+        <!-- II. BAGGAGE -->
+        <tr>
+            <td>
+                <strong>II. BAGGAGE ALLOWANCE (If not pre-arranged):</strong><br>
+                Justification: <input type="text" style="width:60%; border-bottom:1px solid #555; border-top:none; border-left:none; border-right:none;"><br>
+                No. of Kilos Needed: <input type="text" style="width:50%; border-bottom:1px solid #555; border-top:none; border-left:none; border-right:none;">
+            </td>
+            <td><input type="number" id="bagQty" value="1" step="1"></td>
+            <td><input type="text" value="Per Kilo"></td>
+            <td><input type="number" id="bagUnit" value="0" step="any"></td>
+            <td class="amt"><input type="number" id="bagAmt" readonly value="0"></td>
+        </tr>
+
+        <!-- III. HOTEL -->
+        <tr>
+            <td>
+                <strong>III. HOTEL ACCOMMODATION (Standard: Twin-Sharing):</strong><br>
+                <label class="check-label"><input type="checkbox" id="hotelSingle"> Single-room</label>
+                <label class="check-label"><input type="checkbox" id="hotelTwin" checked> Twin-sharing</label>
+            </td>
+            <td><input type="number" id="hotelQty" value="38" step="1"></td>
+            <td><input type="text" value="Per Room"></td>
+            <td><input type="number" id="hotelUnit" value="1500" step="any"></td>
+            <td class="amt"><input type="number" id="hotelAmt" readonly value="57000"></td>
+        </tr>
+
+        <!-- IV. MEAL ALLOWANCE -->
+        <tr>
+            <td>
+                <strong>IV. MEAL ALLOWANCE (Specify the number of meals or days):</strong><br>
+                <label class="check-label">Local Travel</label> (No. of Days <input type="text" id="mealLocalDaysDisp" value="50" style="width:30px; border-bottom:1px solid #555; border-top:none; border-left:none; border-right:none;">; No. of Meals <input type="text" style="width:30px; border-bottom:1px solid #555; border-top:none; border-left:none; border-right:none;">)<br>
+                <label class="check-label">Foreign Travel</label> (No. of Days <input type="text" style="width:30px; border-bottom:1px solid #555; border-top:none; border-left:none; border-right:none;">; No. of Meals <input type="text" style="width:30px; border-bottom:1px solid #555; border-top:none; border-left:none; border-right:none;">)
+            </td>
+            <td><input type="number" id="mealLocalQty" value="50" step="1"></td>
+            <td><input type="text" value="Per Head/Day"></td>
+            <td><input type="number" id="mealLocalUnit" value="1000" step="any"></td>
+            <td class="amt"><input type="number" id="mealLocalAmt" readonly value="50000"></td>
+        </tr>
+
+        <!-- V. IN-LAND -->
+        <tr>
+            <td colspan="5" style="padding:2px 5px; background:#ebebeb; font-weight:700; font-size:10px;">
+                V. IN-LAND &amp; SEA TRANSPORTATION (Should be receipted):
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="check-label"><input type="checkbox"> Car Rental / Van Rental</label>
+            </td>
+            <td><input type="number" id="carQty" value="1" step="1"></td>
+            <td><input type="text" value="Per Day"></td>
+            <td><input type="number" id="carUnit" value="0" step="any"></td>
+            <td class="amt"><input type="number" id="carAmt" readonly value="0"></td>
+        </tr>
+        <tr>
+            <td>
+                <label class="check-label"><input type="checkbox" checked> RORO / Fast Craft / Boat</label>
+                <label class="check-label"><input type="checkbox"> Others:</label>
+            </td>
+            <td><input type="number" id="roroQty" value="2" step="1"></td>
+            <td><input type="text" value="Per Way"></td>
+            <td><input type="number" id="roroUnit" value="18050" step="any"></td>
+            <td class="amt"><input type="number" id="roroAmt" readonly value="36100"></td>
+        </tr>
+        <tr>
+            <td>
+                <label class="check-label"><input type="checkbox"> Fuel (i.e. Gasoline, Oil)</label>
+            </td>
+            <td><input type="number" id="fuelQty" value="1" step="1"></td>
+            <td><input type="text" value="Per Trip"></td>
+            <td><input type="number" id="fuelUnit" value="0" step="any"></td>
+            <td class="amt"><input type="number" id="fuelAmt" readonly value="0"></td>
+        </tr>
+        <tr>
+            <td>
+                <label class="check-label"><input type="checkbox" checked> Taxi / Grab / Bus / Train / MRT</label><br>
+                <div style="display: flex; align-items: flex-start; gap: 4px; margin-top: 2px;">
+                    <span style="white-space: nowrap;">Others:</span>
+                    <textarea rows="1" style="border-bottom: 1px solid #555; flex: 1;">Bus for Chris Tinson</textarea>
+                </div>
+            </td>
+            <td><input type="number" id="taxiQty" value="2" step="1"></td>
+            <td><input type="text" value="Per Way"></td>
+            <td><input type="number" id="taxiUnit" value="500" step="any"></td>
+            <td class="amt"><input type="number" id="taxiAmt" readonly value="1000"></td>
+        </tr>
+
+        <!-- VI. OTHER INCIDENTAL -->
+        <tr>
+            <td colspan="5" style="padding:2px 5px; background:#ebebeb; font-weight:700; font-size:10px;">
+                VI. OTHER INCIDENTAL EXPENSES:
+            </td>
+        </tr>
+        <tr>
+            <td><label class="check-label"><input type="checkbox"> Passport Processing Fee (only if authorized)</label></td>
+            <td><input type="number" id="passQty" value="1" step="1"></td>
+            <td><input type="text" value="Per Trip"></td>
+            <td><input type="number" id="passUnit" value="0" step="any"></td>
+            <td class="amt"><input type="number" id="passAmt" readonly value="0"></td>
+        </tr>
+        <tr>
+            <td><label class="check-label"><input type="checkbox"> Visa Processing Fee (only if authorized)</label></td>
+            <td><input type="number" id="visaQty" value="1" step="1"></td>
+            <td><input type="text" value="Per Trip"></td>
+            <td><input type="number" id="visaUnit" value="0" step="any"></td>
+            <td class="amt"><input type="number" id="visaAmt" readonly value="0"></td>
+        </tr>
+        <tr>
+            <td><label class="check-label"><input type="checkbox"> Travel Tax (if not included in the airfare ticket)</label></td>
+            <td><input type="number" id="travTaxQty" value="1" step="1"></td>
+            <td><input type="text" value="Per Trip"></td>
+            <td><input type="number" id="travTaxUnit" value="0" step="any"></td>
+            <td class="amt"><input type="number" id="travTaxAmt" readonly value="0"></td>
+        </tr>
+        <tr>
+            <td><label class="check-label"><input type="checkbox"> Terminal Fees (if not included in the airfare ticket)</label></td>
+            <td><input type="number" id="termQty" value="1" step="1"></td>
+            <td><input type="text" value="Per Trip"></td>
+            <td><input type="number" id="termUnit" value="0" step="any"></td>
+            <td class="amt"><input type="number" id="termAmt" readonly value="0"></td>
+        </tr>
+        <tr>
+            <td><label class="check-label"><input type="checkbox" checked> Laundry Expenses</label></td>
+            <td><input type="number" id="laundryQty" value="8" step="1"></td>
+            <td><input type="text" value="Per Trip"></td>
+            <td><input type="number" id="laundryUnit" value="200" step="any"></td>
+            <td class="amt"><input type="number" id="laundryAmt" readonly value="1600"></td>
+        </tr>
+        <tr>
+            <td><label class="check-label"><input type="checkbox" checked> Representation Expense (only if authorized)</label></td>
+            <td><input type="number" id="repQty" value="1" step="1"></td>
+            <td><input type="text" value="Per Request"></td>
+            <td><input type="number" id="repUnit" value="5000" step="any"></td>
+            <td class="amt"><input type="number" id="repAmt" readonly value="5000"></td>
+        </tr>
+        <tr>
+            <td><label class="check-label"><input type="checkbox"> Meeting / Conference Costs (only if authorized)</label></td>
+            <td><input type="number" id="meetCostQty" value="1" step="1"></td>
+            <td><input type="text" value="Per Trip"></td>
+            <td><input type="number" id="meetCostUnit" value="0" step="any"></td>
+            <td class="amt"><input type="number" id="meetCostAmt" readonly value="0"></td>
+        </tr>
+        <tr>
+            <td><label class="check-label"><input type="checkbox"> Communication Expenses (only if authorized)</label></td>
+            <td><input type="number" id="commQty" value="1" step="1"></td>
+            <td><input type="text" value="Per Trip"></td>
+            <td><input type="number" id="commUnit" value="0" step="any"></td>
+            <td class="amt"><input type="number" id="commAmt" readonly value="0"></td>
+        </tr>
+        <tr>
+            <td><label class="check-label"><input type="checkbox"> Contingency Fund</label></td>
+            <td><input type="number" id="contQty" value="1" step="1"></td>
+            <td><input type="text" value="Per Request"></td>
+            <td><input type="number" id="contUnit" value="0" step="any"></td>
+            <td class="amt"><input type="number" id="contAmt" readonly value="0"></td>
+        </tr>
+        <tr>
+            <td><label class="check-label"><input type="checkbox"> Others:</label> <input type="text" style="width:55%; border-bottom:1px solid #555; border-top:none; border-left:none; border-right:none;"></td>
+            <td><input type="number" id="oth1Qty" value="1" step="1"></td>
+            <td><input type="text" value="Per Request"></td>
+            <td><input type="number" id="oth1Unit" value="0" step="any"></td>
+            <td class="amt"><input type="number" id="oth1Amt" readonly value="0"></td>
+        </tr>
+        <tr>
+            <td><label class="check-label"><input type="checkbox"> Others:</label> <input type="text" style="width:55%; border-bottom:1px solid #555; border-top:none; border-left:none; border-right:none;"></td>
+            <td><input type="number" id="oth2Qty" value="1" step="1"></td>
+            <td><input type="text" value="Per Request"></td>
+            <td><input type="number" id="oth2Unit" value="0" step="any"></td>
+            <td class="amt"><input type="number" id="oth2Amt" readonly value="0"></td>
+        </tr>
+
+        <!-- TOTAL -->
+        <tr style="background:#e0e0e0;">
+            <td colspan="4" style="font-weight:900; font-size:11px; text-align:right; padding-right:10px;">TOTAL REQUESTED CASH ADVANCE</td>
+            <td class="amt" style="font-weight:900;">
+                ₱ <input type="number" id="totalCA" readonly style="font-weight:900; width:80px; background:#fff9c4; text-align:right;">
+            </td>
+        </tr>
+    </table>
+
+    <!-- SWORN STATEMENT -->
+    <div class="section-title">SWORN STATEMENT</div>
+    <table>
+        <tr>
+            <td colspan="4" style="font-size:9.5px;">
+                <label class="check-label"><input type="checkbox" id="swornChk"> The requestor and the verifier certify that above information are complete, accurate, and estimated to the best of their knowledge.</label>
+            </td>
+        </tr>
+    </table>
+
+    <!-- TRAVEL APPROVALS -->
+    <div class="section-title">TRAVEL APPROVALS</div>
+    <table>
+        <tr>
+            <td style="width:33%;">
+                <div style="font-weight:700; font-size:9px;">REQUESTED BY:</div>
+                <div class="sign-underline"></div>
+                <div class="sign-name">HANZEL RECUELO</div>
+                <div class="sign-role">System Support Engineer</div>
+            </td>
+            <td style="width:34%;">
+                <div style="font-weight:700; font-size:9px;">VERIFIED BY:</div>
+                <div class="sign-underline" style="min-height:34px;"></div>
+                <div class="sign-name">DAVE S. RANGEL</div>
+                <div class="sign-role">Director - TSSO</div>
+            </td>
+            <td style="width:33%;">
+                <div style="font-weight:700; font-size:9px;">DECISION:</div>
+                <label class="check-label"><input type="checkbox" id="decApproved"> Approved</label>
+                <label class="check-label"><input type="checkbox" id="decDisapproved"> Disapproved</label>
+                <br>
+                <div class="sign-underline" style="min-height:22px;"></div>
+                <div class="sign-name">MARY ROSE A. ZAMORA-ODI</div>
+                <div class="sign-role">Assistant General Manager</div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- LIST OF UNLIQUIDATED CASH ADVANCE -->
+    <div class="section-title" style="margin-top:8px;">LIST OF UNLIQUIDATED CASH ADVANCE (TO BE FILLED UP BY REQUESTOR)</div>
+    <table id="ulTable">
+        <tr>
+            <th style="width:95px;">BTA DATE</th>
+            <th style="width:90px;">BTA NO.</th>
+            <th>FROM</th>
+            <th>TO</th>
+            <th style="width:90px;">AMOUNT (₱)</th>
+            <th style="width:95px;">RETURN DATE</th>
+            <th>REMARKS</th>
+        </tr>
+        <tr>
+            <td><input type="date" class="ulDate"></td>
+            <td><input type="text" class="ulNo"></td>
+            <td><input type="text" class="ulFrom"></td>
+            <td><input type="text" class="ulTo"></td>
+            <td class="amt"><input type="number" class="ulAmt" step="any"></td>
+            <td><input type="date" class="ulReturn"></td>
+            <td><textarea rows="1" class="ulRem"></textarea></td>
+        </tr>
+        <tr>
+            <td><input type="date" class="ulDate"></td>
+            <td><input type="text" class="ulNo"></td>
+            <td><input type="text" class="ulFrom"></td>
+            <td><input type="text" class="ulTo"></td>
+            <td class="amt"><input type="number" class="ulAmt" step="any"></td>
+            <td><input type="date" class="ulReturn"></td>
+            <td><textarea rows="1" class="ulRem"></textarea></td>
+        </tr>
+        <tr>
+            <td><input type="date" class="ulDate"></td>
+            <td><input type="text" class="ulNo"></td>
+            <td><input type="text" class="ulFrom"></td>
+            <td><input type="text" class="ulTo"></td>
+            <td class="amt"><input type="number" class="ulAmt" step="any"></td>
+            <td><input type="date" class="ulReturn"></td>
+            <td><textarea rows="1" class="ulRem"></textarea></td>
+        </tr>
+        <tr style="background:#f0f0f0;">
+            <td colspan="4" style="font-weight:700; text-align:right;">TOTAL UNLIQUIDATED CASH ADVANCE</td>
+            <td class="amt" style="font-weight:700;">₱ <span id="totalUL">0.00</span></td>
+            <td colspan="2"></td>
+        </tr>
+    </table>
+
+    <!-- PROMISSORY NOTE -->
+    <div class="promissory-box" style="margin-top:0; border-top:none;">
+        <strong>PROMISSORY NOTE / SALARY DEDUCTION AUTHORITY</strong><br>
+        <label class="check-label" style="align-items:flex-start; gap:6px; white-space: normal;">
+            <input type="checkbox" style="margin-top:2px;">
+            <span style="text-align: justify;">I, as the employee and payee, authorize the Administration and Finance Department (AFD) to deduct the full amount of my unliquidated cash advance from my net take-home pay within seven (7) working days from the return date.
+            If the liquidation period lapses and I still have remaining unliquidated cash advances, I will submit an incident report to AFD and the Human Resources Department.
+            I acknowledge that this matter will be addressed in accordance with the Company's schedule of disciplinary actions.</span>
+        </label>
+    </div>
+
+    <!-- COMMENTS AND REVISION (AFD) -->
+    <div class="section-title" style="margin-top:8px;">COMMENTS AND REVISION (TO BE FILLED UP BY AFD)</div>
+    <table>
+        <tr>
+            <th style="width:95px;">DATE</th>
+            <th>DESCRIPTION</th>
+            <th style="width:70px;">QUANTITY</th>
+            <th style="width:90px;">UNIT COST (₱)</th>
+            <th style="width:90px;">AMOUNT (₱)</th>
+        </tr>
+        <tr>
+            <td><input type="date" id="afd1Date"></td>
+            <td><textarea rows="1" id="afd1Desc"></textarea></td>
+            <td><input type="number" id="afd1Qty" step="any"></td>
+            <td><input type="number" id="afd1Unit" step="any"></td>
+            <td class="amt"><input type="number" id="afd1Amt" readonly></td>
+        </tr>
+        <tr>
+            <td><input type="date" id="afd2Date"></td>
+            <td><textarea rows="1" id="afd2Desc"></textarea></td>
+            <td><input type="number" id="afd2Qty" step="any"></td>
+            <td><input type="number" id="afd2Unit" step="any"></td>
+            <td class="amt"><input type="number" id="afd2Amt" readonly></td>
+        </tr>
+        <tr>
+            <td><input type="date" id="afd3Date"></td>
+            <td><textarea rows="1" id="afd3Desc"></textarea></td>
+            <td><input type="number" id="afd3Qty" step="any"></td>
+            <td><input type="number" id="afd3Unit" step="any"></td>
+            <td class="amt"><input type="number" id="afd3Amt" readonly></td>
+        </tr>
+        <tr style="background:#f0f0f0;">
+            <td colspan="4" style="font-weight:700; text-align:right;">TOTAL APPROVED CASH ADVANCE</td>
+            <td class="amt" style="font-weight:700;">₱ <span id="totalAFD">0.00</span></td>
+        </tr>
+    </table>
+
+    <!-- BUDGET CONTROL -->
+    <div class="section-title" style="margin-top:8px;">BUDGET CONTROL (TO BE FILLED UP BY AFD)</div>
+    <table>
+        <tr>
+            <td style="width:50%; vertical-align:top; padding:8px;">
+                <table style="border:none; font-size:10px;">
+                    <tr>
+                        <td style="border:none; padding:2px 0; white-space:nowrap;">Total Budget for This Month:</td>
+                        <td style="border:none; padding:2px 4px;"><input type="number" id="budgetMonth" value="500000" step="any" style="border-bottom:1px solid #000; border-top:none; border-left:none; border-right:none; width:100px;"></td>
+                    </tr>
+                    <tr>
+                        <td style="border:none; padding:2px 0; white-space:nowrap;">Less Previous Approvals:</td>
+                        <td style="border:none; padding:2px 4px;"><input type="number" id="prevApprovals" value="0" step="any" style="border-bottom:1px solid #000; border-top:none; border-left:none; border-right:none; width:100px;"></td>
+                    </tr>
+                    <tr>
+                        <td style="border:none; padding:2px 0; white-space:nowrap;">Available Balance</td>
+                        <td style="border:none; padding:2px 4px; font-weight:700;"><span id="availBalance">500,000.00</span></td>
+                    </tr>
+                    <tr>
+                        <td style="border:none; padding:2px 0; white-space:nowrap;">Total of This Request:</td>
+                        <td style="border:none; padding:2px 4px; font-weight:700;"><span id="thisRequest">0.00</span></td>
+                    </tr>
+                    <tr>
+                        <td style="border:none; padding:2px 0; white-space:nowrap;">Budget Balance</td>
+                        <td style="border:none; padding:2px 4px; font-weight:700; border-bottom:2px double #000;"><span id="budgetBalance">500,000.00</span></td>
+                    </tr>
+                </table>
+            </td>
+            <td style="width:50%; vertical-align:top; padding:8px;">
+                <strong>BUDGET CONTROLLED BY:</strong><br><br>
+                <div class="sign-underline"></div>
+                <div class="sign-name">MARIA ELENORE M. MERCURIO</div>
+                <div class="sign-role">Administrative Officer</div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- FUNDING APPROVALS -->
+    <div class="section-title" style="margin-top:0;">FUNDING APPROVALS</div>
+    <table>
+        <tr>
+            <td style="width:50%; vertical-align:top; padding:8px;">
+                <div style="font-weight:700; font-size:9px;">CHECKED BY:</div>
+                <div class="sign-underline" style="min-height:30px;"></div>
+                <div class="sign-name">ROSHELLE B. FRANCISCO, CPA</div>
+                <div class="sign-role">General Acctg &amp; Reporting Manager</div>
+            </td>
+            <td style="width:50%; vertical-align:top; padding:8px;">
+                <div style="font-weight:700; font-size:9px;">FUNDS AVAILABLE CERTIFICATION:</div>
+                <div class="sign-underline" style="min-height:30px;"></div>
+                <div class="sign-name">JON JON E. SILLEZA</div>
+                <div class="sign-role">Financial Controller</div>
+            </td>
+        </tr>
+        <tr>
+            <td style="vertical-align:top; padding:8px;">
+                <div style="font-weight:700; font-size:9px;">APPROVED BY (Within Standard Limits):</div>
+                <div class="sign-underline" style="min-height:30px;"></div>
+                <div class="sign-name">KHIM G. DAGANGON, CPA</div>
+                <div class="sign-role">Chief Financial Officer</div>
+            </td>
+            <td style="vertical-align:top; padding:8px;">
+                <div style="font-weight:700; font-size:9px;">DECISION (Beyond Standard Limits):</div>
+                <label class="check-label"><input type="checkbox" id="ceoApproved"> Approved</label>
+                <label class="check-label"><input type="checkbox" id="ceoDisapproved"> Disapproved</label>
+                <div class="sign-underline" style="min-height:22px; margin-top:6px;"></div>
+                <div class="sign-name">JOHN N. DOMANTAY</div>
+                <div class="sign-role">Chief Executive Officer</div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- ADDITIONAL NOTES -->
+    <table style="margin-top:0;">
+        <tr>
+            <td style="font-weight:700; vertical-align:top; padding:5px; width:130px;">ADDITIONAL NOTES:</td>
+            <td><textarea id="addNotes" rows="2" style="width:100%;"></textarea></td>
+        </tr>
+    </table>
+
+    <!-- FOOTER -->
+    <div style="text-align:right; margin-top:6px;">
+        <span style="background:#000; color:#fff; font-size:9px; font-weight:700; padding:2px 8px; letter-spacing:1px;">CONFIDENTIAL &nbsp;&nbsp; AFD_P2P_FORMS_002_v2</span>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div style="margin-top:12px; text-align:right;" class="no-print">
+        <button class="reset-btn" onclick="resetForm()">Reset Form</button>
+        <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
+    </div>
+
+</div>
+
+<script src="/js/btaf.js"></script>
+<script>
+    function addItineraryRow() {
+        const table = document.getElementById('itineraryTable');
+        const row = table.insertRow(-1);
+        for (let i = 0; i < 7; i++) {
+            const cell = row.insertCell(i);
+            if (i === 0) {
+                cell.innerHTML = '<input type="date">';
+            } else if (i === 6) {
+                cell.innerHTML = '<textarea rows="1"></textarea>';
+                if (window.initAutoResize) window.initAutoResize(cell.querySelector('textarea'));
+            } else {
+                cell.innerHTML = '<input type="text">';
+            }
+        }
+    }
+    function removeItineraryRow() {
+        const table = document.getElementById('itineraryTable');
+        // Siguraduhin na hindi mabubura ang headers (Rows 0-1) at ang unang data row (Row 2)
+        if (table.rows.length > 3) table.deleteRow(-1);
+    }
+</script>
+</body>
+</html>

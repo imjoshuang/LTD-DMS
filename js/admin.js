@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     if (!isLoggedIn && !currentUser) {
         console.log("No user found, redirecting to login");
-        window.location.replace('../admin/index.html');
+        window.location.replace('../index.html');
         return;
     }
 

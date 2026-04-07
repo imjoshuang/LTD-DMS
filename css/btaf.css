@@ -1,0 +1,377 @@
+/* style.css */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  /* Sinisigurado na laging lalabas ang background colors kahit sa preview o print */
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body {
+  background: #d1d5db;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 10.5px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.page {
+  width: 850px;
+  background: white;
+  border: 1px solid #999;
+  padding: 16px 20px 20px;
+}
+
+/* OUTER WRAPPER TABLE FOR HEADER */
+.header-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 2px solid #000;
+}
+
+.header-table td {
+  border: 0;
+  padding: 0;
+  vertical-align: middle;
+}
+
+/* LOGO CELL */
+.logo-cell {
+  width: 90px;
+  border-right: 2px solid #000;
+  text-align: center;
+  padding: 8px 10px;
+  vertical-align: middle;
+}
+
+.logo-cell img {
+  max-height: 55px;
+  width: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* COMPANY INFO CELL */
+.company-cell {
+  padding: 6px 12px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.company-name {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0.3px;
+  color: #000;
+}
+
+.company-addr {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 8.5px;
+  color: #333;
+  margin-top: 2px;
+}
+
+/* SECOND ROW: BTA TITLE + NO/DATE */
+.bta-row-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 2px solid #000;
+  border-top: 0;
+}
+
+.bta-title-cell {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 15px;
+  font-weight: 900;
+  text-align: center;
+  padding: 5px 10px;
+  vertical-align: middle;
+  letter-spacing: 0.5px;
+  background: #e0e0e0; /* Nilagyan ng pale grey para sa main section title */
+}
+
+.bta-nodate-cell {
+  border-left: 2px solid #000;
+  width: 190px;
+  padding: 0;
+  vertical-align: middle;
+}
+
+.bta-nodate-cell table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 10px;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.bta-nodate-cell table td {
+  border: 0;
+  border-bottom: 1px solid #000;
+  padding: 3px 6px;
+  vertical-align: middle;
+}
+
+.bta-nodate-cell table tr:last-child td {
+  border-bottom: 0;
+}
+
+.bta-nodate-cell .nd-label {
+  font-weight: 700;
+  white-space: nowrap;
+  width: 38px;
+  border-right: 1px solid #000;
+}
+
+/* GENERIC TABLE */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10px;
+  font-family: "Times New Roman", Times, serif;
+}
+
+td,
+th {
+  border: 1.5px solid #000;
+  padding: 3px 5px;
+  vertical-align: middle;
+  word-wrap: break-word;
+}
+
+th {
+  background: #d8d8d8;
+  font-weight: 700;
+  text-align: center;
+  font-size: 10px;
+}
+
+.lbl {
+  font-weight: 700;
+  background: #e8e8e8;
+  white-space: nowrap;
+  padding: 3px 6px;
+}
+
+/* INPUTS */
+input[type="text"],
+input[type="date"],
+input[type="number"],
+select,
+textarea {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 10px;
+  font-family: "Times New Roman", Times, serif;
+  background: transparent;
+  padding: 1px 2px;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+  background: transparent;
+}
+
+input[type="number"] {
+  text-align: right;
+}
+
+input[readonly] {
+  background: #f0f0f0;
+  color: #333;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  width: auto;
+  margin: 0 2px 0 0;
+  vertical-align: middle;
+}
+
+.check-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-right: 10px;
+  white-space: nowrap;
+}
+
+/* SECTION HEADERS */
+.section-header td {
+  background: #d0d0d0;
+  font-weight: 900;
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: 1px;
+  border: 1px solid #000;
+  padding: 3px 5px;
+}
+
+.total-row td {
+  font-weight: 900;
+  background: #f0f0f0;
+}
+
+textarea {
+  resize: none;
+  width: 100%;
+  display: block;
+  height: auto;
+  min-height: 14px;
+  overflow: hidden;
+  line-height: 1.2;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.amt {
+  text-align: right;
+}
+
+.sign-underline {
+  border-bottom: 1px solid #000;
+  min-height: 28px;
+  margin-bottom: 2px;
+}
+
+.sign-name {
+  font-weight: 900;
+  font-size: 10px;
+}
+
+.sign-role {
+  font-size: 9px;
+}
+
+.confidential {
+  text-align: right;
+  font-size: 9px;
+  font-weight: 700;
+  margin-top: 6px;
+  background: #000;
+  color: #fff;
+  padding: 2px 6px;
+  display: inline-block;
+  float: right;
+}
+
+.promissory-box {
+  border: 1px solid #000;
+  padding: 6px 8px;
+  font-size: 9.5px;
+  line-height: 1.5;
+}
+
+.section-title {
+  font-weight: 900;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  background: #d0d0d0;
+  text-align: center;
+  border: 1px solid #000;
+  border-bottom: none;
+  padding: 3px;
+}
+
+.inline-input {
+  display: inline-block;
+  border-bottom: 1px solid #555;
+  min-width: 80px;
+}
+
+.budget-table {
+  border: 1px solid #000;
+  padding: 8px;
+  font-size: 10px;
+}
+
+.budget-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3px;
+}
+
+.budget-row span:last-child {
+  border-bottom: 1px solid #000;
+  min-width: 90px;
+  display: inline-block;
+}
+
+.no-border-top {
+  border-top: none;
+}
+
+.no-border-bottom {
+  border-bottom: none;
+}
+
+.no-border-left {
+  border-left: none;
+}
+
+.no-border-right {
+  border-right: none;
+}
+
+/* Print styles */
+@media print {
+  body {
+    background: white;
+    padding: 0;
+  }
+
+  .page {
+    border: none;
+    width: 100%;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}
+
+.print-btn {
+  background: #1e3a5f;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 4px;
+  margin: 12px 0;
+}
+
+.reset-btn {
+  background: #555;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 4px;
+  margin: 12px 4px;
+}
+
+/* Override: header-table and bta-row-table internal tds don't get the generic border */
+.header-table td,
+.bta-row-table td,
+.bta-nodate-cell table td {
+  border: 0;
+}
+
+.bta-nodate-cell table td.nd-label {
+  border-right: 1px solid #000;
+}
+
+.bta-nodate-cell table tr:not(:last-child) td {
+  border-bottom: 1px solid #000;
+}
