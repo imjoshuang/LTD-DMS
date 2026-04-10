@@ -325,15 +325,29 @@ textarea {
   body {
     background: white;
     padding: 0;
+    display: block; /* Flexbox can cause pagination issues in some browsers */
   }
 
   .page {
     border: none;
     width: 100%;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    overflow: visible !important;
+    height: auto !important;
   }
 
   .no-print {
     display: none !important;
+  }
+
+  table, .section-title, .promissory-box {
+    page-break-inside: avoid; /* Iwasan ang pagputol sa gitna ng table/section hangga't maaari */
+  }
+
+  @page {
+    margin: 1cm;
   }
 }
 

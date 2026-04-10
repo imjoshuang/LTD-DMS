@@ -53,9 +53,9 @@
             <div class="flex items-center gap-4">
                 <div class="text-right">
                     <p class="text-[10px] font-bold text-gray-400 uppercase leading-none">Requestor:</p>
-                    <p class="text-xs font-bold text-gray-900 uppercase">MARIA REYES</p>
+                    <p id="headerUserName" class="text-xs font-bold text-gray-900 uppercase">Loading...</p>
                 </div>
-                <div class="w-10 h-10 rounded-full bg-maroon-ltd text-white font-bold flex items-center justify-center border-2 border-gold-ltd shadow-md">MR</div>
+                <div id="headerUserAvatar" class="w-10 h-10 rounded-full bg-maroon-ltd text-white font-bold flex items-center justify-center border-2 border-gold-ltd shadow-md">--</div>
             </div>
         </header>
 
@@ -63,13 +63,7 @@
             
             <div id="dashboardSection" class="space-y-8">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div class="bg-maroon-ltd p-6 rounded-3xl shadow-lg relative overflow-hidden flex flex-col justify-between h-32">
-                        <p class="text-white text-[10px] font-bold tracking-widest uppercase">Submit New Document</p>
-                        <div class="flex items-center gap-3">
-                            <div class="bg-white/20 p-2 rounded-lg text-white font-bold text-2xl">+</div>
-                            <button class="bg-gold-ltd text-white px-4 py-1.5 rounded-lg text-[10px] font-bold tracking-widest uppercase shadow-inner">Upload Document (v1)</button>
-                        </div>
-                    </div>
+
                     <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-5">
                         <div class="p-3 bg-red-50 text-maroon-ltd rounded-2xl"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></div>
                         <div>
@@ -91,6 +85,13 @@
                             <p class="text-3xl font-bold">1</p>
                         </div>
                         <span class="absolute top-4 right-6 w-5 h-5 bg-gold-ltd text-white rounded-full text-[10px] font-bold flex items-center justify-center">1</span>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-5">
+                        <div class="p-3 bg-blue-50 text-blue-600 rounded-2xl"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></div>
+                        <div>
+                            <p class="text-[10px] font-bold text-gray-400 tracking-widest uppercase leading-none">Available Templates</p>
+                            <p id="dashboardTemplatesCount" class="text-3xl font-bold">0</p>
+                        </div>
                     </div>
                 </div>
 
@@ -260,61 +261,12 @@
                     <div class="lg:col-span-3 space-y-6">
                         <div class="flex items-center justify-between">
                             <h4 class="text-xl font-bold tracking-tight text-gray-900 uppercase">Available Templates</h4>
-                            <span class="text-[10px] font-bold text-gray-400 tracking-widest uppercase bg-gray-100 px-3 py-1 rounded-full">4 Forms Ready</span>
+                            <span id="templateCount" class="text-[10px] font-bold text-gray-400 tracking-widest uppercase bg-gray-100 px-3 py-1 rounded-full">Loading...</span>
                         </div>
                         
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <!-- Technical Service Request -->
-                            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group">
-                                <div class="flex items-start justify-between mb-4">
-                                    <div class="p-3 bg-gray-50 rounded-xl group-hover:bg-maroon-ltd/5 transition-colors text-maroon-ltd">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                                    </div>
-                                    <span class="px-2 py-1 bg-red-50 text-red-600 text-[9px] font-bold rounded-lg uppercase">PDF</span>
-                                </div>
-                                <h5 class="font-bold text-gray-800 text-sm mb-1 uppercase tracking-tight">Technical Service Request</h5>
-                                <p class="text-[10px] text-gray-400 uppercase tracking-widest mb-4">Standard Service Protocol v2.1</p>
-                                <button class="w-full py-2.5 bg-[#C29B6D] hover:bg-[#b08a5d] text-white rounded-xl text-[10px] font-bold uppercase tracking-[0.15em] transition-colors">Use Template</button>
-                            </div>
-
-                            <!-- Equipment Maintenance Log -->
-                            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group">
-                                <div class="flex items-start justify-between mb-4">
-                                    <div class="p-3 bg-gray-50 rounded-xl group-hover:bg-maroon-ltd/5 transition-colors text-maroon-ltd">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
-                                    </div>
-                                    <span class="px-2 py-1 bg-blue-50 text-blue-600 text-[9px] font-bold rounded-lg uppercase">DOCX</span>
-                                </div>
-                                <h5 class="font-bold text-gray-800 text-sm mb-1 uppercase tracking-tight">Equipment Maintenance Log</h5>
-                                <p class="text-[10px] text-gray-400 uppercase tracking-widest mb-4">Monthly Equipment Checklist</p>
-                                <button class="w-full py-2.5 bg-[#C29B6D] hover:bg-[#b08a5d] text-white rounded-xl text-[10px] font-bold uppercase tracking-[0.15em] transition-colors">Use Template</button>
-                            </div>
-
-                            <!-- System Access Form -->
-                            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group">
-                                <div class="flex items-start justify-between mb-4">
-                                    <div class="p-3 bg-gray-50 rounded-xl group-hover:bg-maroon-ltd/5 transition-colors text-maroon-ltd">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
-                                    </div>
-                                    <span class="px-2 py-1 bg-red-50 text-red-600 text-[9px] font-bold rounded-lg uppercase">PDF</span>
-                                </div>
-                                <h5 class="font-bold text-gray-800 text-sm mb-1 uppercase tracking-tight">System Access Form</h5>
-                                <p class="text-[10px] text-gray-400 uppercase tracking-widest mb-4">Privileged Account Request</p>
-                                <button class="w-full py-2.5 bg-[#C29B6D] hover:bg-[#b08a5d] text-white rounded-xl text-[10px] font-bold uppercase tracking-[0.15em] transition-colors">Use Template</button>
-                            </div>
-
-                            <!-- Incident Report -->
-                            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group">
-                                <div class="flex items-start justify-between mb-4">
-                                    <div class="p-3 bg-gray-50 rounded-xl group-hover:bg-maroon-ltd/5 transition-colors text-maroon-ltd">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                                    </div>
-                                    <span class="px-2 py-1 bg-blue-50 text-blue-600 text-[9px] font-bold rounded-lg uppercase">DOCX</span>
-                                </div>
-                                <h5 class="font-bold text-gray-800 text-sm mb-1 uppercase tracking-tight">Incident Report</h5>
-                                <p class="text-[10px] text-gray-400 uppercase tracking-widest mb-4">Security & Technical Breach Log</p>
-                                <button class="w-full py-2.5 bg-[#C29B6D] hover:bg-[#b08a5d] text-white rounded-xl text-[10px] font-bold uppercase tracking-[0.15em] transition-colors">Use Template</button>
-                            </div>
+                        <div id="availableTemplatesContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Templates will be loaded here dynamically -->
+                            <p class="col-span-full text-center text-gray-400 italic py-10 uppercase text-[10px] font-bold tracking-widest">Loading available templates...</p>
                         </div>
                     </div>
 
@@ -349,7 +301,7 @@
     </main>
 
     <script type="module">
-        import { logoutUser } from '../js/auth.js';
+        import { logoutUser, getCurrentUser, db } from '../js/auth.js';
 
         document.addEventListener('DOMContentLoaded', () => {
             // --- SESSION PROTECTION ---
@@ -361,6 +313,21 @@
                 console.log("Unauthorized access. Redirecting to login...");
                 window.location.replace('../index.html');
                 return;
+            }
+            
+            // Get current user's UID for filtering shared documents
+            // Mas safe kunin sa sessionStorage dahil minsan ay null pa ang Firebase Auth pagka-load
+            const currentUserId = sessionStorage.getItem('userId');
+            const currentUserName = sessionStorage.getItem('userName') || 'User';
+
+            // --- UPDATE HEADER USER INFO ---
+            const headerUserName = document.getElementById('headerUserName');
+            const headerUserAvatar = document.getElementById('headerUserAvatar');
+
+            if (headerUserName) headerUserName.textContent = currentUserName;
+            if (headerUserAvatar) {
+                const initials = currentUserName.split(' ').map(n => n[0]).join('').toUpperCase();
+                headerUserAvatar.textContent = initials || 'U';
             }
 
             // UI Elements
@@ -421,6 +388,120 @@
                     }
                 });
             }
+
+            // --- LOAD AVAILABLE TEMPLATES FOR TSSO ---
+            async function loadAvailableTemplates() {
+                const container = document.getElementById('availableTemplatesContainer');
+                const dashboardTemplatesCount = document.getElementById('dashboardTemplatesCount');
+                const templateCountSpan = document.getElementById('templateCount');
+
+                if (!container) return;
+
+                container.innerHTML = '<p class="col-span-full text-center text-gray-400 italic py-10 uppercase text-[10px] font-bold tracking-widest">Loading available templates...</p>';
+                if (dashboardTemplatesCount) dashboardTemplatesCount.textContent = '...';
+
+                if (!currentUserId) {
+                    container.innerHTML = '<p class="col-span-full text-center text-red-500 italic py-10 uppercase text-[10px] font-bold tracking-widest">User not logged in or UID not found.</p>';
+                }
+
+                try {
+                    const { getFirestore, collection, query, where, getDocs } = await import("https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js");
+                    const templatesRef = collection(db, "templates");
+                    // Query for documents where sharedWithUids array contains the current user's UID
+                    const q = query(templatesRef, where("sharedWithUids", "array-contains", currentUserId));
+                    const querySnapshot = await getDocs(q);
+                    
+                    let templatesData = [];
+
+                    // Idagdag ang mga shared documents galing sa Firestore
+                    querySnapshot.forEach(doc => {
+                        templatesData.push({ ...doc.data(), id: doc.id });
+                    });
+
+                    if (templatesData.length === 0) {
+                        container.innerHTML = '<p class="col-span-full text-center text-gray-400 italic py-10 uppercase text-[10px] font-bold tracking-widest">No templates shared with you yet.</p>';
+                        if (dashboardTemplatesCount) dashboardTemplatesCount.textContent = '0';
+                        if (templateCountSpan) templateCountSpan.textContent = '0 Forms Ready';
+                        return;
+                    }
+
+                    container.innerHTML = ''; // Clear loading message
+                    if (dashboardTemplatesCount) dashboardTemplatesCount.textContent = templatesData.length;
+                    if (templateCountSpan) templateCountSpan.textContent = `${templatesData.length} Forms Ready`;
+
+                    templatesData.forEach(data => {
+
+                        // Determine icon and color based on file type/URL
+                        let iconSvg = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>'; // Default
+                        let fileTypeLabel = 'FILE';
+                        let fileTypeBg = 'bg-gray-50';
+                        let fileTypeColor = 'text-gray-600';
+
+                        if (data.fileUrl && data.fileUrl !== '#') { // Check for placeholder URL
+                            const ext = data.fileUrl.split('.').pop().toLowerCase().split(/[?#]/)[0];
+                            if (ext === 'pdf') {
+                                iconSvg = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>';
+                                fileTypeLabel = 'PDF';
+                                fileTypeBg = 'bg-red-50';
+                                fileTypeColor = 'text-red-600';
+                            } else if (['doc', 'docx'].includes(ext)) {
+                                iconSvg = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>';
+                                fileTypeLabel = 'DOCX';
+                                fileTypeBg = 'bg-blue-50';
+                                fileTypeColor = 'text-blue-600';
+                            } else if (ext === 'html') {
+                                iconSvg = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>';
+                                fileTypeLabel = 'HTML';
+                                fileTypeBg = 'bg-amber-50';
+                                fileTypeColor = 'text-amber-600';
+                            }
+                        }
+                        
+                        const isPlaceholder = data.fileUrl === '#';
+
+                        const cardHtml = `
+                            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group">
+                                <div class="flex items-start justify-between mb-4">
+                                    <div class="p-3 bg-gray-50 rounded-xl group-hover:bg-maroon-ltd/5 transition-colors text-maroon-ltd">
+                                        ${iconSvg}
+                                    </div>
+                                    <span class="px-2 py-1 ${fileTypeBg} ${fileTypeColor} text-[9px] font-bold rounded-lg uppercase">${fileTypeLabel}</span>
+                                </div>
+                                <h5 class="font-bold text-gray-800 text-sm mb-1 uppercase tracking-tight">${data.name}</h5>
+                                <p class="text-[10px] text-gray-400 uppercase tracking-widest mb-4">Shared by: ${data.createdBy || 'Admin'}</p>
+                                <button onclick="${isPlaceholder ? 'alert(\'Template file coming soon!\')' : `window.openPreviewModal('${data.fileUrl}')`}" 
+                                        class="w-full py-2.5 ${isPlaceholder ? 'bg-gray-200 cursor-not-allowed' : 'bg-[#C29B6D] hover:bg-[#b08a5d]'} text-white rounded-xl text-[10px] font-bold uppercase tracking-[0.15em] transition-colors">
+                                    Use Template
+                                </button>
+                            </div>
+                        `;
+                        container.insertAdjacentHTML('beforeend', cardHtml);
+                    });
+                } catch (error) {
+                    console.error("Error loading shared templates for TSSO:", error);
+                    container.innerHTML = '<p class="col-span-full text-center text-red-500 italic py-10 uppercase text-[10px] font-bold tracking-widest">Error loading templates.</p>';
+                    if (dashboardTemplatesCount) dashboardTemplatesCount.textContent = 'ERR';
+                    if (templateCountSpan) templateCountSpan.textContent = 'ERR';
+                }
+            }
+
+            // --- BASIC PREVIEW MODAL FOR TSSO (opens in new tab) ---
+            window.openPreviewModal = function(url) {
+                const cleanUrl = url.trim();
+                const fileExtension = cleanUrl.split('.').pop().toLowerCase().split(/[?#]/)[0];
+                let displayUrl = cleanUrl;
+
+                if (fileExtension === 'pdf') {
+                    displayUrl = cleanUrl;
+                } else if (['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(fileExtension)) {
+                    const cacheBuster = `&_cb=${Date.now()}`;
+                    displayUrl = `https://docs.google.com/gview?url=${encodeURIComponent(cleanUrl)}&embedded=true${cacheBuster}`;
+                }
+                window.open(displayUrl, '_blank');
+            };
+
+            // Load available templates when the page loads
+            loadAvailableTemplates();
         });
     </script>
 </body>

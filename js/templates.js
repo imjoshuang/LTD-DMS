@@ -1,4 +1,4 @@
-import { getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp, doc, deleteDoc, updateDoc, arrayUnion, arrayRemove, where } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp, doc, deleteDoc, updateDoc, arrayUnion, arrayRemove, where, setDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 import { getCurrentUser, db } from './auth.js';
 
 let currentFolderId = null;
@@ -89,17 +89,65 @@ window.openShareModal = async function(data, docId) {
 };
 
 window.grantAccess = async function(docId, uid, name, email, dept) {
-    const docRef = doc(db, "templates", docId);
-    await updateDoc(docRef, {
-        sharedWith: arrayUnion({ uid, name, email, dept })
-    });
-    window.showToast(`Access granted to ${name}`, 'success');
-    document.getElementById('searchResults').classList.add('hidden');
-    
-    // Refresh logic: reload templates UI and re-fetch doc for the modal
-    loadTemplatesUI();
-    const snap = await getDocs(query(collection(db, "templates")));
-    snap.forEach(d => { if(d.id === docId) window.openShareModal(d.data(), d.id); });
+    try {
+        let docRef = doc(db, "templates", docId);
+        let targetDocId = docId;
+
+        // Handle Materialization for Interactive Forms (Static items starting with st-)
+        // Ginagawa nating permanenteng record sa DB ang static forms para gumana ang sharing
+        if (docId.startsWith('st-')) {
+            const staticMap = {
+                'st-btaf': { name: 'BTAF FORM (INTERACTIVE)', fileUrl: '/BTAForm.html' },
+                'st-breakdown': { name: 'TRAVEL EXPENSES BREAKDOWN (INTERACTIVE)', fileUrl: '/travel_expense_breakdown.html' },
+                'st-predeploy': { name: 'PRE-DEPLOYMENT REPORT (INTERACTIVE)', fileUrl: '/pre_deployment.html' }
+            };
+            
+            const toolInfo = staticMap[docId];
+            if (toolInfo) {
+                // I-check kung may existing record na para hindi doble
+                const q = query(collection(db, "templates"), where("name", "==", toolInfo.name));
+                const existingDocs = await getDocs(q);
+                
+                if (existingDocs.empty) {
+                    const user = getCurrentUser();
+                    const newDoc = await addDoc(collection(db, "templates"), {
+                        ...toolInfo,
+                        type: 'file',
+                        sharedWith: [],
+                        sharedWithUids: [],
+                        createdAt: serverTimestamp(),
+                        createdBy: user ? user.uid : 'admin',
+                        parentId: null,
+                        status: 'published'
+                    });
+                    docRef = doc(db, "templates", newDoc.id);
+                    targetDocId = newDoc.id;
+                } else {
+                    docRef = doc(db, "templates", existingDocs.docs[0].id);
+                    targetDocId = existingDocs.docs[0].id;
+                }
+            }
+        }
+
+        // I-save ang sharing access. Gumagamit tayo ng sharedWithUids para sa mabilis na query ni TSSO.
+        await updateDoc(docRef, {
+            sharedWith: arrayUnion({ uid, name, email, dept }),
+            sharedWithUids: arrayUnion(uid)
+        });
+
+        window.showToast(`DOCUMENT SHARED SUCCESSFULLY WITH ${name.toUpperCase()} (${dept})`, 'success');
+        document.getElementById('searchResults').classList.add('hidden');
+        
+        // I-refresh ang UI at ang Share Modal para makita ang updated list
+        loadTemplatesUI();
+        const updatedSnap = await getDocs(query(collection(db, "templates")));
+        updatedSnap.forEach(d => { 
+            if(d.id === targetDocId) window.openShareModal(d.data(), d.id); 
+        });
+    } catch (error) {
+        console.error("Share error:", error);
+        window.showToast("UNABLE TO SHARE DOCUMENT. PLEASE TRY AGAIN.", "error");
+    }
 };
 
 /**
@@ -268,15 +316,38 @@ export async function loadTemplatesUI(folderId = currentFolderId, folderName = c
         const q = query(collection(db, "templates"), orderBy("createdAt", "desc"));
         const snap = await getDocs(q);
         
+        // Listahan ng templates na papayagan lang makita
+        const allowedTemplates = [
+            "BTAF",
+            "TRAVEL",
+            "DEPLOYMENT"
+        ];
+
         let filteredDocs = snap.docs.filter(doc => {
             const data = doc.data();
-            return (data.parentId || null) === currentFolderId;
-        });
+            const nameUpper = data.name ? data.name.toUpperCase() : "";
+            return (data.parentId || null) === currentFolderId && (allowedTemplates.some(t => nameUpper.includes(t)) || data.type === 'folder');
+        }).map(doc => ({ id: doc.id, ...doc.data() }));
 
-        // Sort: Folders first, then files
+        // Magdagdag ng Static HTML Forms kung nasa root folder
+        if (!currentFolderId) {
+            // Kuhanin ang mga pangalan na nasa database na para hindi mag-duplicate
+            const existingNames = new Set(filteredDocs.map(d => d.name));
+
+            const staticTools = [
+                { id: 'st-btaf', name: 'BTAF FORM (INTERACTIVE)', fileUrl: '/BTAForm.html', type: 'file', isStatic: true, createdAt: { toDate: () => new Date() } },
+                { id: 'st-breakdown', name: 'TRAVEL EXPENSES BREAKDOWN (INTERACTIVE)', fileUrl: '/travel_expense_breakdown.html', type: 'file', isStatic: true, createdAt: { toDate: () => new Date() } },
+                { id: 'st-predeploy', name: 'PRE-DEPLOYMENT REPORT (INTERACTIVE)', fileUrl: '/pre_deployment.html', type: 'file', isStatic: true, createdAt: { toDate: () => new Date() } }
+            ].filter(tool => !existingNames.has(tool.name)); // Pakita lang kung wala pa sa DB
+
+            // I-prepend para laging nasa taas ang mga tools
+            filteredDocs = [...staticTools, ...filteredDocs];
+        }
+
+        // Sort: Folders first, then files (including static ones)
         filteredDocs.sort((a, b) => {
-            const aType = a.data().type || 'file';
-            const bType = b.data().type || 'file';
+            const aType = a.type || 'file';
+            const bType = b.type || 'file';
             if (aType === 'folder' && bType !== 'folder') return -1;
             if (aType !== 'folder' && bType === 'folder') return 1;
             return 0;
@@ -288,9 +359,8 @@ export async function loadTemplatesUI(folderId = currentFolderId, folderName = c
         }
 
         container.innerHTML = '';
-        filteredDocs.forEach((doc) => {
-            const data = doc.data();
-            const date = data.createdAt?.toDate ? data.createdAt.toDate().toLocaleDateString() : 'Just now';
+        filteredDocs.forEach((data) => {
+            const date = data.createdAt?.toDate ? data.createdAt.toDate().toLocaleDateString() : 'N/A';
             
             // Detect File Extension for specific icons and colors
             let iconClass = 'bg-maroon-ltd/5 text-maroon-ltd';
@@ -300,10 +370,13 @@ export async function loadTemplatesUI(folderId = currentFolderId, folderName = c
                 iconClass = 'bg-gold-ltd/10 text-gold-ltd';
                 iconSvg = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>';
             } else if (data.fileUrl) {
-                const ext = data.fileUrl.split('.').pop().toLowerCase().split(/[?#]/)[0];
+                const ext = data.fileUrl.split('.').pop().toLowerCase().split(/[?#]/)[0] || 'html';
                 if (ext === 'pdf') {
                     iconClass = 'bg-red-50 text-red-600';
                     iconSvg = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>';
+                } else if (ext === 'html') {
+                    iconClass = 'bg-amber-50 text-amber-600';
+                    iconSvg = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>';
                 } else if (['doc', 'docx'].includes(ext)) {
                     iconClass = 'bg-blue-50 text-blue-600';
                     iconSvg = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>';
@@ -321,21 +394,12 @@ export async function loadTemplatesUI(folderId = currentFolderId, folderName = c
             // Double Click logic: Kapag folder, pumasok sa loob
             card.ondblclick = () => {
                 if (isFolder) {
-                    window.loadTemplatesUI(doc.id, data.name);
+                    window.loadTemplatesUI(data.id, data.name);
                 }
             };
 
             // SETUP DROPDOWN ITEMS BASED ON TYPE
-            const menuItems = isFolder ? `
-                <button onclick="window.renameTemplate('${doc.id}', '${data.name}')" class="w-full text-left px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-                    <svg class="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                    Rename Folder
-                </button>
-                <button class="delete-btn w-full text-left px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest text-red-600 hover:bg-red-50 flex items-center gap-2 border-t border-gray-50">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                    Delete Folder
-                </button>
-            ` : `
+            const menuItems = `
                 ${data.fileUrl ? `
                     <button onclick="window.openPreviewModal('${data.fileUrl}')" class="w-full text-left px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest text-gray-700 hover:bg-gray-50 flex items-center gap-2">
                         <svg class="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
@@ -345,14 +409,16 @@ export async function loadTemplatesUI(folderId = currentFolderId, folderName = c
                     <svg class="w-3.5 h-3.5 text-gold-ltd" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     See Details
                 </button>
-                <button onclick="window.renameTemplate('${doc.id}', '${data.name}')" class="w-full text-left px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-                    <svg class="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                    Rename File
-                </button>
-                <button class="delete-btn w-full text-left px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest text-red-600 hover:bg-red-50 flex items-center gap-2 border-t border-gray-50">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                    Delete File
-                </button>
+                ${!data.isStatic ? `
+                    <button onclick="window.renameTemplate('${data.id}', '${data.name}')" class="w-full text-left px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+                        <svg class="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        Rename File
+                    </button>
+                    <button class="delete-btn w-full text-left px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest text-red-600 hover:bg-red-50 flex items-center gap-2">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        Delete Item
+                    </button>
+                ` : ''}
             `;
 
             if (isFolder) {
@@ -363,7 +429,12 @@ export async function loadTemplatesUI(folderId = currentFolderId, folderName = c
                         <div class="p-3 ${iconClass} rounded-2xl group-hover:bg-maroon-ltd group-hover:text-white transition-all duration-300">
                             ${iconSvg}
                         </div>
-                        <div class="relative">
+                        <div class="flex items-center gap-1 relative">
+                            <button class="share-btn p-1.5 text-gray-400 hover:text-blue-600 transition-all opacity-0 invisible group-hover:opacity-100 group-hover:visible" title="Share to People">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                </svg>
+                            </button>
                             <button class="menu-trigger p-1.5 text-gray-400 hover:text-gray-600 transition-colors">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path></svg>
                             </button>
@@ -389,7 +460,7 @@ export async function loadTemplatesUI(folderId = currentFolderId, folderName = c
                         <p class="text-[9px] text-gray-400 uppercase tracking-widest">Added: ${date}</p>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
-                        <button class="share-btn p-1.5 text-gray-400 hover:text-blue-600 transition-all opacity-0 group-hover:opacity-100" title="Share to People">
+                        <button class="share-btn p-1.5 text-gray-400 hover:text-blue-600 transition-all opacity-0 invisible group-hover:opacity-100 group-hover:visible" title="Share to People">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                             </svg>
@@ -423,7 +494,7 @@ export async function loadTemplatesUI(folderId = currentFolderId, folderName = c
             if (shareBtn) {
                 shareBtn.onclick = (e) => {
                     e.stopPropagation();
-                    window.openShareModal(data, doc.id);
+                    window.openShareModal(data, data.id);
                 };
             }
 
@@ -437,11 +508,14 @@ export async function loadTemplatesUI(folderId = currentFolderId, folderName = c
             }
 
             // Delete listener
-            card.querySelector('.delete-btn').onclick = () => {
-                dropdown.classList.add('hidden');
-                const deleteTitle = isFolder ? "Delete Folder" : "Delete Template";
-                deleteTemplate(doc.id, data.filePath, data.name, deleteTitle);
-            };
+            const deleteBtn = card.querySelector('.delete-btn');
+            if (deleteBtn) {
+                deleteBtn.onclick = () => {
+                    dropdown.classList.add('hidden');
+                    const deleteTitle = isFolder ? "Delete Folder" : "Delete Template";
+                    deleteTemplate(data.id, data.filePath, data.name, deleteTitle);
+                };
+            }
 
             container.appendChild(card);
         });
@@ -585,7 +659,10 @@ window.removeAccess = async function(docId, uid) {
     snap.forEach(d => { if(d.id === docId) userDataToRemove = d.data().sharedWith.find(u => u.uid === uid); });
     
     if (userDataToRemove) {
-        await updateDoc(docRef, { sharedWith: arrayRemove(userDataToRemove) });
+        await updateDoc(docRef, { 
+            sharedWith: arrayRemove(userDataToRemove),
+            sharedWithUids: arrayRemove(uid)
+        });
         window.showToast('Access removed', 'warning');
         loadTemplatesUI();
         window.closeShareModal();
