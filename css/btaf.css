@@ -18,10 +18,12 @@ body {
 }
 
 .page {
-  width: 850px;
+  width: 210mm; /* Standard A4 Width */
+  min-height: 297mm; /* Standard A4 Height */
   background: white;
   border: 1px solid #999;
-  padding: 16px 20px 20px;
+  padding: 15mm;
+  margin: 0 auto;
 }
 
 /* OUTER WRAPPER TABLE FOR HEADER */
@@ -336,18 +338,25 @@ textarea {
     box-shadow: none;
     overflow: visible !important;
     height: auto !important;
+    min-height: initial !important; /* Siguraduhing hindi pilit ang A4 height kung maikli ang content */
+    padding: 0;
   }
 
   .no-print {
     display: none !important;
   }
 
-  table, .section-title, .promissory-box {
-    page-break-inside: avoid; /* Iwasan ang pagputol sa gitna ng table/section hangga't maaari */
+  /* Hinahayaan ang table na mag-flow sa next page pero bawal hatiin ang loob ng row */
+  table { page-break-inside: auto; }
+  tr { page-break-inside: avoid; page-break-after: auto; }
+  
+  .section-title, .promissory-box, .section-header {
+    page-break-inside: avoid; /* Ang mga titles at box na ito ay dapat buo pa rin */
   }
 
   @page {
-    margin: 1cm;
+    size: A4;
+    margin: 15mm; /* Standard margin para hindi masaid ang dulo ng papel at walang blank pages */
   }
 }
 

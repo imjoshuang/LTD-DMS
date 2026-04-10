@@ -99,6 +99,27 @@ function attachEvents() {
   document.querySelectorAll('textarea').forEach(window.initAutoResize);
 }
 
+function initUserInfo() {
+  const userName = sessionStorage.getItem('userName');
+  const userDept = sessionStorage.getItem('userDept');
+  // const userRole = sessionStorage.getItem('userRole'); // Maaaring gamitin kung kailangan ang designation
+
+  if (userName) {
+    // I-update ang Employee Name sa taas
+    const empNameInput = document.getElementById('empName');
+    if (empNameInput) empNameInput.value = userName;
+
+    // I-update ang Signature Name sa baba
+    const reqNameDiv = document.getElementById('requestedByName');
+    if (reqNameDiv) reqNameDiv.textContent = userName.toUpperCase();
+  }
+
+  if (userDept) {
+    const deptInput = document.getElementById('dept');
+    if (deptInput) deptInput.value = userDept;
+  }
+}
+
 window.showConfirm = function(title, message) {
   return new Promise((resolve) => {
       const confirmModal = document.createElement('div');
@@ -154,17 +175,24 @@ async function resetForm() {
   // I-reset ang height ng textareas pagkatapos i-clear
   setTimeout(() => document.querySelectorAll('textarea').forEach(autoResizeTextarea), 10);
   // Restore defaults
+  const userName = sessionStorage.getItem('userName') || "Hanzel Recuelo | Floter Foronda | Chris Tinson | Manolito Bautista";
+  const userDept = sessionStorage.getItem('userDept') || "TSSO | PMO";
+
   document.getElementById("btaDate").value = "2026-02-13";
-  document.getElementById("empName").value =
-    "Hanzel Recuelo | Floter Foronda | Chris Tinson | Manolito Bautista";
+  document.getElementById("empName").value = userName;
   document.getElementById("designation").value = "System Support Engineer";
-  document.getElementById("dept").value = "TSSO | PMO";
+  document.getElementById("dept").value = userDept;
   document.getElementById("projCode").value = "PUB0003-01 & 02";
   document.querySelector('input[name="travelType"]').checked = true;
+
+  const reqNameDiv = document.getElementById('requestedByName');
+  if (reqNameDiv) reqNameDiv.textContent = userName.toUpperCase();
+
   recalc();
 }
 
 window.addEventListener("load", () => {
+  initUserInfo();
   attachEvents();
   recalc();
 });

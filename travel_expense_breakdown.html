@@ -225,7 +225,7 @@
         @media print {
             body { background: white; padding: 0; }
             .page { border: none; width: 100%; padding: 6px; }
-            .no-print { display: none; }
+            .no-print { display: none !important; }
             table { page-break-inside: avoid; font-size: 7pt !important; }
             .date-input-th { font-size: 6.5pt !important; }
             .name-input { font-size: 7pt !important; }
@@ -265,9 +265,21 @@
         <input type="text" id="destination" value="Romblon State University (RSU)" style="width:230px;">
     </div>
 
+    <div class="no-print" style="margin-top: 5px; margin-bottom: 15px; display: flex; gap: 8px; align-items: center;">
+        <span style="font-size: 10px; font-weight: bold; color: #600000; text-transform: uppercase;">Manage Personnel:</span>
+        <button type="button" onclick="addExpenseRow()" style="width: 22px; height: 22px; background: #b7b7b7; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center;">+</button>
+        <button type="button" onclick="removeExpenseRow()" style="width: 22px; height: 22px; background: #b7b7b7; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center;">-</button>
+
+        <span style="margin-left: 20px; font-size: 10px; font-weight: bold; color: #600000; text-transform: uppercase;">Manage Sections:</span>
+        <button type="button" onclick="addNewSection()" style="width: 22px; height: 22px; background: #600000; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center;" title="Add New Category Section">+</button>
+        <button type="button" onclick="removeLastSection()" style="width: 22px; height: 22px; background: #600000; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center;" title="Remove Last Section">-</button>
+    </div>
+
+    <div id="sectionsContainer">
     <!-- ══════════════════════════════════════════════════════════
-         I. MEAL ALLOWANCE  — 13 day columns (Feb 16–28)
+         I. MEAL ALLOWANCE
     ══════════════════════════════════════════════════════════ -->
+    <div class="section-container" data-cols="13" data-input-class="meal" data-col-total-prefix="mD" data-grand-total-id="mealGrand" data-summary-val-id="sumMeal" data-name-class="meal-name" data-is-primary="true">
     <div class="section-title">I. MEAL ALLOWANCE (₱1,000 per day per person)</div>
     <table id="mealTable">
         <colgroup>
@@ -345,10 +357,9 @@
             </tr>
         </tbody>
     </table>
+    </div>
 
-    <!-- ══════════════════════════════════════════════════════════
-         II. LODGING — 11 night columns (Feb 17–27)
-    ══════════════════════════════════════════════════════════ -->
+    <div class="section-container" data-cols="11" data-input-class="lodging" data-col-total-prefix="lD" data-grand-total-id="lodgingGrand" data-summary-val-id="sumLodging" data-name-class="lodging-name">
     <div class="section-title">II. LODGING / HOTEL ACCOMMODATION (₱1,500 per room per night)</div>
     <table id="lodgingTable">
         <colgroup>
@@ -419,10 +430,9 @@
             </tr>
         </tbody>
     </table>
+    </div>
 
-    <!-- ══════════════════════════════════════════════════════════
-         III. TRANSPORTATION BREAKDOWN
-    ══════════════════════════════════════════════════════════ -->
+    <div class="section-container" data-cols="7" data-input-class="trans" data-col-total-prefix="tC" data-grand-total-id="transGrand" data-summary-val-id="sumTrans" data-name-class="trans-name">
     <div class="section-title">III. TRANSPORTATION BREAKDOWN</div>
     <table id="transportTable" style="table-layout:auto;">
         <thead>
@@ -488,10 +498,9 @@
             </tr>
         </tbody>
     </table>
+    </div>
 
-    <!-- ══════════════════════════════════════════════════════════
-         IV. LAUNDRY — 13 day columns
-    ══════════════════════════════════════════════════════════ -->
+    <div class="section-container" data-cols="13" data-input-class="laundry" data-col-total-prefix="ldD" data-grand-total-id="laundryGrand" data-summary-val-id="sumLaundry" data-name-class="laundry-name">
     <div class="section-title">IV. LAUNDRY EXPENSES (₱200 per batch)</div>
     <table id="laundryTable">
         <colgroup>
@@ -568,10 +577,9 @@
             </tr>
         </tbody>
     </table>
+    </div>
 
-    <!-- ══════════════════════════════════════════════════════════
-         V. REPRESENTATION EXPENSE — 13 day columns
-    ══════════════════════════════════════════════════════════ -->
+    <div class="section-container" data-cols="13" data-input-class="rep" data-col-total-prefix="rD" data-grand-total-id="repGrand" data-summary-val-id="sumRep" data-name-class="rep-name">
     <div class="section-title">V. REPRESENTATION EXPENSE</div>
     <table id="repTable">
         <colgroup>
@@ -648,18 +656,24 @@
             </tr>
         </tbody>
     </table>
+    </div>
+    </div> <!-- End sectionsContainer -->
+
+    <div id="dynamicSectionsContainer"></div>
 
     <!-- ══════════════════════════════════════════════════════════
          VI. SUMMARY
     ══════════════════════════════════════════════════════════ -->
     <div class="section-title">VI. SUMMARY OF TOTAL EXPENSES</div>
     <table class="summary-table" style="table-layout:auto; margin-bottom:14px;">
-        <tr><td style="font-weight:700;">I. Meal Allowance Total</td><td style="text-align:right;">₱ <span id="sumMeal">0.00</span></td></tr>
-        <tr><td style="font-weight:700;">II. Lodging / Hotel Total</td><td style="text-align:right;">₱ <span id="sumLodging">0.00</span></td></tr>
-        <tr><td style="font-weight:700;">III. Transportation Total</td><td style="text-align:right;">₱ <span id="sumTrans">0.00</span></td></tr>
-        <tr><td style="font-weight:700;">IV. Laundry Total</td><td style="text-align:right;">₱ <span id="sumLaundry">0.00</span></td></tr>
-        <tr><td style="font-weight:700;">V. Representation Total</td><td style="text-align:right;">₱ <span id="sumRep">0.00</span></td></tr>
-        <tr class="summary-grand">
+        <tbody id="summaryBody">
+            <tr><td style="font-weight:700;">I. Meal Allowance Total</td><td style="text-align:right;">₱ <span id="sumMeal">0.00</span></td></tr>
+            <tr><td style="font-weight:700;">II. Lodging / Hotel Total</td><td style="text-align:right;">₱ <span id="sumLodging">0.00</span></td></tr>
+            <tr><td style="font-weight:700;">III. Transportation Total</td><td style="text-align:right;">₱ <span id="sumTrans">0.00</span></td></tr>
+            <tr><td style="font-weight:700;">IV. Laundry Total</td><td style="text-align:right;">₱ <span id="sumLaundry">0.00</span></td></tr>
+            <tr><td style="font-weight:700;">V. Representation Total</td><td style="text-align:right;">₱ <span id="sumRep">0.00</span></td></tr>
+        </tbody>
+        <tr class="summary-grand border-t-2 border-black">
             <td style="font-weight:900; padding:5px 8px;">GRAND TOTAL (All Expenses)</td>
             <td style="text-align:right; font-weight:900; padding:5px 8px;">₱ <span id="sumGrand">0.00</span></td>
         </tr>
@@ -684,102 +698,163 @@
 'use strict';
 
 function fmt(n) {
-    return n.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return (n || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 function v(el) { return parseFloat(el.value) || 0; }
 
-/* ── Recalculate all sections ── */
+/* ── Dynamic Calculation Engine ── */
 function recalcAll() {
-    // I. Meal (13 cols)
-    let mealGrand = 0;
-    let mealCols  = Array(13).fill(0);
-    document.querySelectorAll('#mealTable tbody tr:not(.total-row):not(.grand-row)').forEach(tr => {
-        tr.querySelectorAll('.meal').forEach((inp, i) => {
-            const val = v(inp);
-            mealCols[i] += val;
-            mealGrand   += val;
-        });
-    });
-    mealCols.forEach((c,i) => { const el=document.getElementById('mD'+i); if(el) el.textContent=fmt(c); });
-    document.getElementById('mealGrand').textContent = fmt(mealGrand);
+    let overallGrand = 0;
+    document.querySelectorAll('.section-container').forEach(container => {
+        const colCount = parseInt(container.getAttribute('data-cols'));
+        const inputClass = container.getAttribute('data-input-class');
+        const colTotalPrefix = container.getAttribute('data-col-total-prefix');
+        const grandTotalId = container.getAttribute('data-grand-total-id');
+        const summaryValId = container.getAttribute('data-summary-val-id');
 
-    // II. Lodging (11 cols)
-    let lodgGrand = 0;
-    let lodgCols  = Array(11).fill(0);
-    document.querySelectorAll('#lodgingTable tbody tr:not(.total-row):not(.grand-row)').forEach(tr => {
-        tr.querySelectorAll('.lodging').forEach((inp, i) => {
-            const val = v(inp);
-            lodgCols[i] += val;
-            lodgGrand   += val;
-        });
-    });
-    lodgCols.forEach((c,i) => { const el=document.getElementById('lD'+i); if(el) el.textContent=fmt(c); });
-    document.getElementById('lodgingGrand').textContent = fmt(lodgGrand);
+        let sectionGrand = 0;
+        let colTotals = Array(colCount).fill(0);
 
-    // III. Transport (7 cols)
-    let transGrand = 0;
-    let transCols  = Array(7).fill(0);
-    document.querySelectorAll('#transportTable tbody tr:not(.total-row):not(.grand-row)').forEach(tr => {
-        tr.querySelectorAll('.trans').forEach((inp, i) => {
-            const val = v(inp);
-            transCols[i] += val;
-            transGrand   += val;
+        container.querySelectorAll(`tbody tr:not(.total-row):not(.grand-row)`).forEach(tr => {
+            tr.querySelectorAll(`.${inputClass}`).forEach((inp, i) => {
+                const val = v(inp);
+                colTotals[i] += val;
+                sectionGrand += val;
+            });
         });
-    });
-    transCols.forEach((c,i) => { const el=document.getElementById('tC'+i); if(el) el.textContent=fmt(c); });
-    document.getElementById('transGrand').textContent = fmt(transGrand);
 
-    // IV. Laundry (13 cols)
-    let laundGrand = 0;
-    let laundCols  = Array(13).fill(0);
-    document.querySelectorAll('#laundryTable tbody tr:not(.total-row):not(.grand-row)').forEach(tr => {
-        tr.querySelectorAll('.laundry').forEach((inp, i) => {
-            const val = v(inp);
-            laundCols[i] += val;
-            laundGrand   += val;
+        colTotals.forEach((total, i) => {
+            const el = document.getElementById(colTotalPrefix + i);
+            if (el) el.textContent = fmt(total);
         });
-    });
-    laundCols.forEach((c,i) => { const el=document.getElementById('ldD'+i); if(el) el.textContent=fmt(c); });
-    document.getElementById('laundryGrand').textContent = fmt(laundGrand);
 
-    // V. Representation (13 cols)
-    let repGrand = 0;
-    let repCols  = Array(13).fill(0);
-    document.querySelectorAll('#repTable tbody tr:not(.total-row):not(.grand-row)').forEach(tr => {
-        tr.querySelectorAll('.rep').forEach((inp, i) => {
-            const val = v(inp);
-            repCols[i] += val;
-            repGrand   += val;
-        });
-    });
-    repCols.forEach((c,i) => { const el=document.getElementById('rD'+i); if(el) el.textContent=fmt(c); });
-    document.getElementById('repGrand').textContent = fmt(repGrand);
+        const grandEl = document.getElementById(grandTotalId);
+        if (grandEl) grandEl.textContent = fmt(sectionGrand);
 
-    // VI. Summary
-    document.getElementById('sumMeal').textContent    = fmt(mealGrand);
-    document.getElementById('sumLodging').textContent = fmt(lodgGrand);
-    document.getElementById('sumTrans').textContent   = fmt(transGrand);
-    document.getElementById('sumLaundry').textContent = fmt(laundGrand);
-    document.getElementById('sumRep').textContent     = fmt(repGrand);
-    document.getElementById('sumGrand').textContent   = fmt(mealGrand + lodgGrand + transGrand + laundGrand + repGrand);
+        const sumEl = document.getElementById(summaryValId);
+        if (sumEl) sumEl.textContent = fmt(sectionGrand);
+
+        overallGrand += sectionGrand;
+    });
+
+    document.getElementById('sumGrand').textContent = fmt(overallGrand);
 }
 
 /* ── Sync names from meal table → other tables ── */
 function syncNames() {
     const mealNames = document.querySelectorAll('.meal-name');
     mealNames.forEach((inp, i) => {
-        const name = inp.value;
-        const selectors = [
-            `#lodgingTable .lodging-name[data-row="${i}"]`,
-            `#transportTable .trans-name[data-row="${i}"]`,
-            `#laundryTable .laundry-name[data-row="${i}"]`,
-            `#repTable .rep-name[data-row="${i}"]`,
-        ];
-        selectors.forEach(sel => {
-            const el = document.querySelector(sel);
-            if (el) el.textContent = name;
+        document.querySelectorAll(`.name-cell[data-row="${i}"]`).forEach(el => {
+            el.textContent = inp.value;
         });
     });
+}
+
+/* ── Dynamic Row Management (Across All Sections) ── */
+function addExpenseRow() {
+    const containers = document.querySelectorAll('.section-container');
+    const firstBody = containers[0].querySelector('tbody');
+    const newIndex = firstBody.querySelectorAll('tr:not(.total-row):not(.grand-row)').length;
+
+    containers.forEach(container => {
+        const tbody = container.querySelector('tbody');
+        const totalRow = tbody.querySelector('.total-row');
+        const colCount = parseInt(container.getAttribute('data-cols'));
+        const inputClass = container.getAttribute('data-input-class');
+        const nameClass = container.getAttribute('data-name-class');
+        const isPrimary = container.hasAttribute('data-is-primary');
+
+        const tr = document.createElement('tr');
+        let html = isPrimary 
+            ? `<td><input type="text" class="name-input ${nameClass}" data-row="${newIndex}" placeholder="New Personnel"></td>`
+            : `<td class="name-cell ${nameClass}" data-row="${newIndex}"></td>`;
+        
+        for(let i=0; i<colCount; i++) html += `<td><input type="number" class="num-input ${inputClass}" value="0"></td>`;
+        tr.innerHTML = html;
+        tbody.insertBefore(tr, totalRow);
+
+        tr.querySelectorAll('input').forEach(inp => {
+            inp.addEventListener('input', () => { syncNames(); recalcAll(); });
+        });
+    });
+    syncNames();
+    recalcAll();
+}
+
+function removeExpenseRow() {
+    const containers = document.querySelectorAll('.section-container');
+    const rows = containers[0].querySelectorAll('tbody tr:not(.total-row):not(.grand-row)');
+    if (rows.length > 1) {
+        containers.forEach(container => {
+            const tbody = container.querySelector('tbody');
+            const trs = tbody.querySelectorAll('tr:not(.total-row):not(.grand-row)');
+            tbody.removeChild(trs[trs.length - 1]);
+        });
+        recalcAll();
+    }
+}
+
+/* ── Dynamic Section Management ── */
+let dynamicSectionIdx = 0;
+function addNewSection() {
+    dynamicSectionIdx++;
+    const title = prompt("Enter New Section Title (e.g. VII. OTHER EXPENSES):", "NEW EXPENSE CATEGORY");
+    if (!title) return;
+
+    const sectionId = 'dyn_sec_' + dynamicSectionIdx;
+    const container = document.getElementById('dynamicSectionsContainer');
+    
+    const wrapper = document.createElement('div');
+    wrapper.className = 'section-container mt-4';
+    wrapper.id = sectionId;
+    wrapper.setAttribute('data-cols', '13');
+    wrapper.setAttribute('data-input-class', 'dyn-inp-' + dynamicSectionIdx);
+    wrapper.setAttribute('data-col-total-prefix', `dyn_col_${dynamicSectionIdx}_`);
+    wrapper.setAttribute('data-grand-total-id', `dyn_grand_${dynamicSectionIdx}`);
+    wrapper.setAttribute('data-summary-val-id', `dyn_sum_${dynamicSectionIdx}`);
+    wrapper.setAttribute('data-name-class', `dyn-name-${dynamicSectionIdx}`);
+
+    // Copy names and header from Section I
+    const names = Array.from(document.querySelectorAll('.meal-name')).map(i => i.value);
+    const mealHeader = document.querySelector('#mealTable thead tr').innerHTML;
+
+    const colCount = 13;
+    let bodyHtml = names.map((name, idx) => `
+        <tr>
+            <td class="name-cell dyn-name-${dynamicSectionIdx}" data-row="${idx}">${name}</td>
+            ${Array(colCount).fill(`<td><input type="number" class="num-input dyn-inp-${dynamicSectionIdx}" value="0"></td>`).join('')}
+        </tr>
+    `).join('');
+
+    let totalRow = `<tr><td><strong>DAILY TOTAL</strong></td>${Array.from({length:colCount}, (_,i)=>`<td>₱ <span id="dyn_col_${dynamicSectionIdx}_${i}">0</span></td>`).join('')}</tr>`;
+    let grandRow = `<tr><td colspan="13" style="text-align:right; padding-right:8px;"><strong>SECTION TOTAL:</strong></td><td style="text-align:right;">₱ <span id="dyn_grand_${dynamicSectionIdx}">0</span></td></tr>`;
+
+    wrapper.innerHTML = `
+        <div class="section-title">${title.toUpperCase()}</div>
+        <table><thead><tr>${mealHeader}</tr></thead><tbody>${bodyHtml}<tr class="total-row">${totalRow}</tr><tr class="grand-row">${grandRow}</tr></tbody></table>
+    `;
+    container.appendChild(wrapper);
+
+    // Add to Summary Table
+    const summaryRow = document.createElement('tr');
+    summaryRow.id = 'sum_row_' + sectionId;
+    summaryRow.innerHTML = `<td style="font-weight:700;">${title}</td><td style="text-align:right;">₱ <span id="dyn_sum_${dynamicSectionIdx}">0.00</span></td>`;
+    document.getElementById('summaryBody').appendChild(summaryRow);
+
+    wrapper.querySelectorAll('input').forEach(inp => {
+        inp.addEventListener('input', () => { syncNames(); recalcAll(); });
+    });
+    recalcAll();
+}
+
+function removeLastSection() {
+    const container = document.getElementById('dynamicSectionsContainer');
+    if (container.children.length === 0) return;
+    const last = container.lastElementChild;
+    const sumRow = document.getElementById('sum_row_' + last.id);
+    if (sumRow) sumRow.remove();
+    last.remove();
+    recalcAll();
 }
 
 /* ── Modal Confirmation ── */
@@ -823,6 +898,11 @@ window.showConfirm = function(title, message) {
 async function resetForm() {
     const confirmed = await window.showConfirm('Reset Form', 'Are you sure you want to reset all fields? This action cannot be undone.');
     if (!confirmed) return;
+    
+    document.getElementById('dynamicSectionsContainer').innerHTML = '';
+    const sumBody = document.getElementById('summaryBody');
+    while (sumBody.children.length > 5) sumBody.removeChild(sumBody.lastElementChild);
+
     document.querySelectorAll('input[type="number"]').forEach(el => el.value = '0');
     document.querySelectorAll('input[type="text"].num-input').forEach(el => el.value = '');
     recalcAll();
