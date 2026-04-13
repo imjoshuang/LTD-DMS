@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lancaster DMS - New Submission</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'maroon-ltd': '#600000',
+                        'gold-ltd': '#C19A6B',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        oswald: ['Oswald', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="../css/submission.css">
+    <script src="../js/submission.js" type="module" defer></script>
+</head>
+<body class="bg-gray-50 flex min-h-screen font-sans">
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        
+        <!-- Header -->
+        <header class="bg-white border-b border-gray-100 px-8 py-5 flex items-center justify-between shrink-0">
+            <div class="flex items-center gap-4">
+                <a href="tssodash.html" class="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 hover:text-maroon-ltd">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </a>
+                <h2 class="text-3xl font-bold tracking-tight text-gray-900 uppercase font-oswald">NEW SUBMISSION</h2>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <div class="text-right">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase leading-none">Requestor:</p>
+                    <p class="text-xs font-bold text-gray-900 uppercase">KEVIN JAVILLONAR</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-maroon-ltd text-white font-bold flex items-center justify-center border-2 border-gold-ltd shadow-md">KJ</div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-8 space-y-8 bg-gray-50/50 custom-scrollbar">
+            
+            <!-- Loading Overlay for Simulated Reload -->
+            <div id="loadingOverlay" class="hidden fixed inset-0 z-[10001] bg-white flex flex-col items-center justify-center transition-opacity duration-500">
+                <div class="w-16 h-16 border-4 border-maroon-ltd border-t-transparent rounded-full animate-spin mb-4"></div>
+                <p class="text-xs font-bold text-maroon-ltd uppercase tracking-widest animate-pulse">Generating Review Presentation...</p>
+            </div>
+            
+            <!-- Stepper -->
+            <div class="max-w-5xl mx-auto w-full mb-12">
+                <div class="relative flex items-center justify-between">
+                    <!-- Progress Line -->
+                    <div class="absolute top-5 left-0 w-full h-0.5 bg-gray-200 -z-0"></div>
+                    <div id="stepperProgress" class="absolute top-5 left-0 w-0 h-0.5 bg-maroon-ltd -z-0 transition-all duration-500"></div>
+
+                    <!-- Step 1 -->
+                    <div id="step1" class="relative z-10 flex flex-col items-center">
+                        <div class="step-circle w-10 h-10 bg-white text-maroon-ltd rounded-full flex items-center justify-center border-4 border-maroon-ltd shadow-lg scale-110">
+                            <span class="step-num font-bold">1</span>
+                        </div>
+                        <span class="step-text text-[10px] font-bold mt-2 uppercase tracking-widest text-maroon-ltd">Select Template</span>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div id="step2" class="relative z-10 flex flex-col items-center">
+                        <div class="step-circle w-10 h-10 bg-white text-gray-300 rounded-full flex items-center justify-center border-4 border-gray-100 shadow-sm">
+                            <span class="step-num font-bold">2</span>
+                        </div>
+                        <span class="step-text text-[10px] font-bold mt-2 uppercase tracking-widest text-gray-300">Draft & Fill-out</span>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div id="step3" class="relative z-10 flex flex-col items-center">
+                        <div class="step-circle w-10 h-10 bg-white text-gray-300 rounded-full flex items-center justify-center border-4 border-gray-100 shadow-sm">
+                            <span class="step-num font-bold">3</span>
+                        </div>
+                        <span class="step-text text-[10px] font-bold mt-2 uppercase tracking-widest text-gray-300">Review</span>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div id="step4" class="relative z-10 flex flex-col items-center">
+                        <div class="step-circle w-10 h-10 bg-white text-gray-300 rounded-full flex items-center justify-center border-4 border-gray-100 shadow-sm">
+                            <span class="step-num font-bold">4</span>
+                        </div>
+                        <span class="step-text text-[10px] font-bold mt-2 uppercase tracking-widest text-gray-300">Submit</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- Main Form Column -->
+                <div id="submissionContent" class="lg:col-span-3 space-y-6">
+                    
+                    <!-- Step 1: Template Selection (Initially Visible) -->
+                    <div id="templateSelectionSection" class="space-y-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-xl font-bold text-gray-900 uppercase font-oswald">Choose a Template to Start</h3>
+                        </div>
+                        <div id="templatesListGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Templates will be injected here -->
+                            <p class="text-xs font-bold text-gray-400 uppercase italic animate-pulse">Loading shared templates...</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Review Section (Initially Hidden) -->
+                    <div id="reviewSection" class="hidden mb-6">
+                        <div class="bg-blue-50 p-6 rounded-3xl border border-blue-100 flex items-center gap-6">
+                            <div class="w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-lg shrink-0">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-blue-900 uppercase font-oswald tracking-tight">Review Mode</h3>
+                                <p class="text-blue-700 text-[11px] leading-tight">Please review your drafted document below. If everything is correct, click the submit button to finalize your request.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Interactive Form (Initially Hidden) -->
+                    <div id="interactiveFormSection" class="hidden space-y-4">
+                        <!-- Request Title Input -->
+                        <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+                            <label for="requestTitle" class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Request Title / Subject</label>
+                            <input type="text" id="requestTitle" placeholder="e.g., Server Maintenance for BGC Office" 
+                                   class="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold focus:ring-2 focus:ring-maroon-ltd outline-none transition-all uppercase">
+                        </div>
+
+                        <div id="formContainer" class="relative bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden" style="height: 900px;">
+                            <!-- Action Button Overlay -->
+                            <div class="absolute top-6 right-8 z-10">
+                                <button onclick="toggleFullScreen()" 
+                                        class="flex items-center gap-2 bg-white/90 backdrop-blur-sm border border-gray-200 px-4 py-2.5 rounded-xl shadow-sm hover:shadow-md hover:bg-maroon-ltd hover:text-white transition-all text-maroon-ltd font-bold text-[10px] uppercase tracking-widest group">
+                                    Full Screen
+                                    <svg class="w-4 h-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <iframe id="templateFrame" src="about:blank" class="w-full h-full border-none"></iframe>
+                        </div>
+                    </div>
+
+                    <!-- Footer Buttons -->
+                    <div id="footerActions" class="hidden flex items-center justify-between pt-4">
+                        <button id="saveDraftBtn" onclick="handleSaveDraft()" class="px-10 py-4 border-2 border-transparent text-gray-400 hover:text-maroon-ltd font-bold text-xs tracking-widest transition-all uppercase">SAVE DRAFT</button>
+                        <button id="validateBtn"
+                                onclick="handleValidateAndSubmit()" 
+                                class="bg-gold-ltd hover:bg-maroon-ltd text-white px-12 py-4 rounded-2xl font-bold text-xs tracking-[0.2em] transition-all shadow-lg shadow-gold-ltd/20 flex items-center gap-3 group uppercase">
+                            NEXT: REVIEW
+                            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </button>
+
+                        <!-- Final Submit Button (Visible only in Step 3) -->
+                        <button id="finalSubmitBtn" onclick="handleFinalSubmission()" 
+                                class="hidden bg-maroon-ltd hover:bg-black text-white px-12 py-4 rounded-2xl font-bold text-xs tracking-[0.2em] transition-all shadow-lg shadow-maroon-ltd/20 flex items-center gap-3 group uppercase">
+                            FINISH & SUBMIT REQUEST
+                            <svg class="w-4 h-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function toggleFullScreen() {
+            const elem = document.getElementById('formContainer');
+            if (!document.fullscreenElement) {
+                elem.requestFullscreen().catch(err => {
+                    console.error(`Error enabling full-screen: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Reusable Modal System (Design Match)
+        window.showConfirm = function(title, message) {
+            return new Promise((resolve) => {
+                const confirmModal = document.createElement('div');
+                confirmModal.className = 'fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all duration-300';
+                confirmModal.innerHTML = `
+                    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full transform transition-all scale-95 opacity-0" id="confirmContent">
+                        <div class="p-6 text-center">
+                            <div class="w-16 h-16 bg-maroon-ltd/10 text-maroon-ltd rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-maroon-ltd tracking-tight mb-2 uppercase font-oswald">${title}</h3>
+                            <p class="text-gray-500 text-sm leading-relaxed mb-6">${message}</p>
+                            <div class="flex gap-3">
+                                <button id="cancelBtn" class="flex-1 px-4 py-3 text-xs font-bold text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-colors border border-gray-100 rounded-xl uppercase tracking-widest">Keep Editing</button>
+                                <button id="proceedBtn" class="flex-1 px-4 py-3 text-xs font-bold bg-maroon-ltd text-white hover:bg-black transition-colors rounded-xl uppercase tracking-widest shadow-lg shadow-maroon-ltd/20">Confirm</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(confirmModal);
+
+                requestAnimationFrame(() => {
+                    const content = document.getElementById('confirmContent');
+                    if (content) content.classList.remove('scale-95', 'opacity-0');
+                });
+
+                const close = (result) => {
+                    const content = document.getElementById('confirmContent');
+                    if (content) content.classList.add('scale-95', 'opacity-0');
+                    confirmModal.classList.add('opacity-0');
+                    setTimeout(() => confirmModal.remove(), 300);
+                    resolve(result);
+                };
+
+                document.getElementById('cancelBtn').onclick = () => close(false);
+                document.getElementById('proceedBtn').onclick = () => close(true);
+            });
+        };
+
+        // Warning/Notice Modal (Design Match for Validation)
+        window.showNotice = function(title, message) {
+            return new Promise((resolve) => {
+                const modal = document.createElement('div');
+                modal.className = 'fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all duration-300';
+                modal.innerHTML = `
+                    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full transform transition-all scale-95 opacity-0" id="noticeContent">
+                        <div class="p-6 text-center">
+                            <div class="w-16 h-16 bg-orange-50 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900 tracking-tight mb-2 uppercase font-oswald">${title}</h3>
+                            <p class="text-gray-500 text-sm leading-relaxed mb-6">${message}</p>
+                            <button id="noticeBtn" class="w-full px-4 py-3 text-xs font-bold bg-maroon-ltd text-white hover:bg-black transition-colors rounded-xl uppercase tracking-widest shadow-lg shadow-maroon-ltd/20">UNDERSTOOD</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+                requestAnimationFrame(() => {
+                    const content = document.getElementById('noticeContent');
+                    if (content) content.classList.remove('scale-95', 'opacity-0');
+                });
+                document.getElementById('noticeBtn').onclick = () => {
+                    modal.classList.add('opacity-0');
+                    setTimeout(() => { modal.remove(); resolve(); }, 300);
+                };
+            });
+        };
+
+        window.showSuccess = function(title, message) {
+            return new Promise((resolve) => {
+                const modal = document.createElement('div');
+                modal.className = 'fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all duration-300';
+                modal.innerHTML = `
+                    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full transform transition-all scale-95 opacity-0" id="successContent">
+                        <div class="p-6 text-center">
+                            <div class="w-16 h-16 bg-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900 tracking-tight mb-2 uppercase font-oswald">${title}</h3>
+                            <p class="text-gray-500 text-sm leading-relaxed mb-6">${message}</p>
+                            <button id="successBtn" class="w-full px-4 py-3 text-xs font-bold bg-maroon-ltd text-white hover:bg-black transition-colors rounded-xl uppercase tracking-widest shadow-lg shadow-maroon-ltd/20">Continue to Dashboard</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+                requestAnimationFrame(() => {
+                    const content = document.getElementById('successContent');
+                    if (content) content.classList.remove('scale-95', 'opacity-0');
+                });
+                document.getElementById('successBtn').onclick = () => {
+                    modal.classList.add('opacity-0');
+                    setTimeout(() => { modal.remove(); resolve(); }, 300);
+                };
+            });
+        };
+
+        async function handleValidateAndSubmit() {
+            const confirmed = await window.showConfirm('Proceed to Review', 'Are you sure you want to review this draft? You can still go back to edit if needed.');
+            
+            if (confirmed) {
+                // Simulated Reload logic
+                const loader = document.getElementById('loadingOverlay');
+                const loaderText = loader.querySelector('p');
+                if (loaderText) loaderText.textContent = "Generating Review Presentation...";
+                loader.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                    if (window.navigateToStep) {
+                        if (window.setAllowedStep) window.setAllowedStep(3); // Unlock Review
+                        window.navigateToStep(3);
+                    }
+                }, 1200); // 1.2 seconds delay to simulate reload
+            }
+        }
+
+        // Helper to update stepper styles manually
+        function updateStepperStep(step, status) {
+            const stepEl = document.getElementById(`step${step}`);
+            if (!stepEl) return;
+            
+            const circle = stepEl.querySelector('.step-circle');
+            const num = stepEl.querySelector('.step-num');
+            const text = stepEl.querySelector('.step-text');
+
+            if (status === 'completed') {
+                circle.className = "step-circle w-10 h-10 bg-maroon-ltd text-white rounded-full flex items-center justify-center border-4 border-white shadow-sm";
+                num.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>';
+                text.classList.add('text-maroon-ltd');
+                text.classList.remove('text-gray-300');
+            } else if (status === 'active') {
+                circle.className = "step-circle w-10 h-10 bg-white text-maroon-ltd rounded-full flex items-center justify-center border-4 border-maroon-ltd shadow-lg scale-110";
+                num.textContent = step;
+                text.classList.add('text-maroon-ltd');
+                text.classList.remove('text-gray-300');
+            }
+        }
+
+        async function handleFinalSubmission() {
+            // Simulated Submission Process
+            const loader = document.getElementById('loadingOverlay');
+            const loaderText = loader.querySelector('p');
+            if (loaderText) loaderText.textContent = "Finalizing and Submitting Request...";
+            
+            loader.classList.remove('hidden');
+            
+            // Wait for 2 seconds to simulate processing/saving
+            setTimeout(async () => {
+                loader.classList.add('hidden');
+                
+                if (window.setAllowedStep) window.setAllowedStep(4); // Unlock Final Step
+                // Update Stepper to final state (Step 3 and Step 4 completed)
+                updateStepperStep(3, 'completed');
+                updateStepperStep(4, 'completed');
+                
+                const progress = document.getElementById('stepperProgress');
+                if (progress) progress.style.width = '100%';
+
+                await window.showSuccess('Submission Successful', 'Your request has been successfully submitted and is now for review. Redirecting to your dashboard...');
+                window.location.href = 'tssodash.html';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

@@ -102,7 +102,7 @@ function attachEvents() {
 function initUserInfo() {
   const userName = sessionStorage.getItem('userName');
   const userDept = sessionStorage.getItem('userDept');
-  // const userRole = sessionStorage.getItem('userRole'); // Maaaring gamitin kung kailangan ang designation
+  const userRole = sessionStorage.getItem('userRole');
 
   if (userName) {
     // I-update ang Employee Name sa taas
@@ -118,6 +118,15 @@ function initUserInfo() {
     const deptInput = document.getElementById('dept');
     if (deptInput) deptInput.value = userDept;
   }
+
+  // Update designation: Use "System Support Engineer" for TSSO users instead of "USER"
+  let displayRole = userRole || 'USER';
+  if (userDept === 'TSSO') displayRole = 'System Support Engineer';
+
+  const desigInput = document.getElementById('designation');
+  if (desigInput) desigInput.value = displayRole;
+  const reqRoleDiv = document.getElementById('requestedByRole');
+  if (reqRoleDiv) reqRoleDiv.textContent = displayRole;
 }
 
 window.showConfirm = function(title, message) {
@@ -177,16 +186,22 @@ async function resetForm() {
   // Restore defaults
   const userName = sessionStorage.getItem('userName') || "Hanzel Recuelo | Floter Foronda | Chris Tinson | Manolito Bautista";
   const userDept = sessionStorage.getItem('userDept') || "TSSO | PMO";
+  const userRole = sessionStorage.getItem('userRole') || "USER";
 
-  document.getElementById("btaDate").value = "2026-02-13";
+  let displayRole = userRole;
+  if (userDept === 'TSSO') displayRole = 'System Support Engineer';
+
+  document.getElementById("btaDate").value = "";
   document.getElementById("empName").value = userName;
-  document.getElementById("designation").value = "System Support Engineer";
+  document.getElementById("designation").value = displayRole;
   document.getElementById("dept").value = userDept;
-  document.getElementById("projCode").value = "PUB0003-01 & 02";
+  document.getElementById("projCode").value = "";
   document.querySelector('input[name="travelType"]').checked = true;
 
   const reqNameDiv = document.getElementById('requestedByName');
   if (reqNameDiv) reqNameDiv.textContent = userName.toUpperCase();
+  const reqRoleDiv = document.getElementById('requestedByRole');
+  if (reqRoleDiv) reqRoleDiv.textContent = displayRole;
 
   recalc();
 }

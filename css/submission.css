@@ -1,0 +1,11 @@
+/* Custom Scrollbar for Submission Form */
+.custom-scrollbar::-webkit-scrollbar { 
+    width: 4px; 
+}
+.custom-scrollbar::-webkit-scrollbar-track { 
+    background: #f1f1f1; 
+}
+.custom-scrollbar::-webkit-scrollbar-thumb { 
+    background: #600000; 
+    border-radius: 10px; 
+}

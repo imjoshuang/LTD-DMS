@@ -1,8 +1,11 @@
-import { getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp, doc, deleteDoc, updateDoc, arrayUnion, arrayRemove, where, setDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp, doc, deleteDoc, updateDoc, arrayUnion, arrayRemove, where, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 import { getCurrentUser, db } from './auth.js';
 
 let currentFolderId = null;
 let currentFolderName = "Document Management";
+let currentView = 'grid'; // 'grid' or 'list'
+let searchTerm = '';
+let filterType = 'all'; // 'all', 'folder', 'file'
 
 const CLOUD_NAME = "dnch13q6f";
 const UPLOAD_PRESET = "pdfs_dms";
@@ -97,13 +100,17 @@ window.grantAccess = async function(docId, uid, name, email, dept) {
         // Ginagawa nating permanenteng record sa DB ang static forms para gumana ang sharing
         if (docId.startsWith('st-')) {
             const staticMap = {
-                'st-btaf': { name: 'BTAF FORM (INTERACTIVE)', fileUrl: '/BTAForm.html' },
-                'st-breakdown': { name: 'TRAVEL EXPENSES BREAKDOWN (INTERACTIVE)', fileUrl: '/travel_expense_breakdown.html' },
-                'st-predeploy': { name: 'PRE-DEPLOYMENT REPORT (INTERACTIVE)', fileUrl: '/pre_deployment.html' }
+                'st-btaf': { name: 'BTAF FORM (INTERACTIVE)', fileUrl: '/BTAF.html' }
             };
             
             const toolInfo = staticMap[docId];
             if (toolInfo) {
+                if (!toolInfo) {
+                    // Haharangin ang pag-share kung luma na ang static tool ID
+                    window.showToast("THIS TEMPLATE IS NO LONGER AVAILABLE.", "error");
+                    return;
+                }
+
                 // I-check kung may existing record na para hindi doble
                 const q = query(collection(db, "templates"), where("name", "==", toolInfo.name));
                 const existingDocs = await getDocs(q);
@@ -125,6 +132,17 @@ window.grantAccess = async function(docId, uid, name, email, dept) {
                 } else {
                     docRef = doc(db, "templates", existingDocs.docs[0].id);
                     targetDocId = existingDocs.docs[0].id;
+                    
+                    const existingData = existingDocs.docs[0].data();
+                    const updates = {};
+
+                    // Auto-migration: I-update ang URL at Pangalan kung luma pa ang nasa database (e.g. BTAForm.html)
+                    if (existingData.fileUrl !== toolInfo.fileUrl) updates.fileUrl = toolInfo.fileUrl;
+                    if (existingData.name !== toolInfo.name) updates.name = toolInfo.name;
+
+                    if (Object.keys(updates).length > 0) {
+                        await updateDoc(docRef, updates);
+                    }
                 }
             }
         }
@@ -138,12 +156,12 @@ window.grantAccess = async function(docId, uid, name, email, dept) {
         window.showToast(`DOCUMENT SHARED SUCCESSFULLY WITH ${name.toUpperCase()} (${dept})`, 'success');
         document.getElementById('searchResults').classList.add('hidden');
         
-        // I-refresh ang UI at ang Share Modal para makita ang updated list
+        // I-refresh ang UI
         loadTemplatesUI();
-        const updatedSnap = await getDocs(query(collection(db, "templates")));
-        updatedSnap.forEach(d => { 
-            if(d.id === targetDocId) window.openShareModal(d.data(), d.id); 
-        });
+        const updatedDoc = await getDoc(docRef);
+        if (updatedDoc.exists()) {
+            window.openShareModal(updatedDoc.data(), updatedDoc.id);
+        }
     } catch (error) {
         console.error("Share error:", error);
         window.showToast("UNABLE TO SHARE DOCUMENT. PLEASE TRY AGAIN.", "error");
@@ -318,9 +336,7 @@ export async function loadTemplatesUI(folderId = currentFolderId, folderName = c
         
         // Listahan ng templates na papayagan lang makita
         const allowedTemplates = [
-            "BTAF",
-            "TRAVEL",
-            "DEPLOYMENT"
+            "BTAF"
         ];
 
         let filteredDocs = snap.docs.filter(doc => {
@@ -335,13 +351,19 @@ export async function loadTemplatesUI(folderId = currentFolderId, folderName = c
             const existingNames = new Set(filteredDocs.map(d => d.name));
 
             const staticTools = [
-                { id: 'st-btaf', name: 'BTAF FORM (INTERACTIVE)', fileUrl: '/BTAForm.html', type: 'file', isStatic: true, createdAt: { toDate: () => new Date() } },
-                { id: 'st-breakdown', name: 'TRAVEL EXPENSES BREAKDOWN (INTERACTIVE)', fileUrl: '/travel_expense_breakdown.html', type: 'file', isStatic: true, createdAt: { toDate: () => new Date() } },
-                { id: 'st-predeploy', name: 'PRE-DEPLOYMENT REPORT (INTERACTIVE)', fileUrl: '/pre_deployment.html', type: 'file', isStatic: true, createdAt: { toDate: () => new Date() } }
+                { id: 'st-btaf', name: 'BTAF FORM (INTERACTIVE)', fileUrl: '/BTAF.html', type: 'file', isStatic: true, createdAt: { toDate: () => new Date() } }
             ].filter(tool => !existingNames.has(tool.name)); // Pakita lang kung wala pa sa DB
 
             // I-prepend para laging nasa taas ang mga tools
             filteredDocs = [...staticTools, ...filteredDocs];
+        }
+
+        // Apply Filters
+        if (searchTerm) {
+            filteredDocs = filteredDocs.filter(d => d.name.toLowerCase().includes(searchTerm.toLowerCase()));
+        }
+        if (filterType !== 'all') {
+            filteredDocs = filteredDocs.filter(d => (d.type || 'file') === filterType);
         }
 
         // Sort: Folders first, then files (including static ones)
@@ -354,7 +376,8 @@ export async function loadTemplatesUI(folderId = currentFolderId, folderName = c
         });
 
         if (filteredDocs.length === 0) {
-            container.innerHTML = '<p class="col-span-full text-center text-gray-400 italic py-10 uppercase text-[10px] font-bold tracking-widest">No items found in this location.</p>';
+            const msg = searchTerm ? `No items matching "${searchTerm}"` : "No items found in this location.";
+            container.innerHTML = `<p class="col-span-full text-center text-gray-400 italic py-10 uppercase text-[10px] font-bold tracking-widest">${msg}</p>`;
             return;
         }
 
@@ -421,8 +444,8 @@ export async function loadTemplatesUI(folderId = currentFolderId, folderName = c
                 ` : ''}
             `;
 
-            if (isFolder) {
-                // BOX TYPE FOR FOLDERS
+            if (currentView === 'grid') {
+                // BOX TYPE (GDrive Style Grid)
                 card.className = `bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-maroon-ltd/20 transition-all group flex flex-col items-start gap-4 cursor-pointer select-none relative h-44`;
                 card.innerHTML = `
                     <div class="flex justify-between items-start w-full">
@@ -449,10 +472,10 @@ export async function loadTemplatesUI(folderId = currentFolderId, folderName = c
                     </div>
                 `;
             } else {
-                // LONG (HORIZONTAL) PRESENTATION FOR FILES
-                card.className = `bg-white p-4 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group flex items-center gap-4 cursor-pointer select-none col-span-full`;
+                // LIST TYPE (GDrive Style List)
+                card.className = `bg-white p-3 rounded-xl border border-gray-50 shadow-sm hover:shadow-md hover:border-maroon-ltd/20 transition-all group flex items-center gap-4 cursor-pointer select-none col-span-full`;
                 card.innerHTML = `
-                    <div class="p-3 ${iconClass} rounded-xl group-hover:bg-maroon-ltd group-hover:text-white transition-all shrink-0">
+                    <div class="p-2 ${iconClass} rounded-lg group-hover:bg-maroon-ltd group-hover:text-white transition-all shrink-0">
                         ${iconSvg}
                     </div>
                     <div class="flex-1 min-w-0">
@@ -537,7 +560,12 @@ window.openPreviewModal = function(url) {
     if (!modal || !frame) return;
 
     // 1. Linisin ang URL
-    const cleanUrl = url.trim();
+    let cleanUrl = url.trim();
+
+    // Hotfix: Redirect old BTAForm.html requests to the new BTAF.html
+    if (cleanUrl.includes('BTAForm.html')) {
+        cleanUrl = cleanUrl.replace('BTAForm.html', 'BTAF.html');
+    }
     
     // 2. Kunin ang extension nang tama (kahit may query params)
     const fileExtension = cleanUrl.split('.').pop().toLowerCase().split(/[?#]/)[0];
@@ -654,11 +682,12 @@ window.closeShareModal = function() {
 
 window.removeAccess = async function(docId, uid) {
     const docRef = doc(db, "templates", docId);
-    const snap = await getDocs(query(collection(db, "templates")));
-    let userDataToRemove = null;
-    snap.forEach(d => { if(d.id === docId) userDataToRemove = d.data().sharedWith.find(u => u.uid === uid); });
+    const snap = await getDoc(docRef);
     
-    if (userDataToRemove) {
+    if (snap.exists()) {
+        const data = snap.data();
+        const userDataToRemove = (data.sharedWith || []).find(u => u.uid === uid);
+        
         await updateDoc(docRef, { 
             sharedWith: arrayRemove(userDataToRemove),
             sharedWithUids: arrayRemove(uid)
@@ -679,7 +708,7 @@ const initPreviewLogic = () => {
     const closeShareBtn = document.getElementById('closeShareModalBtn');
     const doneShareBtn = document.getElementById('doneShareBtn');
     
-    // Close details modal listeners
+    // Navigation & View Listeners
     const closeDetailsBtn = document.getElementById('closeDetailsModalBtn');
     const closeDetailsBtn2 = document.getElementById('closeDetailsBtn');
     const detailsModal = document.getElementById('detailsModal');
@@ -727,6 +756,48 @@ const initPreviewLogic = () => {
             document.querySelectorAll('.menu-dropdown').forEach(d => d.classList.add('hidden'));
         }
     });
+
+    // Document Filters Logic
+    const docSearch = document.getElementById('docSearch');
+    const docTypeFilter = document.getElementById('docTypeFilter');
+    const gridBtn = document.getElementById('gridLayoutBtn');
+    const listBtn = document.getElementById('listLayoutBtn');
+    const listContainer = document.getElementById('documentsList');
+
+    if (docSearch) {
+        docSearch.oninput = (e) => {
+            searchTerm = e.target.value;
+            loadTemplatesUI();
+        };
+    }
+
+    if (docTypeFilter) {
+        docTypeFilter.onchange = (e) => {
+            filterType = e.target.value;
+            loadTemplatesUI();
+        };
+    }
+
+    if (gridBtn && listBtn && listContainer) {
+        gridBtn.onclick = () => {
+            currentView = 'grid';
+            listContainer.className = "grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 transition-all duration-300";
+            gridBtn.classList.add('bg-white', 'shadow-sm', 'text-maroon-ltd');
+            gridBtn.classList.remove('text-gray-400');
+            listBtn.classList.remove('bg-white', 'shadow-sm', 'text-maroon-ltd');
+            listBtn.classList.add('text-gray-400');
+            loadTemplatesUI();
+        };
+        listBtn.onclick = () => {
+            currentView = 'list';
+            listContainer.className = "flex flex-col gap-2 transition-all duration-300";
+            listBtn.classList.add('bg-white', 'shadow-sm', 'text-maroon-ltd');
+            listBtn.classList.remove('text-gray-400');
+            gridBtn.classList.remove('bg-white', 'shadow-sm', 'text-maroon-ltd');
+            gridBtn.classList.add('text-gray-400');
+            loadTemplatesUI();
+        };
+    }
 };
 
 initPreviewLogic();
