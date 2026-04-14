@@ -33,7 +33,7 @@
         <!-- Header -->
         <header class="bg-white border-b border-gray-100 px-8 py-5 flex items-center justify-between shrink-0">
             <div class="flex items-center gap-4">
-                <a href="tssodash.html" class="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 hover:text-maroon-ltd">
+                <a href="tssodash.html" id="backBtn" class="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 hover:text-maroon-ltd">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                 </a>
                 <h2 class="text-3xl font-bold tracking-tight text-gray-900 uppercase font-oswald">NEW SUBMISSION</h2>
@@ -185,7 +185,7 @@
         }
 
         // Reusable Modal System (Design Match)
-        window.showConfirm = function(title, message) {
+        window.showConfirm = function(title, message, cancelText = 'Keep Editing', proceedText = 'Confirm') {
             return new Promise((resolve) => {
                 const confirmModal = document.createElement('div');
                 confirmModal.className = 'fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all duration-300';
@@ -198,8 +198,8 @@
                             <h3 class="text-lg font-bold text-maroon-ltd tracking-tight mb-2 uppercase font-oswald">${title}</h3>
                             <p class="text-gray-500 text-sm leading-relaxed mb-6">${message}</p>
                             <div class="flex gap-3">
-                                <button id="cancelBtn" class="flex-1 px-4 py-3 text-xs font-bold text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-colors border border-gray-100 rounded-xl uppercase tracking-widest">Keep Editing</button>
-                                <button id="proceedBtn" class="flex-1 px-4 py-3 text-xs font-bold bg-maroon-ltd text-white hover:bg-black transition-colors rounded-xl uppercase tracking-widest shadow-lg shadow-maroon-ltd/20">Confirm</button>
+                                <button id="cancelBtn" class="flex-1 px-4 py-3 text-xs font-bold text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-colors border border-gray-100 rounded-xl uppercase tracking-widest">${cancelText}</button>
+                                <button id="proceedBtn" class="flex-1 px-4 py-3 text-xs font-bold bg-maroon-ltd text-white hover:bg-black transition-colors rounded-xl uppercase tracking-widest shadow-lg shadow-maroon-ltd/20">${proceedText}</button>
                             </div>
                         </div>
                     </div>
@@ -223,6 +223,36 @@
                 document.getElementById('proceedBtn').onclick = () => close(true);
             });
         };
+
+        // Handle Back Button with confirmation
+        document.getElementById('backBtn')?.addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            // I-check kung may in-e-edit na draft (may ID sa session)
+            const isEditingDraft = sessionStorage.getItem('editingDraftId');
+
+            if (isEditingDraft) {
+                const confirmed = await window.showConfirm(
+                    'Unsaved Changes', 
+                    'You are currently editing a draft. Would you like to save your progress before returning to the dashboard?',
+                    'KEEP EDITING',
+                    'SAVE DRAFT'
+                );
+                if (confirmed) {
+                    // Tatawagin ang handleSaveDraft na nasa submission.js
+                    if (window.handleSaveDraft) window.handleSaveDraft();
+                }
+                return;
+            }
+
+            const confirmed = await window.showConfirm(
+                'Discard Changes?', 
+                'Are you sure you want to go back to the dashboard? Any unsaved progress in this submission will be lost.'
+            );
+            if (confirmed) {
+                window.location.href = 'tssodash.html';
+            }
+        });
 
         // Warning/Notice Modal (Design Match for Validation)
         window.showNotice = function(title, message) {
