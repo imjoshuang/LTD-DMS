@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lancaster DMS - New Submission</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="../photos/ltd.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
@@ -312,6 +313,17 @@
         };
 
         async function handleValidateAndSubmit() {
+            // 1. SIGNATURE VALIDATION
+            const iframe = document.getElementById('templateFrame');
+            const frameDoc = iframe?.contentDocument || iframe?.contentWindow?.document;
+            
+            // I-check kung may signature image na sa loob ng container
+            const signContainer = frameDoc?.getElementById('requestedBySign');
+            if (signContainer && !signContainer.querySelector('img')) {
+                await window.showNotice('Signature Required', 'Please add your signature in the "REQUESTED BY" section before proceeding to review.');
+                return;
+            }
+
             const confirmed = await window.showConfirm('Proceed to Review', 'Are you sure you want to review this draft? You can still go back to edit if needed.');
             
             if (confirmed) {

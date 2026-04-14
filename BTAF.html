@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lancaster Technology – Forms</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="photos/ltd.png">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
@@ -89,7 +90,7 @@
         .breakdown-page td, .breakdown-page th {
             border: 1px solid #000;
             padding: 3px 4px;
-            vertical-align: middle;
+            vertical-align: top;
             overflow: hidden;
         }
         .bta-page th,
@@ -139,7 +140,7 @@
         .bta-nodate-cell { width: 25%; padding: 4px 8px; }
         .bta-nodate-cell table { border: none; margin: 0; font-size: 10px; }
         .bta-nodate-cell table td { border: none; padding: 2px 3px; }
-        .nd-label { font-weight: 700; white-space: nowrap; }
+        .nd-label { font-weight: 700; white-space: nowrap; width: 35px; }
 
         /* ── BTA: EMPLOYEE INFO / GENERAL TABLES ── */
         .bta-page table { border-top: 1px solid #000; margin-top: 0; }
@@ -480,6 +481,10 @@
             tr { page-break-inside: avoid; page-break-after: auto; }
             input { border: none !important; background: transparent !important; }
             textarea { border: none !important; background: transparent !important; }
+            input[type="date"]::-webkit-calendar-picker-indicator {
+                display: none !important;
+                -webkit-appearance: none;
+            }
         }
 
         @media screen and (max-width: 1300px) {
@@ -514,7 +519,7 @@
             <td class="bta-nodate-cell">
                 <table>
                     <tr><td class="nd-label">No.:</td><td><input type="text" id="btaNo" placeholder=""></td></tr>
-                    <tr><td class="nd-label">Date:</td><td><input type="text" id="btaDate" value=""></td></tr>
+                    <tr><td class="nd-label">Date:</td><td><input type="date" id="btaDate" value="" style="height: 18px;"></td></tr>
                 </table>
             </td>
         </tr>
@@ -622,11 +627,11 @@
         <tr class="section-header"><td colspan="5">TRAVEL ARRANGEMENT DETAILS</td></tr>
         <tr class="section-header"><td colspan="5">TRAVEL EXPENSE ITEMS</td></tr>
         <tr>
-            <th style="width:500px;">ITEM</th>
-            <th style="width:50px;">QTY</th>
-            <th style="width:90px;">UOM</th>
-            <th style="width:90px;">UNIT COST (₱)</th>
-            <th style="width:90px;">AMOUNT (₱)</th>
+            <th style="width:630px;">ITEM</th>
+            <th style="width:30px;">QTY</th>
+            <th style="width:50px;">UOM</th>
+            <th style="width:55px;">UNIT COST (₱)</th>
+            <th style="width:55px;">AMOUNT (₱)</th>
         </tr>
         <tr>
             <td>
@@ -815,9 +820,14 @@
     <div class="section-title">TRAVEL APPROVALS</div>
     <table>
         <tr>
-            <td style="width:33%;">
-                <div style="font-weight:700;font-size:9px;">REQUESTED BY:</div>
-                <div class="sign-underline"></div>
+            <td style="width:33%; vertical-align: bottom;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="font-weight:700;font-size:9px;">REQUESTED BY:</div>
+                    <button type="button" onclick="document.getElementById('requestedByInput').click()" class="no-print" style="font-size: 7px; background: #600000; color: white; padding: 1px 4px; border-radius: 2px; border: none; cursor: pointer;">Add Signature</button>
+                </div>
+                <div class="sign-underline" id="requestedBySign" style="display: flex; align-items: center; justify-content: center; overflow: hidden; min-height: 60px;">
+                    <input type="file" id="requestedByInput" accept="image/*" style="display: none;" onchange="handleSignatureUpload(this, 'requestedBySign')">
+                </div>
                 <div class="sign-name" id="requestedByName"></div>
                 <div class="sign-role" id="requestedByRole"></div>
             </td>
@@ -1072,19 +1082,19 @@
         <thead>
             <tr>
                 <th class="name-col">NAME</th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">MON</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">TUES</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">WED</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">THURS</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">FRI</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">SAT</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">SUN</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">MON</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">TUES</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">WED</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">THURS</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">FRI</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">SAT</span><input class="date-input-th" value=""></th>
             </tr>
         </thead>
         <tbody>
@@ -1124,17 +1134,17 @@
         <thead>
             <tr>
                 <th class="name-col">NAME</th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">MON</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">TUES</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">WED</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">THURS</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">FRI</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">SAT</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">SUN</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">MON</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">TUES</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">WED</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">THURS</span><input class="date-input-th" value=""></th>
             </tr>
         </thead>
         <tbody>
@@ -1219,19 +1229,19 @@
         <thead>
             <tr>
                 <th class="name-col">NAME</th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">MON</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">TUES</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">WED</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">THURS</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">FRI</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">SAT</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">SUN</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">MON</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">TUES</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">WED</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">THURS</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">FRI</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">SAT</span><input class="date-input-th" value=""></th>
             </tr>
         </thead>
         <tbody>
@@ -1271,19 +1281,19 @@
         <thead>
             <tr>
                 <th class="name-col">NAME</th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
-                <th class="date-th"><span class="day-label"></span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">MON</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">TUES</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">WED</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">THURS</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">FRI</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">SAT</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">SUN</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">MON</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">TUES</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">WED</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">THURS</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">FRI</span><input class="date-input-th" value=""></th>
+                <th class="date-th"><span class="day-label">SAT</span><input class="date-input-th" value=""></th>
             </tr>
         </thead>
         <tbody>
@@ -1510,6 +1520,27 @@ function autoResizeTextarea(el) {
 window.initAutoResize = function(el) {
     el.addEventListener('input', () => autoResizeTextarea(el));
     autoResizeTextarea(el);
+};
+
+/* ── Signature Upload Logic ── */
+window.handleSignatureUpload = function(input, targetId) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const container = document.getElementById(targetId);
+            if (container) {
+                const existingImg = container.querySelector('img');
+                if (existingImg) existingImg.remove();
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.maxHeight = '60px';
+                img.style.maxWidth = '100%';
+                img.style.objectFit = 'contain';
+                container.appendChild(img);
+            }
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
 };
 
 /* ════════════════════════════════════════
@@ -1774,7 +1805,7 @@ async function btaResetForm() {
     const userRole = sessionStorage.getItem('userRole') || "";
 
     const btaDateEl = document.getElementById("btaDate");
-    if (btaDateEl) btaDateEl.value = "February 13, 2026";
+    if (btaDateEl) btaDateEl.value = "";
     const empNameEl = document.getElementById("empName");
     if (empNameEl) empNameEl.value = userName;
     const desigEl = document.getElementById("designation");
@@ -1790,6 +1821,12 @@ async function btaResetForm() {
     const reqRoleDiv = document.getElementById('requestedByRole');
     if (reqRoleDiv) reqRoleDiv.textContent = userRole;
     recalc();
+
+    // Clear signature on reset
+    const signContainer = document.getElementById('requestedBySign');
+    if (signContainer) { const img = signContainer.querySelector('img'); if (img) img.remove(); }
+    const signInput = document.getElementById('requestedByInput');
+    if (signInput) signInput.value = "";
 }
 
 function addItineraryRow() {

@@ -72,9 +72,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
 
-        // Itago ang add/remove row buttons sa mga tables sa BTAF
-        frameDoc.querySelectorAll('.no-print button').forEach(btn => {
-            btn.style.display = readonly ? 'none' : 'flex';
+        // Itago ang lahat ng interactive elements (Buttons, controls) sa Review Mode
+        frameDoc.querySelectorAll('.no-print').forEach(el => {
+            el.style.display = readonly ? 'none' : '';
         });
     };
 
