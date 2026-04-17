@@ -22,8 +22,12 @@
         </div>
 
         <nav class="flex-grow space-y-2">
-            <a href="#" id="navRequests" class="nav-link flex items-center gap-4 px-5 py-3 rounded-xl bg-white/10 text-white font-medium tracking-wide">
-                <svg class="w-5 h-5 text-gold-ltd" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            <a href="#" id="navDashboard" class="nav-link flex items-center gap-4 px-5 py-3 rounded-xl bg-white/10 text-white font-medium tracking-wide">
+                <svg class="w-5 h-5 text-gold-ltd" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                DASHBOARD
+            </a>
+            <a href="#" id="navMyRequests" class="nav-link flex items-center gap-4 px-5 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-all tracking-wide">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                 MY REQUESTS
             </a>
             <a href="#" id="navNewSubmission" class="nav-link flex items-center gap-4 px-5 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-all tracking-wide">
@@ -58,7 +62,7 @@
     <main class="flex-1 flex flex-col h-screen overflow-hidden">
         
         <header class="bg-white border-b border-gray-100 px-8 py-5 flex items-center justify-between">
-            <h2 id="pageTitle" class="text-3xl font-bold tracking-tight text-gray-900 uppercase">MY REQUESTS</h2>
+            <h2 id="pageTitle" class="text-3xl font-bold tracking-tight text-gray-900 uppercase">DASHBOARD</h2>
             <div class="flex items-center gap-4">
                 <div class="text-right">
                     <p class="text-[10px] font-bold text-gray-400 uppercase leading-none">Requestor:</p>
@@ -73,11 +77,11 @@
             <div id="dashboardSection" class="space-y-8">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
 
-                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-5">
+                    <div id="activeRequestsStatCard" class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-5 cursor-pointer hover:shadow-md transition-all">
                         <div class="p-3 bg-red-50 text-maroon-ltd rounded-2xl"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></div>
                         <div>
                             <p class="text-[10px] font-bold text-gray-400 tracking-widest uppercase leading-none">Active Requests</p>
-                            <p class="text-3xl font-bold">2</p>
+                            <p id="dashboardActiveCount" class="text-3xl font-bold">0</p>
                         </div>
                     </div>
                     <div id="draftsStatCard" class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-5 cursor-pointer hover:shadow-md transition-all">
@@ -105,90 +109,10 @@
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    
                     <div class="lg:col-span-2 space-y-8">
-                        <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
-                            <div class="flex justify-between items-start mb-10">
-                                <div>
-                                    <h3 class="text-xl font-bold tracking-wide uppercase">Submission & Version Tracker</h3>
-                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Real-time visual progress bar tracker.</p>
-                                </div>
-                                <div class="w-48">
-                                    <p class="text-[9px] font-bold text-gray-400 uppercase mb-1 ml-1">Request ID</p>
-                                    <select class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold focus:ring-1 focus:ring-gold-ltd outline-none transition-all">
-                                        <option>Select REQUEST ID</option>
-                                        <option>#1023 (Budget v2)</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="relative py-12 px-4">
-                                <div class="absolute h-1 bg-gray-200 w-[90%] top-[60px] left-[5%] -z-0"></div>
-                                <div class="absolute h-1 bg-maroon-ltd w-[45%] top-[60px] left-[5%] -z-0"></div>
-                                
-                                <div class="relative flex justify-between">
-                                    <div class="flex flex-col items-center">
-                                        <div class="w-5 h-5 bg-maroon-ltd rounded-full border-4 border-white ring-1 ring-maroon-ltd"></div>
-                                        <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Submitted</span>
-                                    </div>
-                                    <div class="flex flex-col items-center">
-                                        <span class="bg-red-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-full mb-1">v2</span>
-                                        <div class="w-5 h-5 bg-red-600 rounded-full border-4 border-white ring-1 ring-red-600 animate-pulse"></div>
-                                        <span class="text-[10px] font-bold mt-2 uppercase tracking-tighter text-red-600">AGM Review</span>
-                                        <span class="text-[8px] font-bold text-gray-400 italic text-center w-24">Clarification required on Budget v2</span>
-                                    </div>
-                                    <div class="flex flex-col items-center opacity-100">
-                                        <span class="bg-green-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-full mb-1">v1</span>
-                                        <div class="w-5 h-5 bg-green-600 rounded-full border-4 border-white ring-1 ring-green-600"></div>
-                                        <span class="text-[10px] font-bold mt-2 uppercase tracking-tighter">AFD Review</span>
-                                    </div>
-                                    <div class="flex flex-col items-center opacity-30">
-                                        <div class="w-5 h-5 bg-gray-400 rounded-full border-4 border-white ring-1 ring-gray-400"></div>
-                                        <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Approved</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
-                            <h3 class="text-xl font-bold tracking-wide uppercase mb-6">Version History</h3>
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-left text-xs">
-                                    <thead class="bg-gray-50 text-gray-400 border-b border-gray-100">
-                                        <tr>
-                                            <th class="px-6 py-4 font-bold uppercase tracking-widest">Version</th>
-                                            <th class="px-6 py-4 font-bold uppercase tracking-widest">Status</th>
-                                            <th class="px-6 py-4 font-bold uppercase tracking-widest">Date</th>
-                                            <th class="px-6 py-4 font-bold uppercase tracking-widest">Submitted By</th>
-                                            <th class="px-6 py-4 font-bold uppercase tracking-widest text-right">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="divide-y divide-gray-50">
-                                        <tr class="hover:bg-gray-50 transition-colors">
-                                            <td class="px-6 py-4 font-bold">v1</td>
-                                            <td class="px-6 py-4"><span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full font-bold text-[9px] uppercase">Pending</span></td>
-                                            <td class="px-6 py-4 text-gray-500 font-medium">June 21, 2023</td>
-                                            <td class="px-6 py-4 text-gray-500 font-medium">Administrator</td>
-                                            <td class="px-6 py-4 text-right">
-                                                <a href="#" class="text-blue-600 font-bold hover:underline">View Feedback</a>
-                                                <span class="mx-2 text-gray-300">|</span>
-                                                <a href="#" class="text-blue-600 font-bold hover:underline">Edit</a>
-                                            </td>
-                                        </tr>
-                                        <tr class="hover:bg-gray-50 transition-colors">
-                                            <td class="px-6 py-4 font-bold">v2</td>
-                                            <td class="px-6 py-4"><span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full font-bold text-[9px] uppercase">Pending</span></td>
-                                            <td class="px-6 py-4 text-gray-500 font-medium">June 23, 2023</td>
-                                            <td class="px-6 py-4 text-gray-500 font-medium">Maria Reyes</td>
-                                            <td class="px-6 py-4 text-right">
-                                                <a href="#" class="text-blue-600 font-bold hover:underline">View Feedback</a>
-                                                <span class="mx-2 text-gray-300">|</span>
-                                                <a href="#" class="text-blue-600 font-bold hover:underline">Edit</a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                        <!-- Placeholder for additional dashboard content or activity feeds -->
+                        <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 min-h-[400px] flex items-center justify-center">
+                             <p class="text-gray-400 font-bold uppercase tracking-widest text-xs">Activity Feed Coming Soon</p>
                         </div>
                     </div>
 
@@ -238,6 +162,100 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TSSO File Tracking Section -->
+            <div id="tssoFileTrackingSection" class="hidden space-y-8">
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-start mb-10">
+                        <div>
+                            <h3 class="text-xl font-bold tracking-wide uppercase">Submission & Version Tracker</h3>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Real-time visual progress bar tracker.</p>
+                        </div>
+                        <div class="w-48">
+                            <p class="text-[9px] font-bold text-gray-400 uppercase mb-1 ml-1">Request ID</p>
+                            <select id="trackerRequestId" class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold focus:ring-1 focus:ring-gold-ltd outline-none transition-all">
+                                <option value="">Select REQUEST ID</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="relative py-12 px-4">
+                        <div class="absolute h-1 bg-gray-200 w-[90%] top-[60px] left-[5%] -z-0"></div>
+                        <div id="trackerActiveLine" class="absolute h-1 bg-maroon-ltd w-0 top-[60px] left-[5%] -z-0 transition-all duration-700"></div>
+                        
+                        <div class="relative flex justify-between">
+                            <div class="tracker-step flex flex-col items-center">
+                                <div class="w-5 h-5 bg-gray-400 rounded-full border-4 border-white ring-1 ring-gray-400"></div>
+                                <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Submitted</span>
+                            </div>
+                            <div class="tracker-step flex flex-col items-center">
+                                <div class="w-5 h-5 bg-gray-400 rounded-full border-4 border-white ring-1 ring-gray-400"></div>
+                                <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Verification</span>
+                            </div>
+                            <div class="tracker-step flex flex-col items-center">
+                                <div class="w-5 h-5 bg-gray-400 rounded-full border-4 border-white ring-1 ring-gray-400"></div>
+                                <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Director</span>
+                            </div>
+                            <div class="tracker-step flex flex-col items-center">
+                                <div class="w-5 h-5 bg-gray-400 rounded-full border-4 border-white ring-1 ring-gray-400"></div>
+                                <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">AFD Review</span>
+                            </div>
+                            <div class="tracker-step flex flex-col items-center">
+                                <div class="w-5 h-5 bg-gray-400 rounded-full border-4 border-white ring-1 ring-gray-400"></div>
+                                <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Approved</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
+                    <h3 class="text-xl font-bold tracking-wide uppercase mb-6">Version History</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-gray-50 text-gray-400 border-b border-gray-100">
+                                <tr>
+                                    <th class="px-6 py-4 font-bold uppercase tracking-widest">Version</th>
+                                    <th class="px-6 py-4 font-bold uppercase tracking-widest">Status</th>
+                                    <th class="px-6 py-4 font-bold uppercase tracking-widest">Date</th>
+                                    <th class="px-6 py-4 font-bold uppercase tracking-widest">Submitted By</th>
+                                    <th class="px-6 py-4 font-bold uppercase tracking-widest text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="versionHistoryBody" class="divide-y divide-gray-50">
+                                <tr><td colspan="5" class="text-center py-10 uppercase text-gray-400 font-bold text-[10px] tracking-widest">Select a request to view history</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TSSO My Requests Section -->
+            <div id="tssoMyRequestsSection" class="hidden space-y-8">
+                <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="px-8 py-6 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
+                        <div>
+                            <h3 class="text-xl font-bold tracking-tight uppercase">My Submitted Requests</h3>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Track the status of your submitted documents.</p>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50 text-[10px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">
+                                <tr>
+                                    <th class="px-8 py-4">Request ID</th>
+                                    <th class="px-8 py-4">Document Type</th>
+                                    <th class="px-8 py-4">Submitted Date</th>
+                                    <th class="px-8 py-4">Status</th>
+                                    <th class="px-8 py-4 text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="myRequestsTableBody" class="divide-y divide-gray-50 text-sm">
+                                <tr><td colspan="5" class="text-center py-10 uppercase text-gray-400 font-bold text-xs tracking-widest">Loading requests...</td></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -296,6 +314,68 @@
         </div>
     </main>
 
+    <!-- Document View Modal -->
+    <div id="viewModal" class="fixed inset-0 bg-black/80 z-[100] flex items-center justify-center pointer-events-none opacity-0 transition-all duration-300">
+        <div class="bg-white w-full max-w-6xl h-[95vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden m-4">
+            <div class="flex items-center justify-between p-6 border-b border-gray-100 bg-white shrink-0">
+                <h3 id="viewModalTitle" class="text-xl font-bold tracking-tight text-gray-950 uppercase font-oswald">Request Details</h3>
+                <button onclick="window.closeViewModal()" class="text-gray-400 hover:text-maroon-ltd transition-colors p-2 hover:bg-gray-50 rounded-full">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="flex-1 bg-gray-100 overflow-y-auto p-2 md:p-8 custom-scrollbar">
+                <div class="bg-white shadow-xl rounded-2xl mx-auto max-w-5xl overflow-hidden min-h-screen">
+                    <iframe id="viewFrame" src="about:blank" class="w-full h-full min-h-[1200px] border-none"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tracker Modal -->
+    <div id="trackerModal" class="fixed inset-0 bg-black/80 z-[110] flex items-center justify-center pointer-events-none opacity-0 transition-all duration-300">
+        <div class="bg-white w-full max-w-4xl rounded-3xl shadow-2xl flex flex-col overflow-hidden m-4">
+            <div class="flex items-center justify-between p-6 border-b border-gray-100 bg-white shrink-0">
+                <div>
+                    <h3 id="trackerModalTitle" class="text-xl font-bold tracking-tight text-gray-950 uppercase font-oswald">File Tracking</h3>
+                    <p id="trackerModalRequestId" class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Request Status Overview</p>
+                </div>
+                <button onclick="window.closeTrackerModal()" class="text-gray-400 hover:text-maroon-ltd transition-colors p-2 hover:bg-gray-50 rounded-full">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-8 space-y-12">
+                <!-- Visual Tracker -->
+                <div class="relative py-12 px-4">
+                    <div class="absolute h-1 bg-gray-200 w-[90%] top-[60px] left-[5%] -z-0"></div>
+                    <div id="modalTrackerActiveLine" class="absolute h-1 bg-maroon-ltd w-0 top-[60px] left-[5%] -z-0 transition-all duration-700"></div>
+                    
+                    <div class="relative flex justify-between">
+                        <div class="modal-tracker-step flex flex-col items-center">
+                            <div class="w-5 h-5 bg-gray-400 rounded-full border-4 border-white ring-1 ring-gray-400"></div>
+                            <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Submitted</span>
+                        </div>
+                        <div class="modal-tracker-step flex flex-col items-center">
+                            <div class="w-5 h-5 bg-gray-400 rounded-full border-4 border-white ring-1 ring-gray-400"></div>
+                            <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Verification</span>
+                        </div>
+                        <div class="modal-tracker-step flex flex-col items-center">
+                            <div class="w-5 h-5 bg-gray-400 rounded-full border-4 border-white ring-1 ring-gray-400"></div>
+                            <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Director</span>
+                        </div>
+                        <div class="modal-tracker-step flex flex-col items-center">
+                            <div class="w-5 h-5 bg-gray-400 rounded-full border-4 border-white ring-1 ring-gray-400"></div>
+                            <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">AFD Review</span>
+                        </div>
+                        <div class="modal-tracker-step flex flex-col items-center">
+                            <div class="w-5 h-5 bg-gray-400 rounded-full border-4 border-white ring-1 ring-gray-400"></div>
+                            <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Approved</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { logoutUser, getCurrentUser, db } from '../js/auth.js';
 
@@ -331,9 +411,12 @@
             const navRequests = document.getElementById('navRequests');
             const navNewSubmission = document.getElementById('navNewSubmission');
             const navDrafts = document.getElementById('navDrafts');
+
             const dashboardSection = document.getElementById('dashboardSection');
             const tssoSubmissionSection = document.getElementById('tssoSubmissionSection');
             const tssoDraftsModuleSection = document.getElementById('tssoDraftsModuleSection');
+            const tssoMyRequestsSection = document.getElementById('tssoMyRequestsSection');
+
             const pageTitle = document.getElementById('pageTitle');
             const navLinks = document.querySelectorAll('.nav-link');
 
@@ -363,13 +446,24 @@
                 sessionStorage.removeItem('activeTab'); // Clear it so it doesn't repeat on next refresh
             }
 
-            navRequests.addEventListener('click', (e) => {
+            navDashboard.addEventListener('click', (e) => {
                 e.preventDefault();
                 dashboardSection.classList.remove('hidden');
                 tssoSubmissionSection.classList.add('hidden');
                 tssoDraftsModuleSection.classList.add('hidden');
+                tssoMyRequestsSection.classList.add('hidden');
+                pageTitle.textContent = 'DASHBOARD';
+                setActiveLink(navDashboard);
+            });
+
+            navMyRequests.addEventListener('click', (e) => {
+                e.preventDefault();
+                dashboardSection.classList.add('hidden');
+                tssoSubmissionSection.classList.add('hidden');
+                tssoDraftsModuleSection.classList.add('hidden');
+                tssoMyRequestsSection.classList.remove('hidden');
                 pageTitle.textContent = 'MY REQUESTS';
-                setActiveLink(navRequests);
+                setActiveLink(navMyRequests);
             });
 
             navNewSubmission.addEventListener('click', (e) => {
@@ -377,6 +471,7 @@
                 dashboardSection.classList.add('hidden');
                 tssoSubmissionSection.classList.remove('hidden');
                 tssoDraftsModuleSection.classList.add('hidden');
+                tssoMyRequestsSection.classList.add('hidden');
                 pageTitle.textContent = 'NEW SUBMISSION';
                 setActiveLink(navNewSubmission);
             });
@@ -386,6 +481,7 @@
                 dashboardSection.classList.add('hidden');
                 tssoSubmissionSection.classList.add('hidden');
                 tssoDraftsModuleSection.classList.remove('hidden');
+                tssoMyRequestsSection.classList.add('hidden');
                 pageTitle.textContent = 'DRAFTS';
                 setActiveLink(navDrafts);
             });
@@ -408,6 +504,328 @@
                     }
                 });
             }
+
+            // --- LOAD MY REQUESTS ---
+            async function loadMyRequests() {
+                const tbody = document.getElementById('myRequestsTableBody');
+                const dashboardActiveCount = document.getElementById('dashboardActiveCount');
+                const trackerSelect = document.getElementById('trackerRequestId');
+                if (!tbody) return;
+
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-10 uppercase text-gray-400 font-bold text-xs tracking-widest">Loading requests...</td></tr>';
+
+                try {
+                    const { collection, query, where, getDocs, orderBy, onSnapshot } = await import("https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js");
+                    const submissionsRef = collection(db, "submissions");
+                    
+                    // Ginagamit ang onSnapshot para real-time ang update
+                    const q = query(submissionsRef, where("userId", "==", currentUserId), orderBy("submittedAt", "desc"));
+                    
+                    onSnapshot(q, (snap) => {
+                        if (dashboardActiveCount) dashboardActiveCount.textContent = snap.size;
+
+                        if (snap.empty) {
+                            tbody.innerHTML = '<tr><td colspan="5" class="text-center py-10 uppercase text-gray-400 font-bold text-xs tracking-widest">No requests found.</td></tr>';
+                            return;
+                        }
+
+                        tbody.innerHTML = '';
+                        
+                        // Clear and populate tracker select
+                        if (trackerSelect) {
+                            trackerSelect.innerHTML = '<option value="">Select REQUEST ID</option>';
+                        }
+
+                        snap.forEach(docSnap => {
+                            const data = docSnap.data();
+                            const date = data.submittedAt?.toDate ? data.submittedAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Just now';
+                            
+                            let statusColor = 'bg-gray-100 text-gray-700';
+                            if (data.status === 'pending') statusColor = 'bg-yellow-100 text-yellow-700';
+                            else if (data.status === 'viewed') statusColor = 'bg-orange-100 text-orange-700';
+                            else if (data.status === 'verified') statusColor = 'bg-blue-100 text-blue-700';
+                            else if (data.status === 'returned') statusColor = 'bg-red-100 text-red-700';
+                            else if (data.status === 'approved') statusColor = 'bg-green-100 text-green-700';
+
+                            tbody.innerHTML += `
+                                <tr class="hover:bg-gray-50/80 transition-colors">
+                                    <td class="px-8 py-5 font-mono text-xs text-maroon-ltd font-bold">${data.requestId}</td>
+                                    <td class="px-8 py-5 font-bold text-xs uppercase text-gray-600">${data.templateName}${data.title ? ' - ' + data.title : ''}</td>
+                                    <td class="px-8 py-5 text-gray-500 text-xs">${date}</td>
+                                    <td class="px-8 py-5">
+                                        <span onclick="window.openTrackerModal('${docSnap.id}', '${data.requestId}')" 
+                                              class="px-3 py-1 ${statusColor} rounded-full text-[9px] font-bold uppercase cursor-pointer hover:scale-105 transition-all shadow-sm inline-block" title="Click to track status">
+                                            ${data.status}
+                                        </span>
+                                    </td>
+                                    <td class="px-8 py-5 text-center">
+                                        <button onclick="window.viewRequestDetails('${docSnap.id}')" class="text-blue-600 font-bold hover:underline text-[10px] uppercase tracking-widest">View Details</button>
+                                    </td>
+                                </tr>`;
+                            
+                            // Add to tracker dropdown
+                            if (trackerSelect) {
+                                const opt = document.createElement('option');
+                                opt.value = docSnap.id;
+                                opt.textContent = `${data.requestId} - ${data.title || data.templateName}`;
+                                trackerSelect.appendChild(opt);
+                            }
+                        });
+                    }, (error) => {
+                        console.error("Query failed:", error);
+                        if (error.message.includes("requires an index")) {
+                            // Fixed indexing URL extraction logic to avoid "undefined" error
+                            const urlMatch = error.message.match(/https:\/\/console\.firebase\.google\.com[^\s]*/);
+                            const indexUrl = urlMatch ? urlMatch[0] : "#";
+                            tbody.innerHTML = `<tr><td colspan="5" class="text-center py-10 text-red-500 font-bold text-xs uppercase tracking-widest">
+                                <p class="mb-2">Database Index Required for "My Requests" Module</p>
+                                <a href="${indexUrl}" target="_blank" class="underline hover:text-red-700">Click here to enable database indexing</a>
+                            </td></tr>`;
+                        } else {
+                            tbody.innerHTML = '<tr><td colspan="5" class="text-center py-10 text-red-500 font-bold text-xs uppercase tracking-widest">Error loading requests.</td></tr>';
+                        }
+                    });
+                } catch (error) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-center py-10 text-red-500 font-bold text-xs uppercase tracking-widest">Error loading requests.</td></tr>';
+                }
+            }
+
+            // --- FILE TRACKER REAL-TIME LOGIC ---
+            const trackerSelect = document.getElementById('trackerRequestId');
+            const trackerActiveLine = document.getElementById('trackerActiveLine');
+            const trackerSteps = document.querySelectorAll('.tracker-step');
+            const versionHistoryBody = document.getElementById('versionHistoryBody');
+            let trackerUnsubscribe = null;
+
+            function updateTrackerUI(data) {
+                const status = data?.status;
+
+                // Reset UI styles
+                if (trackerActiveLine) trackerActiveLine.style.width = '0%';
+                trackerSteps.forEach(step => {
+                    const circle = step.querySelector('div');
+                    const text = step.querySelector('span');
+                    circle.className = "w-5 h-5 bg-gray-400 rounded-full border-4 border-white ring-1 ring-gray-400 transition-all";
+                    circle.classList.remove('animate-pulse');
+                    text.classList.remove('text-maroon-ltd');
+                });
+
+                // Update Version History Table
+                if (versionHistoryBody && data) {
+                    const date = data.submittedAt?.toDate ? data.submittedAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Processing...';
+                    
+                    let statusColor = 'bg-yellow-100 text-yellow-700';
+                    if (data.status === 'verified') statusColor = 'bg-blue-100 text-blue-700';
+                    else if (data.status === 'returned') statusColor = 'bg-red-100 text-red-700';
+                    else if (data.status === 'approved') statusColor = 'bg-green-100 text-green-700';
+
+                    versionHistoryBody.innerHTML = `
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 font-bold text-maroon-ltd tracking-tighter uppercase">Original (v1)</td>
+                            <td class="px-6 py-4"><span class="${statusColor} px-3 py-1 rounded-full font-bold text-[9px] uppercase">${data.status}</span></td>
+                            <td class="px-6 py-4 text-gray-500 font-medium">${date}</td>
+                            <td class="px-6 py-4 text-gray-500 font-medium uppercase">${data.requestorName}</td>
+                            <td class="px-6 py-4 text-right">
+                                <button onclick="window.viewRequestDetails('${trackerSelect.value}')" class="text-blue-600 font-bold hover:underline">View Full Details</button>
+                            </td>
+                        </tr>`;
+                } else if (versionHistoryBody) {
+                    versionHistoryBody.innerHTML = '<tr><td colspan="5" class="text-center py-10 uppercase text-gray-400 font-bold text-[10px] tracking-widest">Select a request to view history</td></tr>';
+                }
+
+                if (!status) return;
+
+                // Mapping status sa stage (1-5)
+                const statusToStage = { 'returned': 1, 'pending': 2, 'verified': 3, 'afd_review': 4, 'approved': 5 };
+                const currentStage = statusToStage[status] || 0;
+                if (currentStage === 0) return;
+
+                // Update Progress Line percentage (4 gaps for 5 items = 25% per gap)
+                if (trackerActiveLine) trackerActiveLine.style.width = `${(currentStage - 1) * 25}%`;
+
+                // Update Step Icons
+                trackerSteps.forEach((step, index) => {
+                    const stageNum = index + 1;
+                    const circle = step.querySelector('div');
+                    const text = step.querySelector('span');
+
+                    if (stageNum < currentStage) {
+                        // Completed stages (Green)
+                        circle.className = "w-5 h-5 bg-green-600 rounded-full border-4 border-white ring-1 ring-green-600 transition-all";
+                    } else if (stageNum === currentStage) {
+                        // Current active stage (Pulse animation)
+                        const color = status === 'returned' ? 'bg-red-600' : 'bg-maroon-ltd';
+                        const ring = status === 'returned' ? 'ring-red-600' : 'ring-maroon-ltd';
+                        circle.className = `w-5 h-5 ${color} rounded-full border-4 border-white ring-1 ${ring} transition-all animate-pulse`;
+                        text.classList.add('text-maroon-ltd');
+                    }
+                });
+            }
+
+            if (trackerSelect) {
+                trackerSelect.addEventListener('change', async (e) => {
+                    const docId = e.target.value;
+                    if (trackerUnsubscribe) trackerUnsubscribe(); // Stop old listener
+                    if (!docId) { updateTrackerUI(null); return; }
+
+                    const { doc, onSnapshot } = await import("https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js");
+                    trackerUnsubscribe = onSnapshot(doc(db, "submissions", docId), (docSnap) => {
+                        if (docSnap.exists()) updateTrackerUI(docSnap.data());
+                    });
+                });
+            }
+
+            // --- MODAL TRACKER LOGIC ---
+            let modalTrackerUnsubscribe = null;
+
+            window.openTrackerModal = async function(docId, requestId) {
+                const modal = document.getElementById('trackerModal');
+                const title = document.getElementById('trackerModalTitle');
+                const idLabel = document.getElementById('trackerModalRequestId');
+                
+                if (title) title.textContent = `Tracking Request: ${requestId}`;
+                if (idLabel) idLabel.textContent = `Real-time file tracking for submission ${requestId}`;
+
+                modal.classList.remove('pointer-events-none');
+                modal.classList.add('opacity-100');
+
+                const { doc, onSnapshot } = await import("https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js");
+                
+                if (modalTrackerUnsubscribe) modalTrackerUnsubscribe();
+                
+                modalTrackerUnsubscribe = onSnapshot(doc(db, "submissions", docId), (docSnap) => {
+                    if (docSnap.exists()) {
+                        updateModalTrackerUI(docSnap.data());
+                    }
+                });
+            };
+
+            function updateModalTrackerUI(data) {
+                const status = data?.status;
+                const activeLine = document.getElementById('modalTrackerActiveLine');
+                const steps = document.querySelectorAll('.modal-tracker-step');
+
+                if (activeLine) activeLine.style.width = '0%';
+                steps.forEach(step => {
+                    const circle = step.querySelector('div');
+                    const text = step.querySelector('span');
+                    circle.className = "w-5 h-5 bg-gray-400 rounded-full border-4 border-white ring-1 ring-gray-400 transition-all";
+                    circle.classList.remove('animate-pulse');
+                    text.classList.remove('text-maroon-ltd');
+                });
+
+                if (!status) return;
+
+                const statusToStage = { 
+                    'pending': 1, 
+                    'viewed': 2, 
+                    'verified': 3, 
+                    'agm_viewed': 4, 
+                    'approved': 5,
+                    'returned': 1 };
+                const currentStage = statusToStage[status] || 0;
+                
+                if (activeLine) activeLine.style.width = `${(currentStage - 1) * 25}%`;
+
+                steps.forEach((step, index) => {
+                    const stageNum = index + 1;
+                    const circle = step.querySelector('div');
+                    const text = step.querySelector('span');
+                    const nameLabel = step.querySelector('.step-name');
+
+                    // Ipakita ang pangalan sa "Viewed" steps kung available (Modal tracker)
+                    if (stageNum === 2 && data.viewedByVerifierName) {
+                        nameLabel.textContent = data.viewedByVerifierName;
+                    } else if (stageNum === 4 && data.viewedByAGMName) {
+                        nameLabel.textContent = data.viewedByAGMName;
+                    }
+
+                    if (stageNum < currentStage) {
+                        circle.className = "w-5 h-5 bg-green-600 rounded-full border-4 border-white ring-1 ring-green-600 transition-all";
+                    } else if (stageNum === currentStage) {
+                        const color = status === 'returned' ? 'bg-red-600' : 'bg-maroon-ltd';
+                        circle.className = `w-5 h-5 ${color} rounded-full border-4 border-white ring-1 ${status === 'returned' ? 'ring-red-600' : 'ring-maroon-ltd'} transition-all animate-pulse`;
+                        text.classList.add('text-maroon-ltd');
+                    }
+                });
+            }
+
+            window.closeTrackerModal = function() {
+                const modal = document.getElementById('trackerModal');
+                modal.classList.remove('opacity-100');
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                if (modalTrackerUnsubscribe) {
+                    modalTrackerUnsubscribe();
+                    modalTrackerUnsubscribe = null;
+                }
+            };
+
+            // --- VIEW DETAILS LOGIC ---
+            window.viewRequestDetails = async function(id) {
+                console.log("Viewing details for:", id);
+                const modal = document.getElementById('viewModal');
+                const frame = document.getElementById('viewFrame');
+                const title = document.getElementById('viewModalTitle');
+
+                try {
+                    const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js");
+                    const docRef = doc(db, "submissions", id);
+                    const snap = await getDoc(docRef);
+
+                    if (!snap.exists()) {
+                        alert('Request not found.');
+                        return;
+                    }
+
+                    const data = snap.data();
+                    title.textContent = `Viewing: ${data.requestId} - ${data.title || 'No Title'}`;
+                    
+                    // 1. I-setup ang onload bago i-set ang src
+                    frame.onload = () => {
+                        if (frame.contentWindow && frame.contentWindow.setFormData) {
+                            // I-set ang flag sa loob ng iframe bago i-load ang data
+                            frame.contentWindow.isDataLoaded = true;
+                            frame.contentWindow.setFormData(data.formData);
+                            
+                            // Lock the form (Read-Only)
+                            const frameDoc = frame.contentDocument || frame.contentWindow.document;
+                            if (frameDoc) {
+                                const elements = frameDoc.querySelectorAll('input, textarea, select');
+                                elements.forEach(el => {
+                                    if (el.type === 'file' || el.type === 'checkbox' || el.type === 'radio' || el.tagName === 'SELECT') {
+                                        el.disabled = true;
+                                    } else {
+                                        el.readOnly = true;
+                                    }
+                                });
+                                // Hide "No-Print" buttons/controls inside template
+                                frameDoc.querySelectorAll('.no-print').forEach(el => el.style.display = 'none');
+                            }
+                        }
+                    };
+                    
+                    // 2. I-load ang template
+                    frame.src = '../BTAF.html?mode=review';
+
+                    // 3. I-show ang modal
+                    modal.classList.remove('pointer-events-none');
+                    modal.classList.add('opacity-100');
+
+                } catch (error) {
+                    console.error("View error:", error);
+                    alert('Unable to load request details.');
+                }
+            };
+
+            window.closeViewModal = function() {
+                const modal = document.getElementById('viewModal');
+                const frame = document.getElementById('viewFrame');
+                if (modal) {
+                    modal.classList.remove('opacity-100');
+                    modal.classList.add('opacity-0', 'pointer-events-none');
+                    setTimeout(() => { frame.src = 'about:blank'; }, 300);
+                }
+            };
 
             // --- LOAD AVAILABLE TEMPLATES FOR TSSO ---
             async function loadAvailableTemplates() {
@@ -570,11 +988,21 @@
                 };
             }
 
+            const activeRequestsStatCard = document.getElementById('activeRequestsStatCard');
+            if (activeRequestsStatCard) {
+                activeRequestsStatCard.onclick = () => {
+                    navMyRequests.click();
+                };
+            }
+
             // --- BASIC PREVIEW MODAL FOR TSSO (opens in new tab) ---
             window.openPreviewModal = function(url) {
-                let cleanUrl = url.trim();
+                if (!url || url === 'undefined' || url === '#') {
+                    alert('Template file link is invalid or missing.');
+                    return;
+                }
 
-                // Hotfix: Redirect old BTAForm.html requests to the new BTAF.html
+                let cleanUrl = url.trim();
                 if (cleanUrl.includes('BTAForm.html')) {
                     cleanUrl = cleanUrl.replace('BTAForm.html', 'BTAF.html');
                 }
@@ -660,6 +1088,7 @@
 
             // Load available templates when the page loads
             loadAvailableTemplates();
+            loadMyRequests(); // Load my requests counts and listener immediately
         });
     </script>
 </body>

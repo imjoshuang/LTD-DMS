@@ -13,6 +13,8 @@ function getRedirectPath(department) {
         case 'PMO':   return 'pmo.html';
         case 'TSD':   return 'tsd.html';
         case 'TSSO':  return 'TSSO/tssodash.html';
+        case 'TSSO VERIFIER': return 'Vverifier/verifier-dash.html';
+        case 'VERIFIER': return 'Vverifier/verifier-dash.html';
         case 'OPCEO': return 'opceo.html';
         case 'OGM':   return 'ogm.html';
         case 'LAS':   return 'las.html';

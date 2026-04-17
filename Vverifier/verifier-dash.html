@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifier Dashboard - Lancaster DMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="photos/ltd.png" type="image/png">
+    <link rel="shortcut icon" href="photos/ltd.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/admin.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'maroon-ltd': '#600000',
+                        'gold-ltd': '#C19A6B',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #600000; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-gray-50 flex min-h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-maroon-ltd text-white flex flex-col p-4 shadow-2xl shrink-0">
+        <div class="flex items-center gap-3 px-3 py-5 border-b border-white/10 mb-8">
+            <img src="/photos/gold.png" alt="LTD Logo" class="w-10 h-10 object-contain bg-white rounded-lg p-1">
+            <div>
+                <h1 class="font-bold text-xl tracking-wide text-white uppercase leading-none">LANCASTER</h1>
+                <p class="text-[9px] uppercase tracking-[0.2em] text-white/60">Verifier Portal</p>
+            </div>
+        </div>
+
+        <nav class="flex-grow space-y-2">
+            <a href="#" class="flex items-center gap-4 px-5 py-3 rounded-xl bg-white/10 text-white font-medium tracking-wide">
+                <svg class="w-5 h-5 text-gold-ltd" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                VERIFICATION QUEUE
+            </a>
+            <a href="#" class="flex items-center gap-4 px-5 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-all tracking-wide">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                REVIEW HISTORY
+            </a>
+        </nav>
+
+        <div class="mt-auto border-t border-white/10 pt-4">
+            <button id="logoutBtn" class="w-full flex items-center gap-4 px-5 py-3 rounded-xl text-white/60 hover:bg-red-900/50 hover:text-white transition-all tracking-widest text-xs font-bold uppercase">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                LOGOUT
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        <!-- Header -->
+        <header class="bg-white border-b border-gray-100 px-8 py-5 flex items-center justify-between shrink-0">
+            <h2 class="text-3xl font-bold tracking-tight text-gray-900 uppercase">VERIFIER DASHBOARD</h2>
+            
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-3 pl-6 border-l border-gray-100">
+                    <div class="text-right">
+                        <p id="verifierRole" class="text-xs font-bold leading-none">DMS VERIFIER</p>
+                        <p id="verifierName" class="text-[10px] text-gray-400 tracking-tighter uppercase">Loading...</p>
+                    </div>
+                    <div id="verifierAvatar" class="w-10 h-10 rounded-full bg-maroon-ltd text-white font-bold flex items-center justify-center border-2 border-gold-ltd shadow-md">--</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-8 custom-scrollbar space-y-8">
+            
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-5">
+                    <div class="p-3 bg-orange-50 text-orange-600 rounded-2xl"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-400 tracking-widest uppercase leading-none mb-1">Pending Review</p>
+                        <p id="pendingCount" class="text-3xl font-bold">0</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-5">
+                    <div class="p-3 bg-green-50 text-green-600 rounded-2xl"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-400 tracking-widest uppercase leading-none mb-1">Verified Today</p>
+                        <p class="text-3xl font-bold">8</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-5">
+                    <div class="p-3 bg-red-50 text-maroon-ltd rounded-2xl"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div>
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-400 tracking-widest uppercase leading-none mb-1">Returned Requests</p>
+                        <p id="returnedCount" class="text-3xl font-bold">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verification Queue Table -->
+            <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
+                <div class="px-8 py-6 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
+                    <div>
+                        <h3 class="text-xl font-bold tracking-tight uppercase">Incoming Requests for Verification</h3>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Please review content quality and compliance.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="text" placeholder="Search Request..." class="px-4 py-2 bg-white border border-gray-200 rounded-xl text-xs focus:ring-1 focus:ring-maroon-ltd outline-none transition-all uppercase">
+                    </div>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50 text-[10px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">
+                            <tr>
+                                <th class="px-8 py-4">Request ID</th>
+                                <th class="px-8 py-4">Requestor</th>
+                                <th class="px-8 py-4">Document Type</th>
+                                <th class="px-8 py-4">Submitted Date</th>
+                                <th class="px-8 py-4">Priority</th>
+                                <th class="px-8 py-4 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="verificationQueueBody" class="divide-y divide-gray-50 text-sm">
+                            <tr><td colspan="6" class="text-center py-10 uppercase text-gray-400 font-bold text-xs tracking-widest">Loading queue...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Full-Screen Review Modal (Split View) -->
+    <div id="reviewPanel" class="fixed inset-0 bg-white translate-x-full transition-transform duration-500 z-[100] flex flex-col">
+        <!-- Modal Header -->
+        <div class="px-8 py-4 border-b border-gray-100 flex justify-between items-center bg-maroon-ltd text-white shrink-0">
+            <div>
+                <h3 class="text-lg font-bold uppercase tracking-tight font-oswald">Document Verification Mode</h3>
+                <p id="reviewingID" class="text-[10px] text-white/60 font-bold uppercase tracking-widest">Loading Submission Data...</p>
+            </div>
+            <button onclick="closeReviewPanel()" class="p-2 hover:bg-white/10 rounded-full transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+
+        <!-- Main Split Content -->
+        <div class="flex-1 flex overflow-hidden">
+            <!-- LEFT SIDE: Verification Checklist (Fixed Width) -->
+            <div class="w-[450px] border-r border-gray-100 overflow-y-auto p-8 custom-scrollbar bg-gray-50/30 flex flex-col gap-8">
+                <div class="space-y-6">
+                    <h4 class="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-4">Verification Checklist</h4>
+                    
+                    <!-- Section 1 -->
+                    <div class="p-5 bg-white rounded-2xl border border-gray-100 shadow-sm">
+                        <h4 class="text-xs font-bold text-maroon-ltd uppercase tracking-widest mb-4 flex items-center gap-2">
+                            <span class="w-6 h-6 bg-maroon-ltd text-white rounded-full flex items-center justify-center text-[10px]">1</span>
+                            Data Accuracy
+                        </h4>
+                        <div class="space-y-3 pl-8">
+                            <label class="flex items-start gap-3 cursor-pointer group">
+                                <input type="checkbox" class="mt-1 w-4 h-4 accent-maroon-ltd">
+                                <span class="text-xs text-gray-600 font-medium group-hover:text-black transition-colors">All dates and personnel names are correct.</span>
+                            </label>
+                            <label class="flex items-start gap-3 cursor-pointer group">
+                                <input type="checkbox" class="mt-1 w-4 h-4 accent-maroon-ltd">
+                                <span class="text-xs text-gray-600 font-medium group-hover:text-black transition-colors">Calculations in the breakdown match the summary.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Section 2 -->
+                    <div class="p-5 bg-white rounded-2xl border border-gray-100 shadow-sm">
+                        <h4 class="text-xs font-bold text-maroon-ltd uppercase tracking-widest mb-4 flex items-center gap-2">
+                            <span class="w-6 h-6 bg-maroon-ltd text-white rounded-full flex items-center justify-center text-[10px]">2</span>
+                            Signatures & Proof
+                        </h4>
+                        <div class="space-y-3 pl-8">
+                            <label class="flex items-start gap-3 cursor-pointer group">
+                                <input type="checkbox" class="mt-1 w-4 h-4 accent-maroon-ltd">
+                                <span class="text-xs text-gray-600 font-medium group-hover:text-black transition-colors">Requestor's digital signature is present.</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Verifier's Comment -->
+                <div class="space-y-3 mt-auto">
+                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Verifier Remarks / Feedback</label>
+                    <textarea id="verifierRemarks" rows="4" class="w-full p-4 bg-white border border-gray-200 rounded-2xl text-xs outline-none focus:ring-2 focus:ring-maroon-ltd transition-all shadow-sm" placeholder="Enter comments for the requestor..."></textarea>
+                </div>
+
+                <!-- Panel Actions -->
+                <div class="pt-6 border-t border-gray-100 flex gap-3">
+                    <button onclick="handleReturnForRevision()" class="flex-1 py-4 bg-white border border-gray-200 text-gray-500 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-red-50 hover:text-red-600 transition-all">Return</button>
+                    <button onclick="handleApproveRequest()" class="flex-1 py-4 bg-maroon-ltd text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-black shadow-lg shadow-maroon-ltd/20 transition-all">Approve</button>
+                </div>
+            </div>
+
+            <!-- RIGHT SIDE: Document Preview (Iframe) -->
+            <div class="flex-1 bg-gray-200 p-6 overflow-hidden flex flex-col relative">
+                <div class="absolute top-10 right-10 z-10 flex gap-2">
+                    <span class="bg-white/90 backdrop-blur px-4 py-2 rounded-xl border border-gray-200 shadow-sm text-[10px] font-bold text-maroon-ltd uppercase tracking-widest">Preview Mode (Read-Only)</span>
+                </div>
+                <div class="bg-white rounded-2xl shadow-2xl flex-1 overflow-hidden">
+                    <iframe id="reviewFrame" src="about:blank" class="w-full h-full border-none"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { logoutUser, db } from '../js/auth.js';
+        import { collection, query, where, onSnapshot, orderBy, doc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Session Protection & Initialization
+            const isLoggedIn = sessionStorage.getItem('userLoggedIn') === 'true';
+            const userDept = sessionStorage.getItem('userDept');
+            const userName = sessionStorage.getItem('userName') || 'Verifier';
+
+            // Siguraduhin na Verifier lang ang may access dito
+            if (!isLoggedIn || (userDept !== 'VERIFIER' && userDept !== 'TSSO VERIFIER')) {
+                window.location.replace('../index.html');
+                return;
+            }
+
+            // Update Header UI (Admin Style)
+            const verifierNameEl = document.getElementById('verifierName');
+            const verifierRoleEl = document.getElementById('verifierRole');
+            const verifierAvatarEl = document.getElementById('verifierAvatar');
+
+            if (verifierNameEl) verifierNameEl.textContent = userName;
+            if (verifierRoleEl) verifierRoleEl.textContent = userDept === 'TSSO VERIFIER' ? 'TECHNICAL VERIFIER' : 'DMS VERIFIER';
+            
+            if (verifierAvatarEl) {
+                const initials = userName.split(' ').map(n => n[0]).join('').toUpperCase();
+                verifierAvatarEl.textContent = initials.substring(0, 2);
+            }
+
+            // Logout Logic
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async () => {
+                    const result = await logoutUser();
+                    if (result.success) {
+                        sessionStorage.clear();
+                        localStorage.clear();
+                        window.history.pushState(null, null, window.location.href);
+                        window.onpopstate = function() {
+                            window.history.pushState(null, null, window.location.href);
+                        };
+                        window.location.replace('../index.html');
+                    }
+                });
+            }
+
+            loadVerificationQueue();
+        });
+
+        function loadVerificationQueue() {
+            const tbody = document.getElementById('verificationQueueBody');
+            if (!tbody) return;
+
+            const q = query(
+                collection(db, "submissions"), 
+                where("status", "in", ["pending", "returned"]), 
+                orderBy("submittedAt", "desc")
+            );
+
+            // Real-time listener para makita agad ang bagong submissions
+            onSnapshot(q, (snap) => {
+                tbody.innerHTML = '';
+                let pendingCount = 0;
+                let returnedCount = 0;
+
+                if (snap.empty) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-10 uppercase text-gray-400 font-bold text-xs tracking-widest">No pending requests in queue.</td></tr>';
+                } else {
+                    snap.forEach(docSnap => {
+                        const data = docSnap.data();
+                        const date = data.submittedAt?.toDate ? data.submittedAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ' • ' + data.submittedAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Processing...';
+                        
+                        if (data.status === 'pending') pendingCount++;
+                        if (data.status === 'returned') returnedCount++;
+
+                        const initials = data.requestorName ? data.requestorName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0,2) : '??';
+                        const priorityColor = data.priority === 'Urgent' ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600';
+
+                        tbody.innerHTML += `
+                            <tr class="hover:bg-gray-50/80 transition-colors group">
+                                <td class="px-8 py-5 font-mono text-xs text-maroon-ltd font-bold">${data.requestId}</td>
+                                <td class="px-8 py-5">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-gray-100 text-maroon-ltd flex items-center justify-center font-bold text-[10px]">${initials}</div>
+                                        <div>
+                                            <p class="font-bold text-gray-900 uppercase text-xs">${data.requestorName}</p>
+                                            <p class="text-[10px] text-gray-400 uppercase">${data.department} Dept.</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-5 font-bold text-xs uppercase text-gray-600">${data.templateName}${data.title ? ' - ' + data.title : ''}</td>
+                                <td class="px-8 py-5 text-gray-500 text-xs">${date}</td>
+                                <td class="px-8 py-5"><span class="px-3 py-1 ${priorityColor} rounded-full text-[9px] font-bold uppercase">${data.priority || 'Normal'}</span></td>
+                                <td class="px-8 py-5 text-center">
+                                    <button onclick="openReviewPanel('${docSnap.id}', '${data.requestId}', '${data.requestorName}')" class="bg-maroon-ltd text-white px-6 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-black transition-all shadow-md">Start Review</button>
+                                </td>
+                            </tr>`;
+                    });
+                }
+
+                document.getElementById('pendingCount').textContent = pendingCount;
+                document.getElementById('returnedCount').textContent = returnedCount;
+            }, (err) => {
+                console.error("Queue load error:", err);
+                let userFriendlyMsg = err.message;
+                if (err.code === 'failed-precondition') {
+                    userFriendlyMsg = "Kailangan ng Firestore Composite Index. Pakihintay matapos ang 'Building' status sa Firebase Console.";
+                }
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-red-500 font-bold text-xs uppercase tracking-widest">Error: ${userFriendlyMsg}</td></tr>`;
+            });
+        }
+
+        let currentDocID = null;
+        let currentRequestID = null;
+
+        window.openReviewPanel = async function(docID, reqID, requestorName) {
+            currentDocID = docID;
+            currentRequestID = reqID;
+            
+            const reviewingIDEla = document.getElementById('reviewingID');
+            if (reviewingIDEla) reviewingIDEla.textContent = `Reviewing ${reqID} - ${requestorName.toUpperCase()}`;
+            
+            // Reset fields before opening
+            const remarksArea = document.getElementById('verifierRemarks');
+            if (remarksArea) remarksArea.value = '';
+            document.querySelectorAll('#reviewPanel input[type="checkbox"]').forEach(cb => cb.checked = false);
+            
+            // Load Document into Iframe
+            const frame = document.getElementById('reviewFrame');
+            frame.src = 'about:blank';
+
+            try {
+                const docRef = doc(db, "submissions", docID);
+                const snap = await getDoc(docRef);
+                
+                if (snap.exists()) {
+                    const data = snap.data();
+
+                    // I-update ang status sa 'viewed' kapag binuksan ng verifier ang request (at kung pending pa ito)
+                    if (data.status === 'pending') {
+                        await updateDoc(docRef, {
+                            status: 'viewed',
+                            viewedByVerifierName: sessionStorage.getItem('userName') || 'Verifier',
+                            viewedAt: serverTimestamp()
+                        });
+                        console.log(`Request ${reqID} is now marked as VIEWED`);
+                    }
+                    
+                    // Siguraduhing tama ang path at i-set ang mode bilang review para hindi ma-overwrite ang pangalan ng requestor
+                    frame.src = '../BTAF.html?mode=review';
+                    
+                    frame.onload = () => {
+                        if (frame.contentWindow && frame.contentWindow.setFormData) {
+                            // I-set ang flag sa loob ng iframe bago i-load ang data
+                            frame.contentWindow.isDataLoaded = true;
+                            frame.contentWindow.setFormData(data.formData);
+                            
+                            // Lock the form (Read-Only)
+                            const frameDoc = frame.contentDocument || frame.contentWindow.document;
+                            const elements = frameDoc.querySelectorAll('input, textarea, select');
+                            elements.forEach(el => {
+                                if (el.type === 'file' || el.type === 'checkbox' || el.type === 'radio' || el.tagName === 'SELECT') {
+                                    el.disabled = true;
+                                } else {
+                                    el.readOnly = true;
+                                }
+                            });
+                            
+                            // Hide "No-Print" buttons inside template
+                            frameDoc.querySelectorAll('.no-print').forEach(el => el.style.display = 'none');
+                        }
+                    };
+                }
+            } catch (error) {
+                console.error("Error loading submission:", error);
+                alert("Unable to load document data.");
+            }
+            
+            document.getElementById('reviewPanel').classList.remove('translate-x-full');
+        }
+
+        window.closeReviewPanel = function() {
+            document.getElementById('reviewPanel').classList.add('translate-x-full');
+            document.getElementById('reviewFrame').src = 'about:blank';
+        }
+
+        window.handleReturnForRevision = async function() {
+            const remarks = document.getElementById('verifierRemarks').value.trim();
+            
+            // Validation: Remarks are required so the requestor knows what to fix
+            if (!remarks) {
+                alert("FEEDBACK REQUIRED: Please provide remarks explaining why this request is being returned so the requestor can make the necessary corrections.");
+                document.getElementById('verifierRemarks').focus();
+                return;
+            }
+
+            const confirmed = confirm(`Are you sure you want to return Request ${currentRequestID} for revision?`);
+            if (confirmed) {
+                // Simulated logic: This is where you would update Firestore status to 'returned'
+                try {
+                    const docRef = doc(db, "submissions", currentDocID);
+                    await updateDoc(docRef, {
+                        status: 'returned',
+                        verifierRemarks: remarks,
+                        updatedAt: serverTimestamp()
+                    });
+                    alert(`Request ${currentRequestID} has been returned to the requestor.`);
+                    closeReviewPanel();
+                } catch (e) { console.error(e); }
+            }
+        }
+
+        window.handleApproveRequest = async function() {
+            const confirmed = confirm(`Approve Request ${currentRequestID}? This will forward it to the next department.`);
+            if (confirmed) {
+                try {
+                    const docRef = doc(db, "submissions", currentDocID);
+                    await updateDoc(docRef, {
+                        status: 'verified', // Next status after verification
+                        verifiedAt: serverTimestamp()
+                    });
+                    alert(`Request ${currentRequestID} marked as VERIFIED.`);
+                    closeReviewPanel();
+                } catch (e) { console.error(e); }
+            }
+        }
+    </script>
+</body>
+</html>

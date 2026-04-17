@@ -25,6 +25,15 @@
         }
     </script>
     <link rel="stylesheet" href="../css/submission.css">
+    <style>
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fade-in 0.8s ease-out forwards;
+        }
+    </style>
     <script src="../js/submission.js" type="module" defer></script>
 </head>
 <body class="bg-gray-50 flex min-h-screen font-sans">
@@ -366,30 +375,32 @@
             }
         }
 
-        async function handleFinalSubmission() {
-            // Simulated Submission Process
-            const loader = document.getElementById('loadingOverlay');
-            const loaderText = loader.querySelector('p');
-            if (loaderText) loaderText.textContent = "Finalizing and Submitting Request...";
+        // Tinatawag ito ng submission.js pagkatapos ma-save sa Firestore
+        window.onSubmissionComplete = function(requestId) {
+            const btn = document.getElementById('finalSubmitBtn');
             
-            loader.classList.remove('hidden');
-            
-            // Wait for 2 seconds to simulate processing/saving
-            setTimeout(async () => {
-                loader.classList.add('hidden');
-                
-                if (window.setAllowedStep) window.setAllowedStep(4); // Unlock Final Step
-                // Update Stepper to final state (Step 3 and Step 4 completed)
-                updateStepperStep(3, 'completed');
-                updateStepperStep(4, 'completed');
-                
-                const progress = document.getElementById('stepperProgress');
-                if (progress) progress.style.width = '100%';
+            // 1. Success State sa Button
+            btn.classList.remove('bg-maroon-ltd');
+            btn.classList.add('bg-green-600');
+            btn.innerHTML = `
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                SUBMITTED SUCCESSFULLY
+            `;
 
-                await window.showSuccess('Submission Successful', 'Your request has been successfully submitted and is now for review. Redirecting to your dashboard...');
-                window.location.href = 'tssodash.html';
-            }, 2000);
-        }
+            // 2. Update Stepper UI
+            if (window.setAllowedStep) window.setAllowedStep(4); 
+            updateStepperStep(3, 'completed');
+            updateStepperStep(4, 'completed');
+            
+            const progress = document.getElementById('stepperProgress');
+            if (progress) progress.style.width = '100%';
+
+            // 3. Success Notification
+            setTimeout(() => {
+                window.showSuccess('Submission Complete', `Request ${requestId} has been sent to the verifier.`);
+                setTimeout(() => window.location.href = 'tssodash.html', 2000);
+            }, 1000);
+        };
     </script>
 </body>
 </html>

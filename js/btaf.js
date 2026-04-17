@@ -100,6 +100,13 @@ function attachEvents() {
 }
 
 function initUserInfo() {
+  // I-check ang URL parameter para sa review mode para mapigilan ang auto-fill ng verifier info
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('mode') === 'review') return;
+
+  // Huwag i-overwrite kung may data na kaming ni-load (Review Mode / Draft Mode)
+  if (window.isDataLoaded) return;
+
   const userName = sessionStorage.getItem('userName');
   const userDept = sessionStorage.getItem('userDept');
   const userRole = sessionStorage.getItem('userRole');
@@ -122,6 +129,8 @@ function initUserInfo() {
   // Update designation: Use "System Support Engineer" for TSSO users instead of "USER"
   let displayRole = userRole || 'USER';
   if (userDept === 'TSSO') displayRole = 'System Support Engineer';
+  if (userDept === 'TSSO VERIFIER') displayRole = 'Technical Verifier';
+  if (userDept === 'VERIFIER') displayRole = 'Verifier';
 
   const desigInput = document.getElementById('designation');
   if (desigInput) desigInput.value = displayRole;
@@ -189,7 +198,7 @@ async function resetForm() {
   const userRole = sessionStorage.getItem('userRole') || "USER";
 
   let displayRole = userRole;
-  if (userDept === 'TSSO') displayRole = 'System Support Engineer';
+  if (userDept === 'TSSO' || userDept === 'TSSO VERIFIER') displayRole = userDept === 'TSSO' ? 'System Support Engineer' : 'Technical Verifier';
 
   document.getElementById("btaDate").value = "";
   document.getElementById("empName").value = userName;

@@ -569,7 +569,7 @@
                 <label class="check-label"><input type="checkbox" id="rTraining"> Training/Seminar</label>
                 <label class="check-label"><input type="checkbox" id="rInvite"> 3rd Party Invitation</label><br>
                 <label class="check-label"><input type="checkbox" id="rField"> Field Work/Assignment</label>
-                <label class="check-label"><input type="checkbox" id="rOthers"> Others: <input type="text" style="width:80px; border-bottom:1px solid #555; border-top:none; border-left:none; border-right:none;"></label>
+                <label class="check-label"><input type="checkbox" id="rOthers"> Others: <input type="text" id="rOthersText" style="width:80px; border-bottom:1px solid #555; border-top:none; border-left:none; border-right:none;"></label>
             </td>
         </tr>
         <tr>
@@ -713,7 +713,7 @@
                 <label class="check-label"><input type="checkbox" checked> Taxi / Grab / Bus / Train / MRT</label><br>
                 <div style="display:flex;align-items:flex-start;gap:4px;margin-top:2px;">
                     <span style="white-space:nowrap;">Others:</span>
-                    <textarea rows="1" style="border-bottom:1px solid #555;flex:1;"></textarea>
+                    <textarea id="taxiOthersText" rows="1" style="border-bottom:1px solid #555;flex:1;"></textarea>
                 </div>
             </td>
             <td><input type="number" id="taxiQty" value="0" step="1"></td>
@@ -788,14 +788,14 @@
             <td class="amt"><input type="number" id="contAmt" readonly value="0"></td>
         </tr>
         <tr>
-            <td><label class="check-label"><input type="checkbox"> Others:</label> <input type="text" style="width:55%;border-bottom:1px solid #555;border-top:none;border-left:none;border-right:none;"></td>
+            <td><label class="check-label"><input type="checkbox" id="oth1Chk"> Others:</label> <input type="text" id="oth1Text" style="width:55%;border-bottom:1px solid #555;border-top:none;border-left:none;border-right:none;"></td>
             <td><input type="number" id="oth1Qty" value="1" step="1"></td>
             <td><input type="text" value="Per Request"></td>
             <td><input type="number" id="oth1Unit" value="0" step="any"></td>
             <td class="amt"><input type="number" id="oth1Amt" readonly value="0"></td>
         </tr>
         <tr>
-            <td><label class="check-label"><input type="checkbox"> Others:</label> <input type="text" style="width:55%;border-bottom:1px solid #555;border-top:none;border-left:none;border-right:none;"></td>
+            <td><label class="check-label"><input type="checkbox" id="oth2Chk"> Others:</label> <input type="text" id="oth2Text" style="width:55%;border-bottom:1px solid #555;border-top:none;border-left:none;border-right:none;"></td>
             <td><input type="number" id="oth2Qty" value="1" step="1"></td>
             <td><input type="text" value="Per Request"></td>
             <td><input type="number" id="oth2Unit" value="0" step="any"></td>
@@ -1549,67 +1549,140 @@ window.handleSignatureUpload = function(input, targetId) {
 ════════════════════════════════════════ */
 window.getFormData = function() {
     const formData = {};
-    // Get all input, textarea, select elements
+    // 1. Kunin ang lahat ng standard input, textarea, select elements
     const elements = document.querySelectorAll('input, textarea, select');
     elements.forEach(el => {
-        if (el.id) { // Only process elements with an ID
-            if (el.type === 'checkbox') {
-                formData[el.id] = el.checked;
-            } else if (el.type === 'radio') {
-                if (el.checked) {
-                    formData[el.name] = el.value;
-                }
-            } else if (el.tagName === 'SELECT') {
-                formData[el.id] = el.value;
-            } else {
-                formData[el.id] = el.value;
+        const key = el.type === 'radio' ? el.name : el.id;
+        if (!key) return;
+
+        if (el.type === 'checkbox') {
+            formData[key] = el.checked;
+        } else if (el.type === 'radio') {
+            if (el.checked) {
+                formData[key] = el.value;
             }
+        } else if (el.tagName === 'SELECT') {
+            formData[key] = el.value;
+        } else {
+            formData[key] = el.value;
         }
+    });
+
+    // 2. Capture labels/divs that don't use .value (like names and roles at the bottom)
+    const labelElements = document.querySelectorAll('#requestedByName, #requestedByRole');
+    labelElements.forEach(el => {
+        if (el.id) formData[el.id] = el.textContent;
     });
 
     // Handle dynamic rows (itinerary, unliquidated)
     formData.itineraryRows = [];
-    document.querySelectorAll('#itineraryTable tbody tr').forEach(row => {
-        const rowData = {};
-        rowData.date = row.querySelector('input[type="date"]')?.value || '';
-        rowData.day = row.querySelector('input[type="text"]:nth-of-type(1)')?.value || '';
-        rowData.time = row.querySelector('input[type="text"]:nth-of-type(2)')?.value || '';
-        rowData.flightNo = row.querySelector('input[type="text"]:nth-of-type(3)')?.value || '';
-        rowData.destFrom = row.querySelector('input[type="text"]:nth-of-type(4)')?.value || '';
-        rowData.destTo = row.querySelector('input[type="text"]:nth-of-type(5)')?.value || '';
-        rowData.remarks = row.querySelector('textarea')?.value || '';
-        formData.itineraryRows.push(rowData);
+    const itinRows = document.querySelectorAll('#itineraryTable tr');
+    itinRows.forEach((row, idx) => {
+        if (idx < 2) return; // Skip headers
+        const dateEl = row.querySelector('input[type="date"]');
+        if (!dateEl) return;
+        const textInputs = row.querySelectorAll('input[type="text"]');
+        formData.itineraryRows.push({
+            date: dateEl.value || '',
+            day: textInputs[0]?.value || '',
+            time: textInputs[1]?.value || '',
+            flightNo: textInputs[2]?.value || '',
+            destFrom: textInputs[3]?.value || '',
+            destTo: textInputs[4]?.value || '',
+            remarks: row.querySelector('textarea')?.value || ''
+        });
     });
 
     formData.ulRows = [];
-    document.querySelectorAll('#ulTable tbody tr:not(.total-row)').forEach(row => {
-        const rowData = {};
-        rowData.date = row.querySelector('.ulDate')?.value || '';
-        rowData.no = row.querySelector('.ulNo')?.value || '';
-        rowData.from = row.querySelector('.ulFrom')?.value || '';
-        rowData.to = row.querySelector('.ulTo')?.value || '';
-        rowData.amt = row.querySelector('.ulAmt')?.value || '';
-        rowData.return = row.querySelector('.ulReturn')?.value || '';
-        rowData.rem = row.querySelector('.ulRem')?.value || '';
-        formData.ulRows.push(rowData);
+    const ulRows = document.querySelectorAll('#ulTable tr');
+    ulRows.forEach((row, idx) => {
+        if (idx === 0 || row.querySelector('#totalUL')) return; // Skip header and total row
+        const dateEl = row.querySelector('.ulDate');
+        if (!dateEl) return;
+        formData.ulRows.push({
+            date: dateEl.value || '',
+            no: row.querySelector('.ulNo')?.value || '',
+            from: row.querySelector('.ulFrom')?.value || '',
+            to: row.querySelector('.ulTo')?.value || '',
+            amt: row.querySelector('.ulAmt')?.value || '',
+            return: row.querySelector('.ulReturn')?.value || '',
+            rem: row.querySelector('.ulRem')?.value || ''
+        });
     });
+
+    formData.requestedBySign = document.querySelector('#requestedBySign img')?.src || '';
 
     return formData;
 };
 
 window.setFormData = function(data) {
+    window.isDataLoaded = true; // Flag para pigilan ang initUserInfo
     for (const id in data) {
         const el = document.getElementById(id);
         if (el) {
             if (el.type === 'checkbox') el.checked = data[id];
-            else if (el.type === 'radio') document.querySelector(`input[name="${el.name}"][value="${data[id]}"]`).checked = true;
+            // Support para sa text content ng DIV/SPAN (Pangalan at Role)
+            else if (el.tagName === 'DIV' || el.tagName === 'SPAN') el.textContent = data[id]; 
             else el.value = data[id];
+        } else {
+            // Handle radio buttons by name if ID doesn't exist
+            const radio = document.querySelector(`input[name="${id}"][value="${data[id]}"]`);
+            if (radio) radio.checked = true;
         }
     }
-    // TODO: Handle dynamic rows (itinerary, unliquidated) - this would require recreating rows if needed.
-    // For simplicity, we'll assume the default number of rows for now.
-    // If more rows were added in the draft, they won't be restored automatically without more complex logic.
-    // This is a common challenge with dynamic forms.
+
+    // 2. Restore Signature
+    if (data.requestedBySign) {
+        const container = document.getElementById('requestedBySign');
+        if (container) {
+            // Linisin ang container (alisin ang 'Add Signature' button sa preview)
+            container.innerHTML = ''; 
+            const img = document.createElement('img');
+            img.src = data.requestedBySign;
+            img.style.maxHeight = '60px';
+            img.style.maxWidth = '100%';
+            img.style.objectFit = 'contain';
+            container.appendChild(img);
+        }
+    }
+
+    // 3. Restore Itinerary Rows
+    if (data.itineraryRows && data.itineraryRows.length > 0) {
+        const itinTable = document.getElementById('itineraryTable');
+        while (itinTable.rows.length > 2) itinTable.deleteRow(2);
+        data.itineraryRows.forEach(rowData => {
+            addItineraryRow();
+            const row = itinTable.rows[itinTable.rows.length - 1];
+            row.querySelector('input[type="date"]').value = rowData.date;
+            const txts = row.querySelectorAll('input[type="text"]');
+            if(txts[0]) txts[0].value = rowData.day;
+            if(txts[1]) txts[1].value = rowData.time;
+            if(txts[2]) txts[2].value = rowData.flightNo;
+            if(txts[3]) txts[3].value = rowData.destFrom;
+            if(txts[4]) txts[4].value = rowData.destTo;
+            const ta = row.querySelector('textarea');
+            if(ta) ta.value = rowData.remarks;
+        });
+    }
+
+    // 4. Restore Unliquidated Rows
+    if (data.ulRows && data.ulRows.length > 0) {
+        const ulTable = document.getElementById('ulTable');
+        // Linisin ang table (keep header and total row)
+        while (ulTable.rows.length > 2) ulTable.deleteRow(1);
+        data.ulRows.forEach(rowData => {
+            addULRow();
+            const row = ulTable.rows[ulTable.rows.length - 2]; // Row before the total row
+            if(row.querySelector('.ulDate')) row.querySelector('.ulDate').value = rowData.date;
+            if(row.querySelector('.ulNo')) row.querySelector('.ulNo').value = rowData.no;
+            if(row.querySelector('.ulFrom')) row.querySelector('.ulFrom').value = rowData.from;
+            if(row.querySelector('.ulTo')) row.querySelector('.ulTo').value = rowData.to;
+            if(row.querySelector('.ulAmt')) row.querySelector('.ulAmt').value = rowData.amt;
+            if(row.querySelector('.ulReturn')) row.querySelector('.ulReturn').value = rowData.return;
+            if(row.querySelector('.ulRem')) row.querySelector('.ulRem').value = rowData.rem;
+        });
+    }
+
     recalc(); // Recalculate totals after setting data
     document.querySelectorAll('textarea').forEach(window.initAutoResize); // Adjust textarea heights
 };
@@ -1738,6 +1811,9 @@ function attachBtaEvents() {
 }
 
 function initUserInfo() {
+    // Huwag i-overwrite kung may data na kaming ni-load (Review Mode)
+    if (window.isDataLoaded) return;
+
     const userName = sessionStorage.getItem('userName');
     const userDept = sessionStorage.getItem('userDept');
     const userRole = sessionStorage.getItem('userRole');
@@ -1756,6 +1832,7 @@ function initUserInfo() {
     // Update designation: Use "System Support Engineer" for TSSO users instead of "USER"
     let displayRole = userRole || 'USER';
     if (userDept === 'TSSO') displayRole = 'System Support Engineer';
+    if (userDept === 'VERIFIER') displayRole = 'Verifier';
 
     const desigInput = document.getElementById('designation');
     if (desigInput) desigInput.value = displayRole;

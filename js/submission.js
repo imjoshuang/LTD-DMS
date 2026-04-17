@@ -256,6 +256,71 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
+    // --- FINAL SUBMISSION LOGIC ---
+    window.handleFinalSubmission = async () => {
+        const btn = document.getElementById('finalSubmitBtn');
+        if (!btn) return;
+
+        const confirmed = await window.showConfirm('Final Submission', 'Are you sure you want to submit this request to the verifier?');
+        if (!confirmed) return;
+
+        // 1. Loading State
+        const originalContent = btn.innerHTML;
+        btn.disabled = true;
+        btn.classList.add('opacity-80', 'cursor-not-allowed');
+        btn.innerHTML = `
+            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            PROCESSING...
+        `;
+
+        try {
+            const iframe = document.getElementById('templateFrame');
+            if (!iframe || !iframe.contentWindow || !iframe.contentWindow.getFormData) {
+                throw new Error("Form is not ready or does not support submission.");
+            }
+
+            const requestTitle = requestTitleInput?.value.trim();
+            const formData = iframe.contentWindow.getFormData();
+            const userName = sessionStorage.getItem('userName');
+            const userDept = sessionStorage.getItem('userDept');
+
+            // Generate Request ID: LTD-YYYY-XXX
+            const year = new Date().getFullYear();
+            const qCount = query(collection(db, "submissions"));
+            const countSnap = await getDocs(qCount);
+            const sequence = (countSnap.size + 1).toString().padStart(3, '0');
+            const requestId = `LTD-${year}-${sequence}`;
+
+            // Save to Firestore sa 'submissions' collection
+            await addDoc(collection(db, "submissions"), {
+                requestId,
+                userId: currentUserId,
+                requestorName: userName,
+                department: userDept,
+                templateName: selectedTemplateName,
+                title: requestTitle,
+                formData: cleanData(formData),
+                status: 'pending',
+                priority: 'Normal',
+                submittedAt: serverTimestamp()
+            });
+
+            // Trigger completion logic in new_submission.html (Stepper & Modal)
+            if (typeof window.onSubmissionComplete === 'function') {
+                window.onSubmissionComplete(requestId);
+            }
+
+        } catch (error) {
+            console.error(error);
+            btn.disabled = false;
+            btn.innerHTML = originalContent;
+            window.showNotice('Submission Failed', error.message);
+        }
+    };
+
     // Helper function to remove undefined values before sending to Firestore
     const cleanData = (obj) => {
         return JSON.parse(JSON.stringify(obj, (key, value) => {
