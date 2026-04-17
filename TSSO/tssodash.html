@@ -193,19 +193,23 @@
                             </div>
                             <div class="tracker-step flex flex-col items-center">
                                 <div class="w-5 h-5 bg-gray-400 rounded-full border-4 border-white ring-1 ring-gray-400"></div>
-                                <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Verification</span>
+                                <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Viewed</span>
+                                <p class="step-name text-[8px] text-maroon-ltd font-bold uppercase mt-1 truncate max-w-[80px]"></p>
+                                <p class="step-time text-[7px] text-gray-400 font-medium"></p>
                             </div>
                             <div class="tracker-step flex flex-col items-center">
                                 <div class="w-5 h-5 bg-gray-400 rounded-full border-4 border-white ring-1 ring-gray-400"></div>
-                                <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Director</span>
+                                <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Approved (Verifier)</span>
                             </div>
                             <div class="tracker-step flex flex-col items-center">
                                 <div class="w-5 h-5 bg-gray-400 rounded-full border-4 border-white ring-1 ring-gray-400"></div>
-                                <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">AFD Review</span>
+                                <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Viewed (AGM Dept)</span>
+                                <p class="step-name text-[8px] text-maroon-ltd font-bold uppercase mt-1 truncate max-w-[80px]"></p>
+                                <p class="step-time text-[7px] text-gray-400 font-medium"></p>
                             </div>
                             <div class="tracker-step flex flex-col items-center">
                                 <div class="w-5 h-5 bg-gray-400 rounded-full border-4 border-white ring-1 ring-gray-400"></div>
-                                <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Approved</span>
+                                <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Approved (AGM)</span>
                             </div>
                         </div>
                     </div>
@@ -356,19 +360,23 @@
                         </div>
                         <div class="modal-tracker-step flex flex-col items-center">
                             <div class="w-5 h-5 bg-gray-400 rounded-full border-4 border-white ring-1 ring-gray-400"></div>
-                            <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Verification</span>
+                            <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Viewed</span>
+                            <p class="step-name text-[8px] text-maroon-ltd font-bold uppercase mt-1 truncate max-w-[80px]"></p>
+                            <p class="step-time text-[7px] text-gray-400 font-medium"></p>
                         </div>
                         <div class="modal-tracker-step flex flex-col items-center">
                             <div class="w-5 h-5 bg-gray-400 rounded-full border-4 border-white ring-1 ring-gray-400"></div>
-                            <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Director</span>
+                            <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Approved (Verifier)</span>
                         </div>
                         <div class="modal-tracker-step flex flex-col items-center">
                             <div class="w-5 h-5 bg-gray-400 rounded-full border-4 border-white ring-1 ring-gray-400"></div>
-                            <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">AFD Review</span>
+                            <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Viewed (AGM Dept)</span>
+                            <p class="step-name text-[8px] text-maroon-ltd font-bold uppercase mt-1 truncate max-w-[80px]"></p>
+                            <p class="step-time text-[7px] text-gray-400 font-medium"></p>
                         </div>
                         <div class="modal-tracker-step flex flex-col items-center">
                             <div class="w-5 h-5 bg-gray-400 rounded-full border-4 border-white ring-1 ring-gray-400"></div>
-                            <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Approved</span>
+                            <span class="text-[10px] font-bold mt-3 uppercase tracking-tighter">Approved (AGM)</span>
                         </div>
                     </div>
                 </div>
@@ -605,9 +613,13 @@
                 trackerSteps.forEach(step => {
                     const circle = step.querySelector('div');
                     const text = step.querySelector('span');
+                    const nameLabel = step.querySelector('.step-name');
+                    const timeLabel = step.querySelector('.step-time');
                     circle.className = "w-5 h-5 bg-gray-400 rounded-full border-4 border-white ring-1 ring-gray-400 transition-all";
                     circle.classList.remove('animate-pulse');
                     text.classList.remove('text-maroon-ltd');
+                    if (nameLabel) nameLabel.textContent = '';
+                    if (timeLabel) timeLabel.textContent = '';
                 });
 
                 // Update Version History Table
@@ -636,7 +648,13 @@
                 if (!status) return;
 
                 // Mapping status sa stage (1-5)
-                const statusToStage = { 'returned': 1, 'pending': 2, 'verified': 3, 'afd_review': 4, 'approved': 5 };
+                const statusToStage = { 
+                    'pending': 1, 
+                    'viewed': 2, 
+                    'verified': 3, 
+                    'agm_viewed': 4, 
+                    'approved': 5,
+                    'returned': 1 };
                 const currentStage = statusToStage[status] || 0;
                 if (currentStage === 0) return;
 
@@ -648,6 +666,17 @@
                     const stageNum = index + 1;
                     const circle = step.querySelector('div');
                     const text = step.querySelector('span');
+                    const nameLabel = step.querySelector('.step-name');
+                    const timeLabel = step.querySelector('.step-time');
+
+                    // Ipakita ang pangalan at oras sa "Viewed" steps (Main tracker)
+                    if (stageNum === 2 && data.viewedByVerifierName) {
+                        if (nameLabel) nameLabel.textContent = data.viewedByVerifierName;
+                        if (timeLabel && data.viewedAt) timeLabel.textContent = data.viewedAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    } else if (stageNum === 4 && data.viewedByAGMName) {
+                        if (nameLabel) nameLabel.textContent = data.viewedByAGMName;
+                        if (timeLabel && data.agmViewedAt) timeLabel.textContent = data.agmViewedAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    }
 
                     if (stageNum < currentStage) {
                         // Completed stages (Green)
@@ -732,12 +761,15 @@
                     const circle = step.querySelector('div');
                     const text = step.querySelector('span');
                     const nameLabel = step.querySelector('.step-name');
+                    const timeLabel = step.querySelector('.step-time');
 
-                    // Ipakita ang pangalan sa "Viewed" steps kung available (Modal tracker)
+                    // Ipakita ang pangalan at oras sa "Viewed" steps kung available (Modal tracker)
                     if (stageNum === 2 && data.viewedByVerifierName) {
-                        nameLabel.textContent = data.viewedByVerifierName;
+                        if (nameLabel) nameLabel.textContent = data.viewedByVerifierName;
+                        if (timeLabel && data.viewedAt) timeLabel.textContent = data.viewedAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                     } else if (stageNum === 4 && data.viewedByAGMName) {
-                        nameLabel.textContent = data.viewedByAGMName;
+                        if (nameLabel) nameLabel.textContent = data.viewedByAGMName;
+                        if (timeLabel && data.agmViewedAt) timeLabel.textContent = data.agmViewedAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                     }
 
                     if (stageNum < currentStage) {
