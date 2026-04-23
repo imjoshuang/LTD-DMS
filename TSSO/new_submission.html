@@ -53,9 +53,9 @@
             <div class="flex items-center gap-4">
                 <div class="text-right">
                     <p class="text-[10px] font-bold text-gray-400 uppercase leading-none">Requestor:</p>
-                    <p class="text-xs font-bold text-gray-900 uppercase">KEVIN JAVILLONAR</p>
+                    <p id="headerUserName" class="text-xs font-bold text-gray-900 uppercase">Loading...</p>
                 </div>
-                <div class="w-10 h-10 rounded-full bg-maroon-ltd text-white font-bold flex items-center justify-center border-2 border-gold-ltd shadow-md">KJ</div>
+                <div id="headerUserAvatar" class="w-10 h-10 rounded-full bg-maroon-ltd text-white font-bold flex items-center justify-center border-2 border-gold-ltd shadow-md">--</div>
             </div>
         </header>
 
@@ -139,6 +139,60 @@
 
                     <!-- Step 2: Interactive Form (Initially Hidden) -->
                     <div id="interactiveFormSection" class="hidden space-y-4">
+                        <!-- Returned File Notification -->
+                        <div id="revisionNotificationBanner" class="hidden bg-amber-50 p-4 sm:p-6 rounded-3xl border border-amber-200 shadow-sm overflow-hidden">
+                            <div class="flex flex-col sm:flex-row items-start gap-4 min-w-0">
+                                <div class="w-12 h-12 bg-amber-500 text-white rounded-2xl flex items-center justify-center shadow-lg shrink-0">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M4.93 19h14.14c1.54 0 2.5-1.67 1.73-3L13.73 4c-.77-1.33-2.69-1.33-3.46 0L3.2 16c-.77 1.33.19 3 1.73 3z"></path>
+                                    </svg>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <p class="text-[10px] font-bold text-amber-700 uppercase tracking-widest mb-1">File Status Notification</p>
+                                    <p id="revisionNotificationText" class="text-sm text-amber-900 leading-relaxed font-medium break-words whitespace-pre-wrap" style="overflow-wrap:anywhere;">This request was returned for revision. Please review the remarks below, update the form, and resubmit once complete.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Revision Remarks Banner -->
+                        <div id="verifierRemarksDisplay" class="hidden bg-red-50 p-4 sm:p-6 rounded-3xl border border-red-100 shadow-sm overflow-hidden">
+                            <div class="flex flex-col sm:flex-row items-start gap-4 min-w-0">
+                                <div class="w-12 h-12 bg-red-600 text-white rounded-2xl flex items-center justify-center shadow-lg shrink-0">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 4h.01M5.07 19h13.86c1.54 0 2.5-1.67 1.73-3L13.73 4c-.77-1.33-2.69-1.33-3.46 0L3.34 16c-.77 1.33.19 3 1.73 3z"></path>
+                                    </svg>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <p class="text-[10px] font-bold text-red-600 uppercase tracking-widest mb-1">Verifier Remarks</p>
+                                    <p id="verifierRemarksText" class="text-sm text-red-900 leading-relaxed font-medium break-words whitespace-pre-wrap" style="overflow-wrap:anywhere;">Please review the verifier feedback and update your request accordingly.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="justificationSection" class="hidden bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+                            <label for="requestorJustification" class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Your Response / Justification</label>
+                            <textarea id="requestorJustification" rows="4" placeholder="Explain the changes you made based on the returned remarks..." class="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-maroon-ltd outline-none transition-all resize-y"></textarea>
+                        </div>
+
+                        <div id="uploadAttachmentSection" class="hidden bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-4">
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-900 uppercase font-oswald tracking-tight">Upload Justification / Supporting Documents</h4>
+                                <p class="text-[11px] text-gray-500 leading-relaxed">Attach any proof, screenshot, or supporting file related to the returned request.</p>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <label class="flex items-center justify-between gap-3 px-4 py-3 bg-gray-50 border border-dashed border-gray-300 rounded-2xl cursor-pointer hover:border-maroon-ltd hover:bg-maroon-ltd/5 transition-all">
+                                    <input id="file1" type="file" class="hidden">
+                                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider truncate">Attach File...</span>
+                                    <span class="text-[10px] font-bold text-maroon-ltd uppercase tracking-widest shrink-0">Browse</span>
+                                </label>
+                                <label class="flex items-center justify-between gap-3 px-4 py-3 bg-gray-50 border border-dashed border-gray-300 rounded-2xl cursor-pointer hover:border-maroon-ltd hover:bg-maroon-ltd/5 transition-all">
+                                    <input id="file2" type="file" class="hidden">
+                                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider truncate">Attach File...</span>
+                                    <span class="text-[10px] font-bold text-maroon-ltd uppercase tracking-widest shrink-0">Browse</span>
+                                </label>
+                            </div>
+                        </div>
+
                         <!-- Request Title Input -->
                         <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
                             <label for="requestTitle" class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Request Title / Subject</label>
@@ -159,6 +213,20 @@
                             </div>
                             <iframe id="templateFrame" src="about:blank" class="w-full h-full border-none"></iframe>
                         </div>
+
+                        <div id="supportingDocsReviewSection" class="hidden bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-4">
+                            <div class="flex items-center justify-between gap-4 border-b border-gray-100 pb-4">
+                                <div>
+                                    <h4 class="text-sm font-bold text-gray-900 uppercase font-oswald tracking-tight">Supporting Documents Review</h4>
+                                    <p class="text-[11px] text-gray-500 leading-relaxed">Visible attachments submitted together with this request or resubmission.</p>
+                                </div>
+                                <span id="supportingDocsCount" class="px-3 py-1 rounded-full bg-gray-100 text-gray-500 text-[10px] font-bold uppercase tracking-widest">0 Files</span>
+                            </div>
+                            <div id="supportingDocsList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <p class="col-span-full text-center text-gray-400 italic py-6 uppercase text-[10px] font-bold tracking-widest">No supporting documents attached.</p>
+                            </div>
+                        </div>
+
                     </div>
 
                     <!-- Footer Buttons -->
@@ -184,6 +252,18 @@
     </main>
 
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUserName = sessionStorage.getItem('userName') || 'User';
+            const headerUserName = document.getElementById('headerUserName');
+            const headerUserAvatar = document.getElementById('headerUserAvatar');
+
+            if (headerUserName) headerUserName.textContent = currentUserName;
+            if (headerUserAvatar) {
+                const initials = currentUserName.split(' ').map(n => n[0]).join('').toUpperCase();
+                headerUserAvatar.textContent = initials || 'U';
+            }
+        });
+
         function toggleFullScreen() {
             const elem = document.getElementById('formContainer');
             if (!document.fullscreenElement) {

@@ -34,19 +34,24 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"></path></svg>
                 NEW SUBMISSION
             </a>
+            <a href="#" id="navRevisions" class="nav-link flex items-center justify-between gap-4 px-5 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-all tracking-wide">
+                <div class="flex items-center gap-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    <span>FOR REVISION</span>
+                </div>
+                <span id="revisionsNavBadge" class="hidden min-w-[20px] h-5 px-1.5 rounded-full bg-red-500 text-white text-[10px] font-bold items-center justify-center animate-pulse">0</span>
+            </a>
             <a href="#" id="navDrafts" class="nav-link flex items-center gap-4 px-5 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-all tracking-wide">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                 </svg>
                 DRAFTS
             </a>
-
-            <a href="#" class="flex items-center gap-4 px-5 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-all tracking-wide">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                REVISION HISTORY
-            </a>
-            <a href="#" class="flex items-center gap-4 px-5 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-all tracking-wide">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+            <a href="#" id="navNotifications" class="nav-link flex items-center gap-4 px-5 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-all tracking-wide">
+                <div class="relative">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                    <span id="sidebarNotificationBadge" class="hidden absolute -top-2 -right-2 min-w-[18px] h-[18px] px-1 bg-gold-ltd text-maroon-ltd rounded-full text-[9px] font-bold flex items-center justify-center">0</span>
+                </div>
                 NOTIFICATIONS
             </a>
         </nav>
@@ -84,20 +89,19 @@
                             <p id="dashboardActiveCount" class="text-3xl font-bold">0</p>
                         </div>
                     </div>
+                    <div id="returnedRequestsStatCard" class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-5 cursor-pointer hover:shadow-md transition-all">
+                        <div class="p-3 bg-red-50 text-red-600 rounded-2xl"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                        <div>
+                            <p class="text-[10px] font-bold text-gray-400 tracking-widest uppercase leading-none">For Revision</p>
+                            <p id="dashboardReturnedCount" class="text-3xl font-bold">0</p>
+                        </div>
+                    </div>
                     <div id="draftsStatCard" class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-5 cursor-pointer hover:shadow-md transition-all">
                         <div class="p-3 bg-orange-50 text-gold-ltd rounded-2xl"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></div>
                         <div>
                             <p class="text-[10px] font-bold text-gray-400 tracking-widest uppercase leading-none">Drafts</p>
                             <p id="dashboardDraftsCount" class="text-3xl font-bold">0</p>
                         </div>
-                    </div>
-                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-5 relative">
-                        <div class="p-3 bg-yellow-50 text-yellow-600 rounded-2xl"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg></div>
-                        <div>
-                            <p class="text-[10px] font-bold text-gray-400 tracking-widest uppercase leading-none">Notifications (New)</p>
-                            <p class="text-3xl font-bold">1</p>
-                        </div>
-                        <span class="absolute top-4 right-6 w-5 h-5 bg-gold-ltd text-white rounded-full text-[10px] font-bold flex items-center justify-center">1</span>
                     </div>
                     <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-5">
                         <div class="p-3 bg-blue-50 text-blue-600 rounded-2xl"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></div>
@@ -145,21 +149,8 @@
 
                         <div class="bg-maroon-ltd p-8 rounded-[2.5rem] shadow-2xl shadow-maroon-ltd/30 text-white min-h-[300px]">
                             <h3 class="text-lg font-bold tracking-widest uppercase mb-6 border-b border-white/10 pb-4">Notification Hub</h3>
-                            <div class="space-y-6">
-                                <div class="flex gap-4">
-                                    <div class="bg-gold-ltd/20 p-2 rounded-lg h-fit"><svg class="w-4 h-4 text-gold-ltd" fill="currentColor" viewBox="0 0 20 20"><path d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"></path></svg></div>
-                                    <div class="flex-1">
-                                        <p class="text-xs font-bold leading-tight mb-2 uppercase tracking-wide">Alert: AGM (CJ) has requested clarification on Request #1023 (Budget v2).</p>
-                                        <a href="#" class="text-[10px] font-bold text-gold-ltd hover:underline uppercase tracking-widest">Click to view</a>
-                                    </div>
-                                </div>
-                                <div class="flex gap-4 opacity-70">
-                                    <div class="bg-white/10 p-2 rounded-lg h-fit"><svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"></path></svg></div>
-                                    <div class="flex-1">
-                                        <p class="text-xs font-bold leading-tight mb-2 uppercase tracking-wide">Alert: New Revision needed for Request #1020.</p>
-                                        <a href="#" class="text-[10px] font-bold text-gold-ltd hover:underline uppercase tracking-widest">Click to view</a>
-                                    </div>
-                                </div>
+                            <div id="notificationHubList" class="space-y-6">
+                                <p class="text-[10px] font-bold text-white/60 uppercase tracking-widest">Loading notifications...</p>
                             </div>
                         </div>
                     </div>
@@ -236,6 +227,34 @@
                 </div>
             </div>
 
+            <!-- TSSO Revision Section -->
+            <div id="tssoRevisionSection" class="hidden space-y-8">
+                <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="px-8 py-6 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
+                        <div>
+                            <h3 class="text-xl font-bold tracking-tight uppercase">Returned Items for Revision</h3>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Please review verifier remarks and update your request.</p>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50 text-[10px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">
+                                <tr>
+                                    <th class="px-8 py-4">Request ID</th>
+                                    <th class="px-8 py-4">Document Type</th>
+                                    <th class="px-8 py-4">Feedback</th>
+                                    <th class="px-8 py-4">Return Date</th>
+                                    <th class="px-8 py-4 text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="revisionTableBody" class="divide-y divide-gray-50 text-sm">
+                                <tr><td colspan="5" class="text-center py-10 uppercase text-gray-400 font-bold text-xs tracking-widest">Loading revisions...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
             <!-- TSSO My Requests Section -->
             <div id="tssoMyRequestsSection" class="hidden space-y-8">
                 <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
@@ -273,6 +292,21 @@
                 
                 <div id="draftsModuleGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Drafts will be loaded here dynamically -->
+                </div>
+            </div>
+
+            <div id="tssoNotificationsSection" class="hidden space-y-8">
+                <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="px-8 py-6 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
+                        <div>
+                            <h3 class="text-xl font-bold tracking-tight uppercase">My Notifications</h3>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Updates about your requests, returned files, and progress changes.</p>
+                        </div>
+                        <span id="notificationsSectionCount" class="text-[10px] font-bold text-gray-400 tracking-widest uppercase bg-gray-100 px-3 py-1 rounded-full">0 Alerts</span>
+                    </div>
+                    <div id="notificationsSectionList" class="divide-y divide-gray-50">
+                        <div class="px-8 py-10 text-center uppercase text-gray-400 font-bold text-xs tracking-widest">Loading notifications...</div>
+                    </div>
                 </div>
             </div>
 
@@ -328,8 +362,33 @@
                 </button>
             </div>
             <div class="flex-1 bg-gray-100 overflow-y-auto p-2 md:p-8 custom-scrollbar">
+                <!-- Verifier Remarks Display -->
+                <div id="viewModalRemarksContainer" class="hidden bg-red-50 border border-red-100 p-6 rounded-2xl shadow-sm mb-6 max-w-5xl mx-auto overflow-hidden">
+                    <div class="flex items-start gap-4 min-w-0">
+                        <div class="p-2 bg-red-600 text-white rounded-lg shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <h4 class="text-[10px] font-bold text-red-600 uppercase tracking-widest mb-1">Verifier Remarks / Feedback</h4>
+                            <p id="viewModalRemarksText" class="text-sm text-red-900 font-medium whitespace-pre-wrap leading-relaxed break-words" style="overflow-wrap: anywhere;"></p>
+                        </div>
+                    </div>
+                </div>
                 <div class="bg-white shadow-xl rounded-2xl mx-auto max-w-5xl overflow-hidden min-h-screen">
                     <iframe id="viewFrame" src="about:blank" class="w-full h-full min-h-[1200px] border-none"></iframe>
+                </div>
+                <div id="viewModalAttachmentsPanel" class="hidden bg-white shadow-xl rounded-2xl mx-auto max-w-5xl overflow-hidden mt-6 border border-gray-100">
+                    <div class="flex items-center justify-between gap-4 px-6 py-5 border-b border-gray-100">
+                        <div>
+                            <h4 class="text-[10px] font-bold text-maroon-ltd uppercase tracking-widest flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.364 6.364a4 4 0 105.656 5.656l6.364-6.364a4 4 0 00-5.656-5.656l-1.272 1.272"></path></svg>
+                                Supporting Documents
+                            </h4>
+                            <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Files uploaded for the request / resubmission</p>
+                        </div>
+                        <span id="viewModalAttachmentsCount" class="px-3 py-1 rounded-full bg-gray-100 text-gray-500 text-[10px] font-bold uppercase tracking-widest">0 Files</span>
+                    </div>
+                    <div id="viewModalAttachmentsList" class="grid grid-cols-1 gap-4 p-6"></div>
                 </div>
             </div>
         </div>
@@ -419,14 +478,93 @@
             const navRequests = document.getElementById('navRequests');
             const navNewSubmission = document.getElementById('navNewSubmission');
             const navDrafts = document.getElementById('navDrafts');
+            const navRevisions = document.getElementById('navRevisions');
+            const navNotifications = document.getElementById('navNotifications');
 
             const dashboardSection = document.getElementById('dashboardSection');
             const tssoSubmissionSection = document.getElementById('tssoSubmissionSection');
             const tssoDraftsModuleSection = document.getElementById('tssoDraftsModuleSection');
             const tssoMyRequestsSection = document.getElementById('tssoMyRequestsSection');
+            const tssoRevisionSection = document.getElementById('tssoRevisionSection');
+            const tssoNotificationsSection = document.getElementById('tssoNotificationsSection');
 
             const pageTitle = document.getElementById('pageTitle');
             const navLinks = document.querySelectorAll('.nav-link');
+            const dashboardNotificationsCount = document.getElementById('dashboardNotificationsCount');
+            const dashboardNotificationsBadge = document.getElementById('dashboardNotificationsBadge');
+            const sidebarNotificationBadge = document.getElementById('sidebarNotificationBadge');
+            const revisionsNavBadge = document.getElementById('revisionsNavBadge');
+            const notificationHubList = document.getElementById('notificationHubList');
+            const notificationsSectionList = document.getElementById('notificationsSectionList');
+            const notificationsSectionCount = document.getElementById('notificationsSectionCount');
+            const notificationSeenStorageKey = `tssoSeenNotifications_${currentUserId}`;
+            const notificationHistoryStorageKey = `tssoNotificationHistory_${currentUserId}`;
+            let latestNotificationItems = [];
+
+            function getSeenNotificationIds() {
+                try {
+                    return JSON.parse(localStorage.getItem(notificationSeenStorageKey) || '[]');
+                } catch (error) {
+                    return [];
+                }
+            }
+
+            function markNotificationAsSeen(notificationId) {
+                const seenIds = new Set(getSeenNotificationIds());
+                seenIds.add(notificationId);
+                localStorage.setItem(notificationSeenStorageKey, JSON.stringify([...seenIds]));
+            }
+
+            function getStoredNotificationHistory() {
+                try {
+                    return JSON.parse(localStorage.getItem(notificationHistoryStorageKey) || '[]');
+                } catch (error) {
+                    return [];
+                }
+            }
+
+            function saveNotificationHistory(items) {
+                localStorage.setItem(notificationHistoryStorageKey, JSON.stringify(items));
+            }
+
+            function mergeNotificationHistory(newItems) {
+                const history = getStoredNotificationHistory();
+                const historyMap = new Map(history.map(item => [item.id, item]));
+                newItems.forEach(item => {
+                    const existing = historyMap.get(item.id);
+                    historyMap.set(item.id, existing ? { ...existing, ...item, isSeen: existing.isSeen || item.isSeen } : item);
+                });
+                return Array.from(historyMap.values()).sort((a, b) => {
+                    const aTime = a.sortTime || 0;
+                    const bTime = b.sortTime || 0;
+                    return bTime - aTime;
+                });
+            }
+
+            function dedupeNotificationItems(items) {
+                const seen = new Map();
+
+                return items.filter(item => {
+                    const signature = [
+                        item.docId || '',
+                        item.kind || '',
+                        item.message || '',
+                        item.meta || ''
+                    ].join('|');
+
+                    if (!seen.has(signature)) {
+                        seen.set(signature, true);
+                        return true;
+                    }
+
+                    const existingIndex = seen.get(signature);
+                    if (typeof existingIndex === 'number') {
+                        return false;
+                    }
+
+                    return false;
+                });
+            }
 
             function setActiveLink(activeLink) {
                 navLinks.forEach(link => {
@@ -447,6 +585,7 @@
             // Check if we need to open a specific tab (e.g. after saving a draft)
             const preferredTab = sessionStorage.getItem('activeTab');
             if (preferredTab === 'newSubmission') {
+                hideAllSections();
                 dashboardSection.classList.add('hidden');
                 tssoSubmissionSection.classList.remove('hidden');
                 pageTitle.textContent = 'NEW SUBMISSION';
@@ -456,43 +595,54 @@
 
             navDashboard.addEventListener('click', (e) => {
                 e.preventDefault();
+                hideAllSections();
                 dashboardSection.classList.remove('hidden');
-                tssoSubmissionSection.classList.add('hidden');
-                tssoDraftsModuleSection.classList.add('hidden');
-                tssoMyRequestsSection.classList.add('hidden');
                 pageTitle.textContent = 'DASHBOARD';
                 setActiveLink(navDashboard);
             });
 
             navMyRequests.addEventListener('click', (e) => {
                 e.preventDefault();
-                dashboardSection.classList.add('hidden');
-                tssoSubmissionSection.classList.add('hidden');
-                tssoDraftsModuleSection.classList.add('hidden');
+                hideAllSections();
                 tssoMyRequestsSection.classList.remove('hidden');
                 pageTitle.textContent = 'MY REQUESTS';
                 setActiveLink(navMyRequests);
             });
 
+            navRevisions.addEventListener('click', (e) => {
+                e.preventDefault();
+                hideAllSections();
+                tssoRevisionSection.classList.remove('hidden');
+                pageTitle.textContent = 'FOR REVISION';
+                setActiveLink(navRevisions);
+                loadRevisions();
+            });
+
             navNewSubmission.addEventListener('click', (e) => {
                 e.preventDefault();
-                dashboardSection.classList.add('hidden');
+                hideAllSections();
                 tssoSubmissionSection.classList.remove('hidden');
-                tssoDraftsModuleSection.classList.add('hidden');
-                tssoMyRequestsSection.classList.add('hidden');
                 pageTitle.textContent = 'NEW SUBMISSION';
                 setActiveLink(navNewSubmission);
             });
 
             navDrafts.addEventListener('click', (e) => {
                 e.preventDefault();
-                dashboardSection.classList.add('hidden');
-                tssoSubmissionSection.classList.add('hidden');
+                hideAllSections();
                 tssoDraftsModuleSection.classList.remove('hidden');
-                tssoMyRequestsSection.classList.add('hidden');
                 pageTitle.textContent = 'DRAFTS';
                 setActiveLink(navDrafts);
             });
+
+            if (navNotifications) {
+                navNotifications.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    hideAllSections();
+                    if (tssoNotificationsSection) tssoNotificationsSection.classList.remove('hidden');
+                    pageTitle.textContent = 'NOTIFICATIONS';
+                    setActiveLink(navNotifications);
+                });
+            }
 
             // --- LOGOUT LOGIC ---
             if (logoutBtn) {
@@ -513,10 +663,117 @@
                 });
             }
 
+            function hideAllSections() {
+                dashboardSection.classList.add('hidden');
+                tssoSubmissionSection.classList.add('hidden');
+                tssoDraftsModuleSection.classList.add('hidden');
+                tssoMyRequestsSection.classList.add('hidden');
+                tssoRevisionSection.classList.add('hidden');
+                if (tssoNotificationsSection) tssoNotificationsSection.classList.add('hidden');
+            }
+
+            function formatNotificationDate(value) {
+                if (!value?.toDate) return 'Just now';
+                return value.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            }
+
+            function formatTrackerDateTime(value) {
+                if (!value?.toDate) return '';
+                const dateObj = value.toDate();
+                const datePart = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                const timePart = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                return `${datePart} • ${timePart}`;
+            }
+
+            function updateNotificationBadges(count) {
+                if (dashboardNotificationsCount) dashboardNotificationsCount.textContent = String(count);
+                if (notificationsSectionCount) notificationsSectionCount.textContent = `${count} Alert${count === 1 ? '' : 's'}`;
+                if (dashboardNotificationsBadge) {
+                    dashboardNotificationsBadge.textContent = String(count);
+                    dashboardNotificationsBadge.classList.toggle('hidden', count === 0);
+                }
+                if (sidebarNotificationBadge) {
+                    sidebarNotificationBadge.textContent = String(count);
+                    sidebarNotificationBadge.classList.toggle('hidden', count === 0);
+                }
+            }
+
+            function updateRevisionBadge(count) {
+                if (!revisionsNavBadge) return;
+                revisionsNavBadge.textContent = String(count);
+                revisionsNavBadge.classList.toggle('hidden', count === 0);
+                revisionsNavBadge.classList.toggle('flex', count > 0);
+            }
+
+            window.openNotificationDetails = function(docId, notificationId) {
+                if (notificationId) {
+                    markNotificationAsSeen(notificationId);
+                    renderNotifications(latestNotificationItems);
+                }
+                window.viewRequestDetails(docId);
+            };
+
+            function renderNotifications(items) {
+                const incomingItems = Array.isArray(items) ? items : [];
+                const seenNotificationIds = new Set(getSeenNotificationIds());
+
+                const normalizedIncomingItems = incomingItems.map(item => ({
+                    ...item,
+                    isSeen: seenNotificationIds.has(item.id),
+                    sortTime: item.sortTime || item.timestamp || Date.now()
+                }));
+
+                const mergedItems = mergeNotificationHistory(normalizedIncomingItems);
+                const dedupedItems = dedupeNotificationItems(mergedItems);
+                latestNotificationItems = dedupedItems.map(item => ({
+                    ...item,
+                    isSeen: seenNotificationIds.has(item.id)
+                }));
+                saveNotificationHistory(latestNotificationItems);
+
+                const unreadCount = latestNotificationItems.filter(item => !item.isSeen).length;
+                updateNotificationBadges(unreadCount);
+
+                if (notificationHubList) {
+                    notificationHubList.innerHTML = latestNotificationItems.length ? latestNotificationItems.slice(0, 5).map(item => `
+                        <button type="button" onclick="window.openNotificationDetails('${item.docId}', '${item.id}')" class="w-full text-left flex gap-4 rounded-2xl p-3 transition-all ${item.isSeen ? 'bg-white/5 opacity-80 hover:bg-white/10' : (item.kind === 'revision' ? 'bg-red-500/15 ring-1 ring-red-400/40 hover:bg-red-500/20' : 'bg-gold-ltd/15 ring-1 ring-gold-ltd/40 hover:bg-gold-ltd/20')}">
+                            <div class="${item.isSeen ? 'bg-white/10' : (item.kind === 'revision' ? 'bg-red-500/20' : 'bg-gold-ltd/20')} p-2 rounded-lg h-fit">
+                                <svg class="w-4 h-4 ${item.isSeen ? 'text-white' : (item.kind === 'revision' ? 'text-red-300' : 'text-gold-ltd')}" fill="currentColor" viewBox="0 0 20 20"><path d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"></path></svg>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between gap-3 mb-1">
+                                    <p class="text-xs font-bold leading-tight uppercase tracking-wide truncate">${item.message}</p>
+                                    ${item.isSeen ? '' : `<span class="shrink-0 w-2.5 h-2.5 rounded-full ${item.kind === 'revision' ? 'bg-red-400' : 'bg-gold-ltd'}"></span>`}
+                                </div>
+                                <p class="text-[10px] font-bold ${item.isSeen ? 'text-white/60' : (item.kind === 'revision' ? 'text-red-200' : 'text-gold-ltd')} uppercase tracking-widest">${item.meta}</p>
+                            </div>
+                        </button>
+                    `).join('') : '<p class="text-[10px] font-bold text-white/60 uppercase tracking-widest">No new notifications.</p>';
+                }
+
+                if (notificationsSectionList) {
+                    notificationsSectionList.innerHTML = latestNotificationItems.length ? latestNotificationItems.map(item => `
+                        <button type="button" onclick="window.openNotificationDetails('${item.docId}', '${item.id}')" class="w-full text-left px-8 py-6 flex items-center justify-between gap-4 transition-colors border-l-4 ${item.isSeen ? 'border-transparent hover:bg-gray-50/70 bg-white' : (item.kind === 'revision' ? 'border-red-500 bg-red-50/70 hover:bg-red-50' : 'border-gold-ltd bg-yellow-50/70 hover:bg-yellow-50')}">
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-3">
+                                    <p class="text-xs font-bold text-gray-800 uppercase tracking-wide">${item.message}</p>
+                                    ${item.isSeen ? '' : `<span class="inline-flex items-center px-2 py-1 rounded-full ${item.kind === 'revision' ? 'bg-red-600' : 'bg-gold-ltd'} text-white text-[9px] font-bold uppercase tracking-widest">New</span>`}
+                                </div>
+                                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-2">${item.meta}</p>
+                            </div>
+                            <span class="shrink-0 text-[10px] font-bold ${item.isSeen ? 'text-gray-400' : (item.kind === 'revision' ? 'text-red-600' : 'text-maroon-ltd')} uppercase tracking-widest">
+                                View Details
+                            </span>
+                        </button>
+                    `).join('') : '<div class="px-8 py-10 text-center uppercase text-gray-400 font-bold text-xs tracking-widest">No notifications available.</div>';
+                }
+            }
+
             // --- LOAD MY REQUESTS ---
             async function loadMyRequests() {
                 const tbody = document.getElementById('myRequestsTableBody');
                 const dashboardActiveCount = document.getElementById('dashboardActiveCount');
+                const dashboardReturnedCount = document.getElementById('dashboardReturnedCount');
                 const trackerSelect = document.getElementById('trackerRequestId');
                 if (!tbody) return;
 
@@ -530,15 +787,22 @@
                     const q = query(submissionsRef, where("userId", "==", currentUserId), orderBy("submittedAt", "desc"));
                     
                     onSnapshot(q, (snap) => {
-                        if (dashboardActiveCount) dashboardActiveCount.textContent = snap.size;
-
+                        let activeCount = 0;
+                        let returnedCount = 0;
+                        
                         if (snap.empty) {
                             tbody.innerHTML = '<tr><td colspan="5" class="text-center py-10 uppercase text-gray-400 font-bold text-xs tracking-widest">No requests found.</td></tr>';
+                            if (dashboardActiveCount) dashboardActiveCount.textContent = '0';
+                            if (dashboardReturnedCount) dashboardReturnedCount.textContent = '0';
+                            updateRevisionBadge(0);
                             return;
                         }
 
                         tbody.innerHTML = '';
                         
+                        // Counts logic
+                        snap.forEach(d => { if(d.data().status === 'returned') returnedCount++; else if(d.data().status !== 'approved') activeCount++; });
+
                         // Clear and populate tracker select
                         if (trackerSelect) {
                             trackerSelect.innerHTML = '<option value="">Select REQUEST ID</option>';
@@ -549,11 +813,26 @@
                             const date = data.submittedAt?.toDate ? data.submittedAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Just now';
                             
                             let statusColor = 'bg-gray-100 text-gray-700';
-                            if (data.status === 'pending') statusColor = 'bg-yellow-100 text-yellow-700';
-                            else if (data.status === 'viewed') statusColor = 'bg-orange-100 text-orange-700';
-                            else if (data.status === 'verified') statusColor = 'bg-blue-100 text-blue-700';
-                            else if (data.status === 'returned') statusColor = 'bg-red-100 text-red-700';
-                            else if (data.status === 'approved') statusColor = 'bg-green-100 text-green-700';
+                            let statusLabel = data.status || 'unknown';
+                            if (data.status === 'pending') {
+                                statusColor = 'bg-yellow-100 text-yellow-700';
+                                statusLabel = 'pending';
+                            } else if (data.status === 'viewed') {
+                                statusColor = 'bg-orange-100 text-orange-700';
+                                statusLabel = 'viewed';
+                            } else if (data.status === 'verified') {
+                                statusColor = 'bg-blue-100 text-blue-700';
+                                statusLabel = 'verified';
+                            } else if (data.status === 'agm_viewed') {
+                                statusColor = 'bg-indigo-100 text-indigo-700';
+                                statusLabel = 'agm viewed';
+                            } else if (data.status === 'returned') {
+                                statusColor = 'bg-red-100 text-red-700';
+                                statusLabel = 'returned';
+                            } else if (data.status === 'approved') {
+                                statusColor = 'bg-green-100 text-green-700';
+                                statusLabel = 'approved';
+                            }
 
                             tbody.innerHTML += `
                                 <tr class="hover:bg-gray-50/80 transition-colors">
@@ -563,7 +842,7 @@
                                     <td class="px-8 py-5">
                                         <span onclick="window.openTrackerModal('${docSnap.id}', '${data.requestId}')" 
                                               class="px-3 py-1 ${statusColor} rounded-full text-[9px] font-bold uppercase cursor-pointer hover:scale-105 transition-all shadow-sm inline-block" title="Click to track status">
-                                            ${data.status}
+                                            ${statusLabel}
                                         </span>
                                     </td>
                                     <td class="px-8 py-5 text-center">
@@ -579,6 +858,57 @@
                                 trackerSelect.appendChild(opt);
                             }
                         });
+                        
+                        if (dashboardActiveCount) dashboardActiveCount.textContent = activeCount;
+                        if (dashboardReturnedCount) dashboardReturnedCount.textContent = returnedCount;
+                        updateRevisionBadge(returnedCount);
+
+                        const seenNotificationIds = new Set(getSeenNotificationIds());
+                        const notificationItems = [];
+                        const activityStatuses = new Set(['returned', 'viewed', 'verified', 'agm_viewed', 'approved']);
+
+                        snap.forEach(docSnap => {
+                            const data = docSnap.data();
+                            const status = String(data.status || '').toLowerCase();
+                            const actorName =
+                                status === 'returned' ? (data.returnedByName || data.returnedByAGMName || data.verifiedByName || data.viewedByVerifierName || 'A team member') :
+                                status === 'viewed' ? (data.viewedByVerifierName || 'Verifier') :
+                                status === 'verified' ? (data.verifiedByName || data.viewedByVerifierName || 'Verifier') :
+                                status === 'agm_viewed' ? (data.viewedByAGMName || 'AGM') :
+                                status === 'approved' ? (data.approvedByName || 'AGM') :
+                                'A team member';
+                            const eventDate = formatNotificationDate(data.returnedAt || data.updatedAt || data.submittedAt);
+                            const sortTime = data.updatedAt?.seconds || data.returnedAt?.seconds || data.viewedAt?.seconds || data.agmViewedAt?.seconds || data.submittedAt?.seconds || 0;
+
+                            // Only show workflow activity from verifier/department side.
+                            // Exclude requestor-driven changes like resubmission updates.
+                            if (!activityStatuses.has(status)) return;
+
+                            if (status === 'returned') {
+                                const notificationId = `returned_${docSnap.id}_${data.updatedAt?.seconds || data.returnedAt?.seconds || 'na'}`;
+                                notificationItems.push({
+                                    id: notificationId,
+                                    docId: docSnap.id,
+                                    kind: 'revision',
+                                    isSeen: seenNotificationIds.has(notificationId),
+                                    message: `${actorName} sent back ${data.requestId}`,
+                                    meta: `${data.templateName} • ${eventDate}`,
+                                    sortTime
+                                });
+                            } else {
+                                const notificationId = `activity_${docSnap.id}_${status}_${data.updatedAt?.seconds || data.viewedAt?.seconds || data.agmViewedAt?.seconds || data.submittedAt?.seconds || 'na'}`;
+                                notificationItems.push({
+                                    id: notificationId,
+                                    docId: docSnap.id,
+                                    kind: 'status',
+                                    isSeen: seenNotificationIds.has(notificationId),
+                                    message: `${actorName} updated ${data.requestId}`,
+                                    meta: `${status.toUpperCase()} • ${data.templateName} • ${eventDate}`,
+                                    sortTime
+                                });
+                            }
+                        });
+                        renderNotifications(notificationItems);
                     }, (error) => {
                         console.error("Query failed:", error);
                         if (error.message.includes("requires an index")) {
@@ -596,6 +926,67 @@
                 } catch (error) {
                     tbody.innerHTML = '<tr><td colspan="5" class="text-center py-10 text-red-500 font-bold text-xs uppercase tracking-widest">Error loading requests.</td></tr>';
                 }
+            }
+
+            // --- LOAD REVISIONS MODULE (REAL-TIME) ---
+            let revisionsUnsubscribe = null;
+            async function loadRevisions() {
+                const tbody = document.getElementById('revisionTableBody');
+                if (!tbody) return;
+                
+                if (revisionsUnsubscribe) revisionsUnsubscribe();
+
+                try {
+                    const { collection, query, where, onSnapshot, orderBy } = await import("https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js");
+                    const q = query(collection(db, "submissions"), where("userId", "==", currentUserId), where("status", "==", "returned"), orderBy("updatedAt", "desc"));
+
+                    revisionsUnsubscribe = onSnapshot(q, (snap) => {
+                        if (snap.empty) {
+                            tbody.innerHTML = '<tr><td colspan="5" class="text-center py-10 uppercase text-gray-400 font-bold text-xs tracking-widest">No items for revision.</td></tr>';
+                            return;
+                        }
+
+                        tbody.innerHTML = '';
+                        snap.forEach(docSnap => {
+                            const data = docSnap.data();
+                            const ts = data.returnedAt || data.updatedAt;
+                            const date = ts?.toDate ? ts.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Just now';
+                            const returnedByName = data.returnedByName || data.returnedByAGMName || data.verifiedByName || data.viewedByVerifierName || 'A team member';
+                            
+                            tbody.innerHTML += `
+                                <tr class="hover:bg-red-50/30 transition-colors">
+                                    <td class="px-8 py-5 font-mono text-xs text-maroon-ltd font-bold">${data.requestId}</td>
+                                    <td class="px-8 py-5 font-bold text-xs uppercase text-gray-600">${data.templateName}</td>
+                                    <td class="px-8 py-5">
+                                        <div class="flex flex-col items-start gap-2">
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-[10px] font-bold text-red-500 uppercase tracking-widest">
+                                                    Returned by ${returnedByName}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-8 py-5 text-gray-500 text-xs">${date}</td>
+                                    <td class="px-8 py-5 text-center">
+                                        <button onclick="window.loadRevisionForEdit('${docSnap.id}', '${data.requestId}')" 
+                                                class="bg-maroon-ltd hover:bg-black text-white px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all shadow-md">
+                                            RESUBMIT
+                                        </button>
+                                    </td>
+                                </tr>`;
+                        });
+                    }, (error) => {
+                        console.error("Revisions query failed:", error);
+                        if (error.message.includes("requires an index")) {
+                            const urlMatch = error.message.match(/https:\/\/console\.firebase\.google\.com[^\s]*/);
+                            const indexUrl = urlMatch ? urlMatch[0] : "#";
+                            tbody.innerHTML = `<tr><td colspan="5" class="text-center py-10 text-red-500 font-bold text-xs uppercase tracking-widest">
+                                <p class="mb-2">Database Index Required</p>
+                                <a href="${indexUrl}" target="_blank" class="underline hover:text-red-700 font-bold">Enable Indexing Here</a>
+                            </td></tr>`;
+                        }
+                    });
+                } catch (e) { console.error(e); }
             }
 
             // --- FILE TRACKER REAL-TIME LOGIC ---
@@ -669,13 +1060,19 @@
                     const nameLabel = step.querySelector('.step-name');
                     const timeLabel = step.querySelector('.step-time');
 
-                    // Ipakita ang pangalan at oras sa "Viewed" steps (Main tracker)
+                    // Ipakita ang pangalan at oras sa critical workflow steps
                     if (stageNum === 2 && data.viewedByVerifierName) {
                         if (nameLabel) nameLabel.textContent = data.viewedByVerifierName;
-                        if (timeLabel && data.viewedAt) timeLabel.textContent = data.viewedAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        if (timeLabel) timeLabel.textContent = formatTrackerDateTime(data.viewedAt);
+                    } else if (stageNum === 3 && data.verifiedByName) {
+                        if (nameLabel) nameLabel.textContent = data.verifiedByName;
+                        if (timeLabel) timeLabel.textContent = formatTrackerDateTime(data.verifiedAt);
                     } else if (stageNum === 4 && data.viewedByAGMName) {
                         if (nameLabel) nameLabel.textContent = data.viewedByAGMName;
-                        if (timeLabel && data.agmViewedAt) timeLabel.textContent = data.agmViewedAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        if (timeLabel) timeLabel.textContent = formatTrackerDateTime(data.agmViewedAt);
+                    } else if (stageNum === 5 && data.approvedByName) {
+                        if (nameLabel) nameLabel.textContent = data.approvedByName;
+                        if (timeLabel) timeLabel.textContent = formatTrackerDateTime(data.approvedAt);
                     }
 
                     if (stageNum < currentStage) {
@@ -763,13 +1160,19 @@
                     const nameLabel = step.querySelector('.step-name');
                     const timeLabel = step.querySelector('.step-time');
 
-                    // Ipakita ang pangalan at oras sa "Viewed" steps kung available (Modal tracker)
+                    // Ipakita ang pangalan at oras sa critical workflow steps (Modal tracker)
                     if (stageNum === 2 && data.viewedByVerifierName) {
                         if (nameLabel) nameLabel.textContent = data.viewedByVerifierName;
-                        if (timeLabel && data.viewedAt) timeLabel.textContent = data.viewedAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        if (timeLabel) timeLabel.textContent = formatTrackerDateTime(data.viewedAt);
+                    } else if (stageNum === 3 && data.verifiedByName) {
+                        if (nameLabel) nameLabel.textContent = data.verifiedByName;
+                        if (timeLabel) timeLabel.textContent = formatTrackerDateTime(data.verifiedAt);
                     } else if (stageNum === 4 && data.viewedByAGMName) {
                         if (nameLabel) nameLabel.textContent = data.viewedByAGMName;
-                        if (timeLabel && data.agmViewedAt) timeLabel.textContent = data.agmViewedAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        if (timeLabel) timeLabel.textContent = formatTrackerDateTime(data.agmViewedAt);
+                    } else if (stageNum === 5 && data.approvedByName) {
+                        if (nameLabel) nameLabel.textContent = data.approvedByName;
+                        if (timeLabel) timeLabel.textContent = formatTrackerDateTime(data.approvedAt);
                     }
 
                     if (stageNum < currentStage) {
@@ -793,11 +1196,109 @@
             };
 
             // --- VIEW DETAILS LOGIC ---
+            function renderViewModalAttachments(rawAttachments = []) {
+                const attachmentsPanel = document.getElementById('viewModalAttachmentsPanel');
+                const attachmentsList = document.getElementById('viewModalAttachmentsList');
+                const attachmentsCount = document.getElementById('viewModalAttachmentsCount');
+
+                if (!attachmentsPanel || !attachmentsList || !attachmentsCount) return;
+
+                const files = (Array.isArray(rawAttachments) ? rawAttachments : [])
+                    .filter(Boolean)
+                    .map((file, index) => {
+                        if (typeof file === 'string') {
+                            return {
+                                url: file,
+                                name: `Attachment ${index + 1}`
+                            };
+                        }
+
+                        return {
+                            url: file.url || file.secure_url || '',
+                            name: file.name || file.original_filename || `Attachment ${index + 1}`
+                        };
+                    })
+                    .filter(file => file.url || file.name)
+                    .map((file) => {
+                        const fileName = (file.name || '').toLowerCase();
+                        const fileUrl = (file.url || '').toLowerCase();
+                        const combined = `${fileName} ${fileUrl}`;
+                        const extension = (file.name || '').includes('.') ? (file.name || '').split('.').pop().toLowerCase() : '';
+                        const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?|$)/i.test(combined);
+                        const isCloudinaryFile = /res\.cloudinary\.com/i.test(file.url || '');
+                        const previewImageUrl = !isImage && isCloudinaryFile && file.url
+                            ? file.url.replace('/upload/', '/upload/pg_1,f_jpg,q_auto,w_1200/')
+                            : '';
+
+                        return {
+                            ...file,
+                            extension,
+                            isImage,
+                            previewImageUrl
+                        };
+                    });
+
+                attachmentsCount.textContent = `${files.length} File${files.length === 1 ? '' : 's'}`;
+                attachmentsPanel.classList.remove('hidden');
+
+                if (files.length === 0) {
+                    attachmentsList.innerHTML = '<p class="text-center text-gray-400 italic py-4 uppercase text-[10px] font-bold tracking-widest">No supporting documents attached.</p>';
+                    return;
+                }
+
+                attachmentsList.innerHTML = files.map((file, index) => `
+                    <div class="bg-gray-50 border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+                        <div class="flex items-center justify-between gap-3 px-4 py-3 border-b border-gray-200 bg-white">
+                            <div class="min-w-0 flex items-center gap-3">
+                                <svg class="w-5 h-5 text-maroon-ltd shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.364 6.364a4 4 0 105.656 5.656l6.364-6.364a4 4 0 00-5.656-5.656l-1.272 1.272"></path></svg>
+                                <div class="min-w-0">
+                                    <p class="text-xs font-bold text-gray-900 uppercase tracking-wide break-words">${file.name || `Attachment ${index + 1}`}</p>
+                                    <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">${file.isImage ? 'Image preview' : file.previewImageUrl ? 'Document preview' : (file.url ? 'Preview unavailable' : 'Attached file')}</p>
+                                </div>
+                            </div>
+                            ${file.url ? `<a href="${file.url}" target="_blank" rel="noopener noreferrer" class="shrink-0 px-3 py-2 rounded-xl bg-maroon-ltd text-white text-[10px] font-bold uppercase tracking-widest hover:bg-black transition-colors">Open</a>` : ''}
+                        </div>
+                        <div class="p-4">
+                            ${file.url ? (
+                                file.isImage
+                                    ? `<img src="${file.url}" alt="${file.name || `Attachment ${index + 1}`}" class="w-full max-h-[500px] object-contain rounded-xl border border-gray-200 bg-white">`
+                                    : file.previewImageUrl
+                                        ? `<div class="rounded-xl border border-gray-200 bg-white overflow-hidden">
+                                                <img src="${file.previewImageUrl}" alt="${file.name || `Attachment ${index + 1}`}" class="w-full max-h-[700px] object-contain bg-white" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
+                                                <div class="hidden flex items-center justify-center min-h-[220px] text-center p-6">
+                                                    <div>
+                                                        <p class="text-xs font-bold text-gray-700 uppercase tracking-widest">Preview unavailable for this file</p>
+                                                        <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-2">Use the Open button to view the original file</p>
+                                                    </div>
+                                                </div>
+                                           </div>`
+                                        : `<div class="flex items-center justify-center min-h-[180px] rounded-xl border border-dashed border-gray-300 bg-white text-center p-6">
+                                                <div>
+                                                    <p class="text-xs font-bold text-gray-700 uppercase tracking-widest">Preview not available for .${file.extension || 'file'}</p>
+                                                    <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-2">Inline preview is available only when the file can be rendered as an image preview</p>
+                                                </div>
+                                           </div>`
+                            ) : `
+                                <div class="flex items-center justify-center min-h-[180px] rounded-xl border border-dashed border-gray-300 bg-white text-center p-6">
+                                    <div>
+                                        <p class="text-xs font-bold text-gray-700 uppercase tracking-widest">Attached file</p>
+                                        <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-2">No preview URL available</p>
+                                    </div>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                `).join('');
+            }
+
             window.viewRequestDetails = async function(id) {
                 console.log("Viewing details for:", id);
                 const modal = document.getElementById('viewModal');
                 const frame = document.getElementById('viewFrame');
                 const title = document.getElementById('viewModalTitle');
+                const remarksContainer = document.getElementById('viewModalRemarksContainer');
+                const remarksText = document.getElementById('viewModalRemarksText');
+                const rawAttachments = [];
 
                 try {
                     const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js");
@@ -812,6 +1313,22 @@
                     const data = snap.data();
                     title.textContent = `Viewing: ${data.requestId} - ${data.title || 'No Title'}`;
                     
+                    // Show verifier remarks only when the request is still returned / for revision
+                    const shouldShowVerifierRemarks = data.status === 'returned' || data.status === 'for_revision';
+                    if (shouldShowVerifierRemarks && (data.verifierRemarks || data.remarks)) {
+                        remarksText.textContent = data.verifierRemarks || data.remarks;
+                        remarksContainer.classList.remove('hidden');
+                    } else {
+                        remarksText.textContent = '';
+                        remarksContainer.classList.add('hidden');
+                    }
+
+                    rawAttachments.push(
+                        ...(Array.isArray(data.proofUrls) ? data.proofUrls : []),
+                        ...(Array.isArray(data.supportingDocs) ? data.supportingDocs : [])
+                    );
+                    renderViewModalAttachments(rawAttachments);
+
                     // 1. I-setup ang onload bago i-set ang src
                     frame.onload = () => {
                         if (frame.contentWindow && frame.contentWindow.setFormData) {
@@ -819,8 +1336,17 @@
                             frame.contentWindow.isDataLoaded = true;
                             frame.contentWindow.setFormData(data.formData);
                             
-                            // Lock the form (Read-Only)
                             const frameDoc = frame.contentDocument || frame.contentWindow.document;
+
+                            if (frameDoc && data.verifierSignature) {
+                                const verifierName = data.verifiedByName || data.viewedByVerifierName || 'Verifier';
+                                const verifierRole = data.verifiedByDept === 'TSSO VERIFIER' ? 'Technical Verifier' : (data.verifiedByDept || 'Verifier');
+                                if (frame.contentWindow.setVerifiedBySignature) {
+                                    frame.contentWindow.setVerifiedBySignature(data.verifierSignature, verifierName, verifierRole);
+                                }
+                            }
+                            
+                            // Lock the form (Read-Only)
                             if (frameDoc) {
                                 const elements = frameDoc.querySelectorAll('input, textarea, select');
                                 elements.forEach(el => {
@@ -855,6 +1381,17 @@
                 if (modal) {
                     modal.classList.remove('opacity-100');
                     modal.classList.add('opacity-0', 'pointer-events-none');
+                    // Reset remarks container when closing
+                    const remarksContainer = document.getElementById('viewModalRemarksContainer');
+                    const attachmentsPanel = document.getElementById('viewModalAttachmentsPanel');
+                    const attachmentsList = document.getElementById('viewModalAttachmentsList');
+                    const attachmentsCount = document.getElementById('viewModalAttachmentsCount');
+
+                    if (remarksContainer) remarksContainer.classList.add('hidden');
+                    if (attachmentsPanel) attachmentsPanel.classList.add('hidden');
+                    if (attachmentsList) attachmentsList.innerHTML = '';
+                    if (attachmentsCount) attachmentsCount.textContent = '0 Files';
+
                     setTimeout(() => { frame.src = 'about:blank'; }, 300);
                 }
             };
@@ -1057,6 +1594,15 @@
                 window.location.href = 'new_submission.html';
             };
 
+            // Function to load a returned request for editing
+            window.loadRevisionForEdit = function(submissionId, requestId) {
+                // We store the submissionId to tell submission.js to update this record instead of creating a new one
+                sessionStorage.setItem('editingRevisionId', submissionId);
+                // Re-use the draft loading logic as the form filling process is the same
+                sessionStorage.setItem('draftIdToLoad', submissionId); 
+                window.location.href = 'new_submission.html';
+            };
+
             // --- DRAFT DELETION LOGIC ---
             window.showConfirm = function(title, message) {
                 return new Promise((resolve) => {
@@ -1117,6 +1663,12 @@
                 }
             };
 
+            const returnedStatCard = document.getElementById('returnedRequestsStatCard');
+            if (returnedStatCard) {
+                returnedStatCard.onclick = () => {
+                    navRevisions.click();
+                };
+            }
 
             // Load available templates when the page loads
             loadAvailableTemplates();
@@ -1124,5 +1676,4 @@
         });
     </script>
 </body>
-</html>
 </html>

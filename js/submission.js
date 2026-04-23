@@ -2,6 +2,11 @@
 import { db } from './auth.js';
 import { collection, getDocs, query, where, addDoc, serverTimestamp, doc, getDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
+// Cloudinary Constants (Matching templates.js)
+const CLOUD_NAME = "dnch13q6f";
+const UPLOAD_PRESET = "pdfs_dms";
+const API_KEY = "rPmHgHmJ44keF5Y5JjNPVMPaWaQ";
+
 // Form Interactivity
 document.addEventListener('DOMContentLoaded', async () => {
     const currentUserId = sessionStorage.getItem('userId');
@@ -12,6 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const submissionContent = document.getElementById('submissionContent');
     const footerActions = document.getElementById('footerActions');
     const reviewSection = document.getElementById('reviewSection');
+    const supportingDocsReviewSection = document.getElementById('supportingDocsReviewSection');
     const validateBtn = document.getElementById('validateBtn');
     const finalSubmitBtn = document.getElementById('finalSubmitBtn');
     const formContainer = document.getElementById('formContainer');
@@ -21,6 +27,172 @@ document.addEventListener('DOMContentLoaded', async () => {
     let selectedTemplateId = null;
     let selectedTemplateName = null;
     let maxStepReached = 1; // Track the furthest step the user is allowed to access
+    let supportingDocsData = [];
+    let supportingDocsPreviewUrls = [];
+
+    const revokeSupportingDocsPreviewUrls = () => {
+        supportingDocsPreviewUrls.forEach(url => {
+            try {
+                URL.revokeObjectURL(url);
+            } catch (error) {
+                // ignore revoke failures
+            }
+        });
+        supportingDocsPreviewUrls = [];
+    };
+
+    const renderSupportingDocuments = (docs = []) => {
+        const docsList = document.getElementById('supportingDocsList');
+        const docsCount = document.getElementById('supportingDocsCount');
+
+        supportingDocsData = Array.isArray(docs) ? docs.filter(Boolean) : [];
+
+        if (docsCount) {
+            docsCount.textContent = `${supportingDocsData.length} File${supportingDocsData.length === 1 ? '' : 's'}`;
+        }
+
+        if (!docsList) return;
+
+        revokeSupportingDocsPreviewUrls();
+
+        if (supportingDocsData.length === 0) {
+            docsList.innerHTML = '<p class="col-span-full text-center text-gray-400 italic py-6 uppercase text-[10px] font-bold tracking-widest">No supporting documents attached.</p>';
+            return;
+        }
+
+        docsList.innerHTML = supportingDocsData.map((doc, index) => {
+            const isFileObject = doc?.file instanceof File;
+            const url = typeof doc === 'string' ? doc : (doc?.url || (isFileObject ? URL.createObjectURL(doc.file) : ''));
+            const name = typeof doc === 'string' ? `Attachment ${index + 1}` : (doc?.name || (isFileObject ? doc.file.name : `Attachment ${index + 1}`));
+            const ext = name.includes('.') ? name.split('.').pop() : 'FILE';
+
+            if (isFileObject && url) {
+                supportingDocsPreviewUrls.push(url);
+            }
+
+            return `
+                <div class="flex items-center justify-between gap-4 p-4 rounded-2xl border border-gray-100 bg-gray-50/80">
+                    <div class="min-w-0">
+                        <p class="text-xs font-bold text-gray-900 uppercase tracking-wide truncate" title="${name}">${name}</p>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">${ext.toUpperCase()}</p>
+                    </div>
+                    ${url ? `
+                        <a href="${url}" target="_blank" rel="noopener noreferrer" class="shrink-0 px-3 py-2 rounded-xl bg-maroon-ltd text-white text-[10px] font-bold uppercase tracking-widest hover:bg-black transition-colors">View</a>
+                    ` : `
+                        <span class="shrink-0 px-3 py-2 rounded-xl bg-gray-200 text-gray-500 text-[10px] font-bold uppercase tracking-widest">Attached</span>
+                    `}
+                </div>
+            `;
+        }).join('');
+    };
+
+    const getSelectedSupportingDocuments = () => {
+        const file1 = document.getElementById('file1')?.files?.[0];
+        const file2 = document.getElementById('file2')?.files?.[0];
+        const selectedFiles = [file1, file2].filter(Boolean);
+
+        return selectedFiles.map(file => ({
+            name: file.name,
+            url: ''
+        }));
+    };
+
+    const normalizeSupportingDocument = (doc, index) => {
+        if (!doc) return null;
+
+        if (typeof doc === 'string') {
+            return {
+                name: `Attachment ${index + 1}`,
+                url: doc
+            };
+        }
+
+        return {
+            name: doc.name || `Attachment ${index + 1}`,
+            url: doc.url || ''
+        };
+    };
+
+    const buildMergedSupportingDocuments = (overrides = {}) => {
+        const existingDocs = Array.isArray(supportingDocsData)
+            ? supportingDocsData.map((doc, index) => normalizeSupportingDocument(doc, index)).filter(Boolean)
+            : [];
+
+        const mergedDocs = [...existingDocs];
+        const slotEntries = [
+            { index: 0, file: document.getElementById('file1')?.files?.[0] || null },
+            { index: 1, file: document.getElementById('file2')?.files?.[0] || null }
+        ];
+
+        slotEntries.forEach(({ index, file }) => {
+            const overrideDoc = overrides[index];
+            const baseDoc = normalizeSupportingDocument(mergedDocs[index], index);
+
+            if (overrideDoc) {
+                mergedDocs[index] = normalizeSupportingDocument(overrideDoc, index);
+                return;
+            }
+
+            if (file) {
+                mergedDocs[index] = {
+                    name: file.name,
+                    file,
+                    url: ''
+                };
+                return;
+            }
+
+            if (baseDoc) {
+                mergedDocs[index] = baseDoc;
+            }
+        });
+
+        return mergedDocs.filter(Boolean);
+    };
+
+    const setRevisionUIVisibility = (isRevisionMode) => {
+        const notificationBanner = document.getElementById('revisionNotificationBanner');
+        const remarksBox = document.getElementById('verifierRemarksDisplay');
+        const justSection = document.getElementById('justificationSection');
+        const uploadSection = document.getElementById('uploadAttachmentSection');
+
+        if (notificationBanner) notificationBanner.classList.toggle('hidden', !isRevisionMode);
+        if (remarksBox) remarksBox.classList.toggle('hidden', !isRevisionMode);
+        if (justSection) justSection.classList.toggle('hidden', !isRevisionMode);
+
+        // Supporting documents must be available in the normal new submission flow as well.
+        // Keep the upload section visible for both new submissions and revisions.
+        if (uploadSection) uploadSection.classList.remove('hidden');
+
+        if (!isRevisionMode) {
+            const remarksText = document.getElementById('verifierRemarksText');
+            const notificationText = document.getElementById('revisionNotificationText');
+            const justificationInput = document.getElementById('requestorJustification');
+
+            if (remarksText) remarksText.textContent = '';
+            if (notificationText) notificationText.textContent = '';
+            if (justificationInput) justificationInput.value = '';
+        }
+    };
+
+    const clearRevisionSession = () => {
+        sessionStorage.removeItem('editingRevisionId');
+        sessionStorage.removeItem('currentStatus');
+        setRevisionUIVisibility(false);
+
+        ['file1', 'file2'].forEach((inputId) => {
+            const input = document.getElementById(inputId);
+            if (input) input.value = '';
+        });
+
+        supportingDocsData = [];
+        revokeSupportingDocsPreviewUrls();
+        renderSupportingDocuments([]);
+    };
+
+    const isRevisionModeActive = () => {
+        return !!sessionStorage.getItem('editingRevisionId');
+    };
 
     // --- STEPPER LOGIC ---
     const updateStepper = (step, status = 'active') => {
@@ -73,14 +245,31 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         // Itago ang lahat ng interactive elements (Buttons, controls) sa Review Mode
-        frameDoc.querySelectorAll('.no-print').forEach(el => {
-            el.style.display = readonly ? 'none' : '';
+        frameDoc.querySelectorAll('button.no-print, input[type="file"]').forEach(el => {
+            if (readonly) {
+                el.style.display = 'none';
+            } else {
+                // Panatilihing nakatago ang signature file input (Choose File) dahil may custom button tayo
+                if (el.id === 'requestedByInput') {
+                    el.style.display = 'none';
+                } else {
+                    el.style.display = '';
+                }
+            }
         });
     };
 
     // --- NAVIGATION LOGIC ---
     const navigateToStep = (targetStep) => {
         // Enforce strict progression: Cannot jump to locked steps
+        const isRevisionMode = isRevisionModeActive();
+
+        if (isRevisionMode && targetStep === 1) {
+            window.showNotice?.('Action Blocked', 'You cannot change the template while in Revision Mode.');
+            return;
+        }
+
+        // Enforce progression for forward steps
         if (targetStep > maxStepReached) return;
 
         // Step 1: Template Selection
@@ -113,6 +302,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             reviewSection.classList.add('hidden');
             footerActions.classList.remove('hidden');
             
+            // --- REVISION MODE UI: Ipakita ang Verify Section habang nagfi-fill out ---
+            const isRev = isRevisionModeActive();
+            setRevisionUIVisibility(isRev);
+            if (supportingDocsReviewSection) supportingDocsReviewSection.classList.add('hidden');
+
             // Restore Interactive/Drafting View
             formContainer.style.height = '900px';
             formContainer.className = "relative bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden";
@@ -140,6 +334,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             reviewSection.classList.remove('hidden'); // Ipakita ang "Review Mode" banner
             footerActions.classList.remove('hidden');
 
+            // --- REVISION MODE UI: Panatilihing visible ang Verify Section sa Review step ---
+            const isRev = isRevisionModeActive();
+            setRevisionUIVisibility(isRev);
+            if (supportingDocsReviewSection) supportingDocsReviewSection.classList.remove('hidden');
+
             // PDF Style Presentation: Center the document, remove fixed height, remove internal scrolls
             formContainer.style.height = 'auto';
             formContainer.className = "relative bg-white shadow-2xl border-none flex flex-col items-center mb-10";
@@ -149,9 +348,20 @@ document.addEventListener('DOMContentLoaded', async () => {
             // I-lock ang form para sa review
             toggleIframeReadOnly(true);
 
+            const selectedFilesForReview = buildMergedSupportingDocuments();
+            if (selectedFilesForReview.length > 0) {
+                renderSupportingDocuments(selectedFilesForReview);
+            } else if (supportingDocsData.length > 0) {
+                renderSupportingDocuments(supportingDocsData);
+            }
+
             // Itago ang 'Next: Review' at ipakita ang 'Final Submit'
             if (validateBtn) validateBtn.classList.add('hidden');
-            if (finalSubmitBtn) finalSubmitBtn.classList.remove('hidden');
+            if (finalSubmitBtn) {
+                finalSubmitBtn.classList.remove('hidden');
+                // Palitan ang label kung ito ay resubmission
+                finalSubmitBtn.textContent = isRevisionMode ? "RESUBMIT REQUEST" : "FINAL SUBMISSION";
+            }
 
             updateStepper(1, 'completed');
             updateStepper(2, 'completed');
@@ -256,6 +466,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
+    // Cloudinary Upload Helper
+    const uploadToCloudinary = async (file) => {
+        if (!file) return null;
+        
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', UPLOAD_PRESET);
+        formData.append('api_key', API_KEY);
+
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`, {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) {
+            const err = await response.json();
+            console.error('Cloudinary Error:', err);
+            throw new Error(`Failed to upload ${file.name}`);
+        }
+
+        const data = await response.json();
+        return { url: data.secure_url, name: file.name };
+    };
+
     // --- FINAL SUBMISSION LOGIC ---
     window.handleFinalSubmission = async () => {
         const btn = document.getElementById('finalSubmitBtn');
@@ -284,8 +518,24 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const requestTitle = requestTitleInput?.value.trim();
             const formData = iframe.contentWindow.getFormData();
+            const justification = document.getElementById('requestorJustification')?.value.trim() || "";
             const userName = sessionStorage.getItem('userName');
             const userDept = sessionStorage.getItem('userDept');
+
+            // 2. HANDLE FILE UPLOADS (For Proof/Justification)
+            const file1 = document.getElementById('file1')?.files[0];
+            const file2 = document.getElementById('file2')?.files[0];
+            
+            const slotUploads = await Promise.all([
+                file1 ? uploadToCloudinary(file1) : Promise.resolve(null),
+                file2 ? uploadToCloudinary(file2) : Promise.resolve(null)
+            ]);
+
+            const proofUrls = buildMergedSupportingDocuments({
+                0: slotUploads[0],
+                1: slotUploads[1]
+            });
+            renderSupportingDocuments(proofUrls);
 
             // Generate Request ID: LTD-YYYY-XXX
             const year = new Date().getFullYear();
@@ -294,22 +544,34 @@ document.addEventListener('DOMContentLoaded', async () => {
             const sequence = (countSnap.size + 1).toString().padStart(3, '0');
             const requestId = `LTD-${year}-${sequence}`;
 
-            // Save to Firestore sa 'submissions' collection
-            await addDoc(collection(db, "submissions"), {
-                requestId,
+            const editingRevisionId = sessionStorage.getItem('editingRevisionId');
+            const submissionPayload = {
                 userId: currentUserId,
                 requestorName: userName,
                 department: userDept,
                 templateName: selectedTemplateName,
                 title: requestTitle,
+                requestorJustification: justification,
+                proofUrls: proofUrls, // Save the array of {url, name}
                 formData: cleanData(formData),
                 status: 'pending',
                 priority: 'Normal',
-                submittedAt: serverTimestamp()
-            });
+                submittedAt: serverTimestamp(),
+                updatedAt: serverTimestamp()
+            };
 
-            // Trigger completion logic in new_submission.html (Stepper & Modal)
-            if (typeof window.onSubmissionComplete === 'function') {
+            if (editingRevisionId) {
+                // UPDATE EXISTING RECORD (Keep original Request ID)
+                const docRef = doc(db, "submissions", editingRevisionId);
+                const originalSnap = await getDoc(docRef);
+                const finalRequestId = originalSnap.exists() ? originalSnap.data().requestId : requestId;
+                
+                await updateDoc(docRef, { ...submissionPayload, requestId: finalRequestId });
+                clearRevisionSession();
+                window.onSubmissionComplete(finalRequestId);
+            } else {
+                // CREATE NEW SUBMISSION
+                await addDoc(collection(db, "submissions"), { ...submissionPayload, requestId });
                 window.onSubmissionComplete(requestId);
             }
 
@@ -405,31 +667,90 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadingOverlay.classList.remove('hidden');
         loadingOverlay.querySelector('p').textContent = "Loading your draft...";
 
+        let isRevision = false;
+
         try {
-            const draftRef = doc(db, "draftSubmissions", draftId);
-            const draftSnap = await getDoc(draftRef);
+            // Subukan munang hanapin sa 'submissions' collection (para sa mga Revisions)
+            let draftRef = doc(db, "submissions", draftId);
+            let draftSnap = await getDoc(draftRef);
+
+            // Kung wala sa submissions, hanapin sa 'draftSubmissions'
+            if (!draftSnap.exists()) {
+                draftRef = doc(db, "draftSubmissions", draftId);
+                draftSnap = await getDoc(draftRef);
+                isRevision = false;
+            } else {
+                // I-check kung ito ay tunay na Revision base sa status sa database
+                const data = draftSnap.data();
+                if (data.status === 'returned' || data.status === 'revision') {
+                    isRevision = true;
+                    sessionStorage.setItem('editingRevisionId', draftId);
+                    sessionStorage.setItem('currentStatus', data.status);
+                }
+            }
 
             if (draftSnap.exists()) {
                 const draft = draftSnap.data();
-                selectedTemplateId = draft.templateId;
+                selectedTemplateId = draft.templateId || 'st-btaf';
                 selectedTemplateName = draft.templateName;
 
                 if (requestTitleInput) {
-                    requestTitleInput.value = draft.requestTitle || '';
+                    requestTitleInput.value = draft.requestTitle || draft.title || '';
+                }
+
+                renderSupportingDocuments(draft.proofUrls || draft.supportingDocs || []);
+                
+                // --- REVISION MODE UI ENHANCEMENTS ---
+                if (isRevision || draft.status === 'returned' || draft.status === 'revision') {
+                    // 1. Ipakita ang status notification para malinaw na returned ang file
+                    const notificationBanner = document.getElementById('revisionNotificationBanner');
+                    const notificationText = document.getElementById('revisionNotificationText');
+                    if (notificationBanner && notificationText) {
+                        const currentStatus = (draft.status || '').toLowerCase();
+                        notificationText.textContent = currentStatus === 'returned'
+                            ? 'This file was returned by the verifier. Please check the remarks below, update the document, and resubmit after completing the required changes.'
+                            : 'This request is currently under revision. Please review the remarks below, update the document, and submit again once resolved.';
+                        notificationBanner.classList.remove('hidden');
+                    }
+
+                    // 2. Ipakita ang Justification Section (Remarks ni Requestor) - Sa itaas ng form
+                    const justSection = document.getElementById('justificationSection');
+                    if (justSection) {
+                        justSection.classList.remove('hidden');
+                    }
+
+                    // 3. Ipakita ang Verifier Remarks Display (Feedback banner sa itaas ng Request Title)
+                    const remarksBox = document.getElementById('verifierRemarksDisplay');
+                    const remarksText = document.getElementById('verifierRemarksText');
+                    if (remarksBox && remarksText) {
+                        remarksText.textContent = draft.verifierRemarks || draft.remarks || "Please review the feedback and update your request.";
+                        remarksBox.classList.remove('hidden');
+                    }
+
+                    // 4. Ipakita ang Upload Section (Para sa supporting documents)
+                    const uploadSection = document.getElementById('uploadAttachmentSection');
+                    if (uploadSection) {
+                        uploadSection.classList.remove('hidden');
+                        const uploadHeader = uploadSection.querySelector('h4');
+                        if (uploadHeader) {
+                            uploadHeader.textContent = "Upload Justification / Supporting Documents";
+                        }
+                    }
                 }
 
                 const iframe = document.getElementById('templateFrame');
                 if (iframe) {
-                    iframe.src = draft.templateUrl;
+                    iframe.src = draft.templateUrl || '../BTAF.html';
                     iframe.onload = () => {
                         if (iframe.contentWindow && iframe.contentWindow.setFormData) {
-                            iframe.contentWindow.setFormData(draft.draftData);
+                            // Gamitin ang formData kung revision, draftData kung normal draft
+                            iframe.contentWindow.setFormData(draft.formData || draft.draftData);
                             maxStepReached = 2; // Unlock Step 2 for drafts
                             navigateToStep(2); // Navigate to form filling step
-                            sessionStorage.setItem('editingDraftId', draftId); // Store draft ID for updates
-                            window.showNotice('Draft Loaded!', `"${draft.templateName}" draft has been loaded.`);
+                            if (!isRevision) sessionStorage.setItem('editingDraftId', draftId);
+                            window.showNotice(isRevision ? 'Revision Mode' : 'Data Restored!', `"${draft.templateName}" data has been loaded. ${isRevision ? 'Please review the verifier remarks and update your request.' : ''}`);
                         } else {
-                            window.showNotice('Load Draft Failed', 'Template form is not ready or does not support loading drafts.');
+                            window.showNotice('Load Error', 'Template form is not ready.');
                         }
                         loadingOverlay.classList.add('hidden');
                     };
@@ -445,6 +766,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
+    clearRevisionSession();
+    setRevisionUIVisibility(false);
+
     // Check if there's a draft to load from sessionStorage on page load
     const draftIdToLoad = sessionStorage.getItem('draftIdToLoad');
     if (draftIdToLoad) {
@@ -455,13 +779,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const setupFileUpload = (inputId, labelId) => {
         const input = document.getElementById(inputId);
-        const label = input?.nextElementSibling?.querySelector('span');
+        const label = input?.nextElementSibling; // Ang span na katabi mismo ng input
 
         if (input && label) {
             input.addEventListener('change', (e) => {
                 const fileName = e.target.files[0]?.name;
                 label.textContent = fileName ? fileName : "Attach File...";
+                
                 label.classList.toggle('text-maroon-ltd', !!fileName);
+                label.classList.toggle('text-gray-400', !fileName);
+
+                // Keep Step 2 clean: do not render the supporting documents preview here.
+                // The uploaded files will be displayed in Step 3 review mode.
             });
         }
     };

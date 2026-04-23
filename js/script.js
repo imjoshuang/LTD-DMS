@@ -9,6 +9,7 @@ function getRedirectPath(department) {
         case 'HR':    return 'hr.html';
         case 'ED':    return 'ed.html';
         case 'AGM':   return 'agmdash.html';
+        case 'AGM Approver': return 'AGM/agmapprove.html';
         case 'AGSD':  return 'agsd.html';
         case 'PMO':   return 'pmo.html';
         case 'TSD':   return 'tsd.html';

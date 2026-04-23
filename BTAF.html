@@ -821,29 +821,39 @@
     <div class="section-title">TRAVEL APPROVALS</div>
     <table>
         <tr>
-            <td style="width:33%; vertical-align: bottom;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div style="font-weight:700;font-size:9px;">REQUESTED BY:</div>
-                    <button type="button" onclick="document.getElementById('requestedByInput').click()" class="no-print" style="font-size: 7px; background: #600000; color: white; padding: 1px 4px; border-radius: 2px; border: none; cursor: pointer;">Add Signature</button>
+            <td style="width:33%; vertical-align: top; padding: 8px 4px 3px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;min-height:16px;">
+                    <div style="font-weight:700;font-size:9px;line-height:1;">REQUESTED BY:</div>
+                    <button type="button" id="requestedByAddSignatureBtn" onclick="document.getElementById('requestedByInput').click()" class="no-print" style="font-size:7px;background:#600000;color:white;padding:1px 4px;border-radius:2px;border:none;cursor:pointer;">Add Signature</button>
                 </div>
-                <div class="sign-underline" id="requestedBySign" style="display: flex; align-items: center; justify-content: center; overflow: hidden; min-height: 60px;">
-                    <input type="file" id="requestedByInput" accept="image/*" style="display: none;" onchange="handleSignatureUpload(this, 'requestedBySign')">
+                <div class="sign-underline" id="requestedBySign" style="display:flex;align-items:center;justify-content:center;overflow:hidden;min-height:60px;margin-top:4px;">
+                    <input type="file" id="requestedByInput" accept="image/*" style="display:none;" onchange="handleSignatureUpload(this, 'requestedBySign')">
                 </div>
                 <div class="sign-name" id="requestedByName"></div>
                 <div class="sign-role" id="requestedByRole"></div>
             </td>
-            <td style="width:34%;">
-                <div style="font-weight:700;font-size:9px;">VERIFIED BY:</div>
-                <div class="sign-underline" style="min-height:34px;"></div>
-                <div class="sign-name">DAVE S. RANGEL</div>
-                <div class="sign-role">Director - TSSO</div>
+            <td style="width:34%; vertical-align: top; padding: 8px 4px 3px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;min-height:16px;">
+                    <div style="font-weight:700;font-size:9px;line-height:1;">VERIFIED BY:</div>
+                </div>
+                <div class="sign-underline" id="verifiedBySign" style="display:flex;align-items:center;justify-content:center;overflow:hidden;min-height:60px;margin-top:4px;">
+                </div>
+                <div class="sign-name" id="verifiedByName">DAVE S. RANGEL</div>
+                <div class="sign-role" id="verifiedByRole">Director - TSSO</div>
             </td>
-            <td style="width:33%;">
-                <div style="font-weight:700;font-size:9px;">DECISION:</div>
-                <label class="check-label"><input type="checkbox" id="decApproved"> Approved</label>
-                <label class="check-label"><input type="checkbox" id="decDisapproved"> Disapproved</label><br>
-                <div class="sign-underline" style="min-height:22px;"></div>
-                <div class="sign-name">MARY ROSE A. ZAMORA-ODI</div>
+            <td style="width:33%; vertical-align: top; padding: 8px 4px 3px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;min-height:16px;">
+                    <div style="font-weight:700;font-size:9px;line-height:1;">DECISION:</div>
+                    <button type="button" id="agmDecisionAddSignatureBtn" class="no-print" onclick="document.getElementById('agmDecisionInput').click()" style="display:none;font-size:7px;background:#600000;color:white;padding:1px 4px;border-radius:2px;border:none;cursor:pointer;">Add Signature</button>
+                </div>
+                <div style="margin-top:4px;">
+                    <label class="check-label"><input type="checkbox" id="decApproved" disabled> Approved</label>
+                    <label class="check-label"><input type="checkbox" id="decDisapproved" disabled> Disapproved</label>
+                </div>
+                <div class="sign-underline" id="agmDecisionSign" style="display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;min-height:60px;margin-top:8px;gap:4px;">
+                    <input type="file" id="agmDecisionInput" accept="image/*" style="display:none;" onchange="handleSignatureUpload(this, 'agmDecisionSign')">
+                </div>
+                <div class="sign-name" style="margin-top:0;">MARY ROSE A. ZAMORA-ODI</div>
                 <div class="sign-role">Assistant General Manager</div>
             </td>
         </tr>
@@ -1002,13 +1012,18 @@
                 <div class="sign-name">KHIM G. DAGANGON, CPA</div>
                 <div class="sign-role">Chief Financial Officer</div>
             </td>
-            <td style="vertical-align:top;padding:8px;">
-                <div style="font-weight:700;font-size:9px;">DECISION (Beyond Standard Limits):</div>
-                <label class="check-label"><input type="checkbox" id="ceoApproved"> Approved</label>
-                <label class="check-label"><input type="checkbox" id="ceoDisapproved"> Disapproved</label>
-                <div class="sign-underline" style="min-height:22px;margin-top:6px;"></div>
-                <div class="sign-name">JOHN N. DOMANTAY</div>
-                <div class="sign-role">Chief Executive Officer</div>
+            <td style="vertical-align:top;padding:20px 8px 8px 8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:0;">
+                    <div style="font-weight:700;font-size:9px;line-height:1;">DECISION (Beyond Standard Limits):</div>
+                </div>
+                <div class="sign-underline" id="decisionSign" style="display:flex;align-items:center;justify-content:center;overflow:hidden;min-height:60px;margin-top:10px;">
+                </div>
+                <div style="margin-top:10px;">
+                    <label class="check-label"><input type="checkbox" id="ceoApproved"> Approved</label>
+                    <label class="check-label"><input type="checkbox" id="ceoDisapproved"> Disapproved</label>
+                </div>
+                <div class="sign-name" style="margin-top:4px;">MARY ROSE A. ZAMORA-ODI</div>
+                <div class="sign-role" style="margin-top:0;">Assistant General Manager</div>
             </td>
         </tr>
     </table>
@@ -1526,21 +1541,127 @@ window.initAutoResize = function(el) {
 /* ── Signature Upload Logic ── */
 window.handleSignatureUpload = function(input, targetId) {
     if (input.files && input.files[0]) {
+        const file = input.files[0];
+        // Check file size (Firestore limit is 1MB per document)
+        if (file.size > 500000) { // 500KB limit for safety
+            alert("Image is too large. Please upload a smaller signature image (below 500KB).");
+            return;
+        }
+
         const reader = new FileReader();
         reader.onload = function(e) {
             const container = document.getElementById(targetId);
             if (container) {
-                const existingImg = container.querySelector('img');
-                if (existingImg) existingImg.remove();
+                // Remove existing images but keep the input
+                const imgs = container.querySelectorAll('img');
+                imgs.forEach(i => i.remove());
+
                 const img = document.createElement('img');
                 img.src = e.target.result;
                 img.style.maxHeight = '60px';
                 img.style.maxWidth = '100%';
                 img.style.objectFit = 'contain';
+                img.id = "actualSignatureImg"; // Add ID for easier access
                 container.appendChild(img);
+                
+                // Trigger recalc to ensure data is updated
+                if(window.recalc) recalc();
             }
         };
         reader.readAsDataURL(input.files[0]);
+    }
+};
+
+window.setVerifiedBySignature = function(signatureData, verifierName, verifierRole) {
+    const signContainer = document.getElementById('verifiedBySign');
+    const nameEl = document.getElementById('verifiedByName');
+    const roleEl = document.getElementById('verifiedByRole');
+    const existingInput = document.getElementById('verifiedByInput');
+
+    if (nameEl && verifierName) {
+        nameEl.textContent = verifierName;
+    }
+
+    if (roleEl && verifierRole) {
+        roleEl.textContent = verifierRole;
+    }
+
+    if (!signContainer) return;
+
+    signContainer.innerHTML = '';
+
+    if (existingInput) {
+        signContainer.appendChild(existingInput);
+    }
+
+    if (signatureData) {
+        const img = document.createElement('img');
+        img.src = signatureData;
+        img.alt = 'Verified by signature';
+        img.style.maxHeight = '60px';
+        img.style.maxWidth = '100%';
+        img.style.objectFit = 'contain';
+        signContainer.appendChild(img);
+    } else {
+        const placeholder = document.createElement('span');
+        placeholder.className = 'text-[10px] font-bold uppercase tracking-widest text-gray-300';
+        placeholder.textContent = 'No signature added';
+        signContainer.appendChild(placeholder);
+    }
+};
+
+window.toggleVerifiedSignatureControls = function() {
+    const requestedBtn = document.getElementById('requestedByAddSignatureBtn');
+    const verifiedBtn = document.getElementById('verifiedByAddSignatureBtn');
+    const verifiedInput = document.getElementById('verifiedByInput');
+    const agmBtn = document.getElementById('agmDecisionAddSignatureBtn');
+    const agmInput = document.getElementById('agmDecisionInput');
+    const decApproved = document.getElementById('decApproved');
+    const decDisapproved = document.getElementById('decDisapproved');
+
+    const mode = new URLSearchParams(window.location.search).get('mode') || '';
+    const isReviewMode = mode === 'review';
+    const isRevisionMode = mode === 'revision';
+    const userDept = sessionStorage.getItem('userDept') || '';
+    const isVerifier = userDept === 'VERIFIER' || userDept === 'TSSO VERIFIER';
+    const isAgm = userDept === 'AGM' || userDept === 'AGM Approver';
+    const isRequestor = userDept === 'TSSO';
+
+    const canUseRequestedSignature = !isReviewMode && !isRevisionMode && isRequestor;
+    const canUseVerifiedSignature = !isReviewMode && !isRevisionMode && isVerifier;
+    const canUseAgmDecisionSignature = isReviewMode && isAgm;
+    const canEditDecisionCheckboxes = isReviewMode && isAgm && !isRevisionMode;
+
+    if (requestedBtn) {
+        requestedBtn.style.display = canUseRequestedSignature ? 'inline-flex' : 'none';
+    }
+
+    if (verifiedBtn) {
+        verifiedBtn.style.display = canUseVerifiedSignature ? 'inline-flex' : 'none';
+    }
+
+    if (agmBtn) {
+        agmBtn.style.display = canUseAgmDecisionSignature ? 'inline-flex' : 'none';
+    }
+
+    if (verifiedInput) {
+        verifiedInput.style.display = 'none';
+        verifiedInput.disabled = !canUseVerifiedSignature;
+    }
+
+    if (agmInput) {
+        agmInput.style.display = 'none';
+        agmInput.disabled = !canUseAgmDecisionSignature;
+    }
+
+    if (decApproved) {
+        decApproved.disabled = !canEditDecisionCheckboxes;
+        decApproved.style.cursor = decApproved.disabled ? 'not-allowed' : '';
+    }
+
+    if (decDisapproved) {
+        decDisapproved.disabled = !canEditDecisionCheckboxes;
+        decDisapproved.style.cursor = decDisapproved.disabled ? 'not-allowed' : '';
     }
 };
 
@@ -1610,7 +1731,7 @@ window.getFormData = function() {
         });
     });
 
-    formData.requestedBySign = document.querySelector('#requestedBySign img')?.src || '';
+    formData.requestedBySign = document.getElementById('actualSignatureImg')?.src || '';
 
     return formData;
 };
@@ -1618,6 +1739,9 @@ window.getFormData = function() {
 window.setFormData = function(data) {
     window.isDataLoaded = true; // Flag para pigilan ang initUserInfo
     for (const id in data) {
+        // Huwag isama ang signature container o input sa loop para hindi ma-overwrite ang HTML structure nito
+        if (id === 'requestedBySign' || id === 'requestedByInput') continue;
+
         const el = document.getElementById(id);
         if (el) {
             if (el.type === 'checkbox') el.checked = data[id];
@@ -1632,14 +1756,23 @@ window.setFormData = function(data) {
     }
 
     // 2. Restore Signature
-    if (data.requestedBySign) {
-        const container = document.getElementById('requestedBySign');
-        if (container) {
-            // Linisin ang container (alisin ang 'Add Signature' button sa preview)
-            container.innerHTML = ''; 
+    const container = document.getElementById('requestedBySign');
+    if (container) {
+        // Linisin ang lumang image para hindi mag-duplicate
+        const oldImg = container.querySelector('img');
+        if (oldImg) oldImg.remove();
+
+        // Siguraduhin na ang file input ay nandoon pa rin (protection against accidental clearing)
+        let existingInput = container.querySelector('input[type="file"]');
+        if (!existingInput) {
+            container.insertAdjacentHTML('afterbegin', '<input type="file" id="requestedByInput" accept="image/*" style="display: none;" onchange="handleSignatureUpload(this, \'requestedBySign\')">');
+        }
+
+        if (data.requestedBySign) {
             const img = document.createElement('img');
             img.src = data.requestedBySign;
-            img.style.maxHeight = '60px';
+            img.id = "actualSignatureImg";
+            img.style.maxHeight = '80px';
             img.style.maxWidth = '100%';
             img.style.objectFit = 'contain';
             container.appendChild(img);
@@ -1686,6 +1819,43 @@ window.setFormData = function(data) {
     recalc(); // Recalculate totals after setting data
     document.querySelectorAll('textarea').forEach(window.initAutoResize); // Adjust textarea heights
 };
+
+/* ════════════════════════════════════════
+   FORM INITIALIZATION
+════════════════════════════════════════ */
+function initUserInfo() {
+    // 1. Siguraduhin na hindi mag-a-auto fill kung nasa Review Mode (URL check)
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('mode') === 'review') return;
+
+    // 2. Huwag i-overwrite kung may data na kaming ni-load (isDataLoaded flag)
+    if (window.isDataLoaded) return;
+
+    const userName = sessionStorage.getItem('userName');
+    const userDept = sessionStorage.getItem('userDept');
+    const userRole = sessionStorage.getItem('userRole');
+
+    if (userName) {
+        const empNameInput = document.getElementById('empName');
+        if (empNameInput) empNameInput.value = userName;
+        const reqNameDiv = document.getElementById('requestedByName');
+        if (reqNameDiv) reqNameDiv.textContent = userName.toUpperCase();
+    }
+    if (userDept) {
+        const deptInput = document.getElementById('dept');
+        if (deptInput) deptInput.value = userDept;
+    }
+
+    // Update designation logic
+    let displayRole = userRole || 'USER';
+    if (userDept === 'TSSO') displayRole = 'System Support Engineer';
+    if (userDept === 'VERIFIER') displayRole = 'Verifier';
+
+    const desigInput = document.getElementById('designation');
+    if (desigInput) desigInput.value = displayRole;
+    const reqRoleDiv = document.getElementById('requestedByRole');
+    if (reqRoleDiv) reqRoleDiv.textContent = displayRole;
+}
 
 /* Shared confirm modal */
 window.showConfirm = function(title, message) {
@@ -1810,36 +1980,6 @@ function attachBtaEvents() {
     document.querySelectorAll('.bta-page textarea').forEach(window.initAutoResize);
 }
 
-function initUserInfo() {
-    // Huwag i-overwrite kung may data na kaming ni-load (Review Mode)
-    if (window.isDataLoaded) return;
-
-    const userName = sessionStorage.getItem('userName');
-    const userDept = sessionStorage.getItem('userDept');
-    const userRole = sessionStorage.getItem('userRole');
-
-    if (userName) {
-        const empNameInput = document.getElementById('empName');
-        if (empNameInput) empNameInput.value = userName;
-        const reqNameDiv = document.getElementById('requestedByName');
-        if (reqNameDiv) reqNameDiv.textContent = userName.toUpperCase();
-    }
-    if (userDept) {
-        const deptInput = document.getElementById('dept');
-        if (deptInput) deptInput.value = userDept;
-    }
-
-    // Update designation: Use "System Support Engineer" for TSSO users instead of "USER"
-    let displayRole = userRole || 'USER';
-    if (userDept === 'TSSO') displayRole = 'System Support Engineer';
-    if (userDept === 'VERIFIER') displayRole = 'Verifier';
-
-    const desigInput = document.getElementById('designation');
-    if (desigInput) desigInput.value = displayRole;
-    const reqRoleDiv = document.getElementById('requestedByRole');
-    if (reqRoleDiv) reqRoleDiv.textContent = displayRole;
-}
-
 function applyAccessControl() {
     const userDept = sessionStorage.getItem('userDept');
     // Restricted for TSSO / Requestor
@@ -1857,9 +1997,23 @@ function applyAccessControl() {
             const el = document.getElementById(id);
             if (el) {
                 el.disabled = true;
+                el.checked = false;
                 el.style.cursor = 'not-allowed';
             }
         });
+
+        const mode = new URLSearchParams(window.location.search).get('mode') || '';
+        if (mode === 'revision' || mode === '') {
+            const revisionOnlyIds = ['ceoApproved', 'ceoDisapproved'];
+            revisionOnlyIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.disabled = true;
+                    el.checked = false;
+                    el.style.cursor = 'not-allowed';
+                }
+            });
+        }
 
         const promissoryCheck = document.querySelector('.promissory-box input[type="checkbox"]');
         if (promissoryCheck) {
@@ -2125,6 +2279,7 @@ async function pdrResetForm() {
 ════════════════════════════════════════ */
 window.addEventListener('load', () => {
     // BTA init
+    toggleVerifiedSignatureControls();
     initUserInfo();
     applyAccessControl();
     attachBtaEvents();

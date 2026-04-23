@@ -40,11 +40,15 @@
         </div>
 
         <nav class="flex-grow space-y-2">
-            <a href="#" class="flex items-center gap-4 px-5 py-3 rounded-xl bg-white/10 text-white font-medium tracking-wide">
+            <a href="#" id="navVerificationQueue" class="nav-link flex items-center gap-4 px-5 py-3 rounded-xl bg-white/10 text-white font-medium tracking-wide">
                 <svg class="w-5 h-5 text-gold-ltd" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
                 VERIFICATION QUEUE
             </a>
-            <a href="#" class="flex items-center gap-4 px-5 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-all tracking-wide">
+            <a href="#" id="navReturnedRequests" class="nav-link flex items-center gap-4 px-5 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-all tracking-wide">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 15v-1a4 4 0 00-4-4H8m0 0l3 3m-3-3l3-3m9 14V5a2 2 0 00-2-2H6a2 2 0 00-2 2v16l4-2 4 2 4-2 4 2z"></path></svg>
+                RETURNED REQUESTS
+            </a>
+            <a href="#" id="navReviewHistory" class="nav-link flex items-center gap-4 px-5 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-all tracking-wide">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 REVIEW HISTORY
             </a>
@@ -89,8 +93,8 @@
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-5">
                     <div class="p-3 bg-green-50 text-green-600 rounded-2xl"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
                     <div>
-                        <p class="text-[10px] font-bold text-gray-400 tracking-widest uppercase leading-none mb-1">Verified Today</p>
-                        <p class="text-3xl font-bold">8</p>
+                        <p class="text-[10px] font-bold text-gray-400 tracking-widest uppercase leading-none mb-1">Total Verified</p>
+                        <p id="verifiedTodayCount" class="text-3xl font-bold">0</p>
                     </div>
                 </div>
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-5">
@@ -103,7 +107,7 @@
             </div>
 
             <!-- Verification Queue Table -->
-            <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
+            <div id="verificationQueueSection" class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
                 <div class="px-8 py-6 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
                     <div>
                         <h3 class="text-xl font-bold tracking-tight uppercase">Incoming Requests for Verification</h3>
@@ -132,6 +136,36 @@
                     </table>
                 </div>
             </div>
+
+            <!-- Returned Requests Section -->
+            <div id="returnedRequestsSection" class="hidden bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
+                <div class="px-8 py-6 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
+                    <div>
+                        <h3 class="text-xl font-bold tracking-tight uppercase">Returned / For Revision Tracking</h3>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Requests currently sent back to requestors or resubmitted for review.</p>
+                    </div>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50 text-[10px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">
+                            <tr>
+                                <th class="px-8 py-4">Request ID</th>
+                                <th class="px-8 py-4">Requestor</th>
+                                <th class="px-8 py-4">Document Type</th>
+                                <th class="px-8 py-4">Return Date</th>
+                                <th class="px-8 py-4">Status</th>
+                                <th class="px-8 py-4 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="returnedQueueBody" class="divide-y divide-gray-50 text-sm">
+                            <tr><td colspan="6" class="text-center py-10 uppercase text-gray-400 font-bold text-xs tracking-widest">No returned items found.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="reviewHistorySection" class="hidden p-20 text-center uppercase text-gray-400 font-bold text-xs tracking-widest bg-white rounded-[2.5rem] border border-gray-100">History Module Coming Soon</div>
         </div>
     </main>
 
@@ -153,7 +187,22 @@
             <!-- LEFT SIDE: Verification Checklist (Fixed Width) -->
             <div class="w-[450px] border-r border-gray-100 overflow-y-auto p-8 custom-scrollbar bg-gray-50/30 flex flex-col gap-8">
                 <div class="space-y-6">
-                    <h4 class="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-4">Verification Checklist</h4>
+                    <!-- Requestor Justification (Visible only if resubmitted) -->
+                    <div id="resubmissionInfo" class="hidden p-5 bg-amber-50 rounded-2xl border border-amber-200 shadow-sm space-y-3">
+                        <h4 class="text-[10px] font-bold text-amber-700 uppercase tracking-widest flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 18 0 0118 0z"></path></svg>
+                            Requestor Explanation
+                        </h4>
+                        <p id="displayJustification" class="text-xs text-amber-900 font-medium leading-relaxed italic break-words whitespace-pre-wrap"></p>
+                    </div>
+
+                    <div id="reviewChecklistPanel" class="p-5 bg-white rounded-2xl border border-gray-100 shadow-sm space-y-3">
+                        <h4 class="text-xs font-bold text-maroon-ltd uppercase tracking-widest flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                            Review Checklist
+                        </h4>
+                        <div id="reviewChecklistItems" class="space-y-3"></div>
+                    </div>
                     
                     <!-- Section 1 -->
                     <div class="p-5 bg-white rounded-2xl border border-gray-100 shadow-sm">
@@ -184,6 +233,10 @@
                                 <input type="checkbox" class="mt-1 w-4 h-4 accent-maroon-ltd">
                                 <span class="text-xs text-gray-600 font-medium group-hover:text-black transition-colors">Requestor's digital signature is present.</span>
                             </label>
+                            <label class="flex items-start gap-3 cursor-pointer group">
+                                <input type="checkbox" class="mt-1 w-4 h-4 accent-maroon-ltd">
+                                <span class="text-xs text-gray-600 font-medium group-hover:text-black transition-colors">All supporting documents are present.</span>
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -202,12 +255,25 @@
             </div>
 
             <!-- RIGHT SIDE: Document Preview (Iframe) -->
-            <div class="flex-1 bg-gray-200 p-6 overflow-hidden flex flex-col relative">
+            <div class="flex-1 bg-gray-200 p-6 overflow-y-auto flex flex-col gap-4 relative custom-scrollbar">
                 <div class="absolute top-10 right-10 z-10 flex gap-2">
                     <span class="bg-white/90 backdrop-blur px-4 py-2 rounded-xl border border-gray-200 shadow-sm text-[10px] font-bold text-maroon-ltd uppercase tracking-widest">Preview Mode (Read-Only)</span>
                 </div>
-                <div class="bg-white rounded-2xl shadow-2xl flex-1 overflow-hidden">
-                    <iframe id="reviewFrame" src="about:blank" class="w-full h-full border-none"></iframe>
+                <div class="bg-white rounded-2xl shadow-2xl flex-none overflow-hidden min-h-[70vh]">
+                    <iframe id="reviewFrame" src="about:blank" class="w-full border-none block" style="height: 70vh;"></iframe>
+                </div>
+                <div id="reviewAttachmentsPanel" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex-none">
+                    <div class="flex items-center justify-between gap-4 mb-4">
+                        <div>
+                            <h4 class="text-[10px] font-bold text-maroon-ltd uppercase tracking-widest flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                Proof / Attachments
+                            </h4>
+                            <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Files attached by the requestor</p>
+                        </div>
+                        <span id="attachmentsCount" class="px-3 py-1 rounded-full bg-gray-100 text-gray-500 text-[10px] font-bold uppercase tracking-widest">0 Files</span>
+                    </div>
+                    <div id="displayAttachments" class="grid grid-cols-1 gap-3"></div>
                 </div>
             </div>
         </div>
@@ -242,6 +308,54 @@
                 verifierAvatarEl.textContent = initials.substring(0, 2);
             }
 
+            // --- NAVIGATION LOGIC ---
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = {
+                verification: document.getElementById('verificationQueueSection'),
+                returned: document.getElementById('returnedRequestsSection'),
+                history: document.getElementById('reviewHistorySection')
+            };
+
+            function hideAllSections() {
+                Object.values(sections).forEach(s => s.classList.add('hidden'));
+                navLinks.forEach(l => {
+                    l.classList.remove('bg-white/10', 'text-white', 'font-medium');
+                    l.classList.add('text-white/70');
+                    l.querySelector('svg')?.classList.remove('text-gold-ltd');
+                });
+            }
+
+            function setActiveNav(navId, sectionKey) {
+                hideAllSections();
+                const nav = document.getElementById(navId);
+                nav.classList.add('bg-white/10', 'text-white', 'font-medium');
+                nav.classList.remove('text-white/70');
+                nav.querySelector('svg')?.classList.add('text-gold-ltd');
+                sections[sectionKey].classList.remove('hidden');
+            }
+
+            document.getElementById('navVerificationQueue').onclick = (e) => {
+                e.preventDefault();
+                setActiveNav('navVerificationQueue', 'verification');
+                document.querySelector('header h2').textContent = 'VERIFIER DASHBOARD';
+            };
+
+            document.getElementById('navReturnedRequests').onclick = (e) => {
+                e.preventDefault();
+                setActiveNav('navReturnedRequests', 'returned');
+                document.querySelector('header h2').textContent = 'RETURNED REQUESTS';
+                loadReturnedRequestsQueue();
+            };
+
+            document.getElementById('navReviewHistory').onclick = (e) => {
+                e.preventDefault();
+                setActiveNav('navReviewHistory', 'history');
+                document.querySelector('header h2').textContent = 'REVIEW HISTORY';
+            };
+
+            // Default
+            setActiveNav('navVerificationQueue', 'verification');
+
             // Logout Logic
             const logoutBtn = document.getElementById('logoutBtn');
             if (logoutBtn) {
@@ -260,7 +374,78 @@
             }
 
             loadVerificationQueue();
+            loadReturnedRequestsCount();
+            loadVerifiedTodayCount();
         });
+
+        // Custom Alert Modal Helper
+        window.showAlertModal = function(title, message) {
+            return new Promise((resolve) => {
+                const alertModal = document.createElement('div');
+                alertModal.className = 'fixed inset-0 z-[10001] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all duration-300';
+                alertModal.innerHTML = `
+                    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full transform transition-all scale-95 opacity-0" id="alertContent">
+                        <div class="p-6 text-center">
+                            <div class="w-16 h-16 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 18 0 0118 0z"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900 tracking-tight mb-2 uppercase font-oswald">${title}</h3>
+                            <p class="text-gray-500 text-sm leading-relaxed mb-6">${message}</p>
+                            <button id="alertOkBtn" class="w-full px-4 py-3 text-xs font-bold bg-maroon-ltd text-white hover:bg-black transition-colors rounded-xl uppercase tracking-widest shadow-lg shadow-maroon-ltd/20">OK</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(alertModal);
+                requestAnimationFrame(() => {
+                    const content = document.getElementById('alertContent');
+                    if (content) content.classList.remove('scale-95', 'opacity-0');
+                });
+                const close = () => {
+                    alertModal.classList.add('opacity-0');
+                    setTimeout(() => alertModal.remove(), 300);
+                    resolve(true);
+                };
+                document.getElementById('alertOkBtn').onclick = close;
+                alertModal.addEventListener('click', (e) => {
+                    if (e.target === alertModal) close();
+                });
+            });
+        };
+
+        // Custom Confirmation Modal Helper
+        window.showConfirm = function(title, message) {
+            return new Promise((resolve) => {
+                const confirmModal = document.createElement('div');
+                confirmModal.className = 'fixed inset-0 z-[10001] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all duration-300';
+                confirmModal.innerHTML = `
+                    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full transform transition-all scale-95 opacity-0" id="confirmContent">
+                        <div class="p-6 text-center">
+                            <div class="w-16 h-16 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900 tracking-tight mb-2 uppercase font-oswald">${title}</h3>
+                            <p class="text-gray-500 text-sm leading-relaxed mb-6">${message}</p>
+                            <div class="flex gap-3">
+                                <button id="confirmCancelBtn" class="flex-1 px-4 py-3 text-xs font-bold text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-colors border border-gray-100 rounded-xl uppercase tracking-widest">Cancel</button>
+                                <button id="confirmProceedBtn" class="flex-1 px-4 py-3 text-xs font-bold bg-maroon-ltd text-white hover:bg-black transition-colors rounded-xl uppercase tracking-widest shadow-lg shadow-maroon-ltd/20">Confirm Return</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(confirmModal);
+                requestAnimationFrame(() => {
+                    const content = document.getElementById('confirmContent');
+                    if (content) content.classList.remove('scale-95', 'opacity-0');
+                });
+                const close = (result) => {
+                    confirmModal.classList.add('opacity-0');
+                    setTimeout(() => confirmModal.remove(), 300);
+                    resolve(result);
+                };
+                document.getElementById('confirmCancelBtn').onclick = () => close(false);
+                document.getElementById('confirmProceedBtn').onclick = () => close(true);
+            });
+        };
 
         function loadVerificationQueue() {
             const tbody = document.getElementById('verificationQueueBody');
@@ -268,7 +453,7 @@
 
             const q = query(
                 collection(db, "submissions"), 
-                where("status", "in", ["pending", "returned", "viewed"]), 
+                where("status", "in", ["pending", "viewed"]), 
                 orderBy("submittedAt", "desc")
             );
 
@@ -283,6 +468,11 @@
                 } else {
                     snap.forEach(docSnap => {
                         const data = docSnap.data();
+
+                        // Client-side filter: Pakita lang ang mga WALANG justification (Truly New)
+                        // Ang mga MERONG justification ay sa "Returned Requests" tab na lilitaw.
+                        if (data.requestorJustification && data.requestorJustification !== "") return;
+
                         const date = data.submittedAt?.toDate ? data.submittedAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ' • ' + data.submittedAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Processing...';
                         
                         if (data.status === 'pending' || data.status === 'viewed') pendingCount++;
@@ -328,8 +518,186 @@
             });
         }
 
+        function loadReturnedRequestsCount() {
+            const returnedCountEl = document.getElementById('returnedCount');
+            if (!returnedCountEl) return;
+
+            const q = query(
+                collection(db, "submissions"),
+                where("status", "in", ["pending", "returned", "viewed"]),
+                orderBy("updatedAt", "desc")
+            );
+
+            onSnapshot(q, (snap) => {
+                const filteredDocs = snap.docs.filter(d => {
+                    const data = d.data();
+                    return data.status === 'returned' ||
+                           ((data.status === 'pending' || data.status === 'viewed') && data.requestorJustification && data.requestorJustification !== "");
+                });
+
+                returnedCountEl.textContent = filteredDocs.length;
+            }, (err) => {
+                console.error("Returned count load error:", err);
+                returnedCountEl.textContent = '0';
+            });
+        }
+
+        function loadVerifiedTodayCount() {
+            const verifiedTodayCountEl = document.getElementById('verifiedTodayCount');
+            if (!verifiedTodayCountEl) return;
+
+            onSnapshot(collection(db, "submissions"), (snap) => {
+                const totalVerified = snap.docs.filter(docSnap => {
+                    const data = docSnap.data();
+                    return data.status === 'verified';
+                });
+
+                verifiedTodayCountEl.textContent = String(totalVerified.length);
+            }, (err) => {
+                console.error("Verified count load error:", err);
+                verifiedTodayCountEl.textContent = '0';
+            });
+        }
+
+        function loadReturnedRequestsQueue() {
+            const tbody = document.getElementById('returnedQueueBody');
+            if (!tbody) return;
+
+            // Query for:
+            // 1. Items currently 'returned'
+            // 2. Items that were resubmitted (pending but has justification)
+            const q = query(
+                collection(db, "submissions"), 
+                where("status", "in", ["pending", "returned", "viewed"]), 
+                orderBy("updatedAt", "desc")
+            );
+
+            onSnapshot(q, (snap) => {
+                tbody.innerHTML = '';
+                const filteredDocs = snap.docs.filter(d => {
+                    const data = d.data();
+                    return data.status === 'returned' || 
+                           ((data.status === 'pending' || data.status === 'viewed') && data.requestorJustification && data.requestorJustification !== "");
+                });
+
+                if (filteredDocs.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-10 uppercase text-gray-400 font-bold text-xs tracking-widest">No returned or resubmitted requests found.</td></tr>';
+                } else {
+                    filteredDocs.forEach(docSnap => {
+                        const data = docSnap.data();
+                        const ts = data.returnedAt || data.updatedAt || data.submittedAt;
+                        const date = ts?.toDate ? ts.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Processing...';
+                        
+                        const initials = data.requestorName ? data.requestorName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0,2) : '??';
+                        
+                        let statusBadge = '';
+                        if (data.status === 'returned') {
+                            statusBadge = '<span class="px-3 py-1 bg-red-50 text-red-600 rounded-full text-[9px] font-bold uppercase">Awaiting Revision</span>';
+                        } else {
+                            statusBadge = '<span class="px-3 py-1 bg-amber-50 text-amber-600 rounded-full text-[9px] font-bold uppercase">Resubmitted</span>';
+                        }
+
+                        tbody.innerHTML += `
+                            <tr class="hover:bg-gray-50/80 transition-colors group">
+                                <td class="px-8 py-5 font-mono text-xs text-maroon-ltd font-bold">${data.requestId}</td>
+                                <td class="px-8 py-5">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-gray-100 text-maroon-ltd flex items-center justify-center font-bold text-[10px]">${initials}</div>
+                                        <div>
+                                            <p class="font-bold text-gray-900 uppercase text-xs">${data.requestorName}</p>
+                                            <p class="text-[10px] text-gray-400 uppercase">${data.department} Dept.</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-5 font-bold text-xs uppercase text-gray-600">
+                                    ${data.templateName}
+                                    <p class="text-[9px] text-gray-400 font-normal italic mt-1 truncate max-w-[200px]">${data.requestorJustification || ''}</p>
+                                </td>
+                                <td class="px-8 py-5 text-gray-500 text-xs">${date}</td>
+                                <td class="px-8 py-5">${statusBadge}</td>
+                                <td class="px-8 py-5 text-center">
+                                    <button onclick="openReviewPanel('${docSnap.id}', '${data.requestId}', '${data.requestorName}')" 
+                                            class="${data.status === 'viewed' ? 'bg-orange-500 hover:bg-orange-600' : 'bg-maroon-ltd hover:bg-black'} text-white px-6 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all shadow-md">
+                                        ${data.status === 'viewed' ? 'Continue Review' : 'Review Changes'}
+                                    </button>
+                                </td>
+                            </tr>`;
+                    });
+                }
+            }, (err) => {
+                console.error("Returned load error:", err);
+                if (err.message.includes("requires an index")) {
+                    const urlMatch = err.message.match(/https:\/\/console\.firebase\.google\.com[^\s]*/);
+                    tbody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-red-500 font-bold text-xs">INDEX REQUIRED: <a href="${urlMatch[0]}" target="_blank" class="underline">Create Index</a></td></tr>`;
+                }
+            });
+        }
+
         let currentDocID = null;
         let currentRequestID = null;
+        let currentVerifierSignature = '';
+
+        const renderVerifierSignaturePreview = (signatureData) => {
+            const previewWrap = document.getElementById('verifierSignaturePreview');
+            const statusEl = document.getElementById('verifierSignatureStatus');
+            if (!previewWrap || !statusEl) return;
+
+            if (signatureData) {
+                previewWrap.innerHTML = `<img src="${signatureData}" alt="Verifier signature preview" class="max-h-24 w-full object-contain rounded-xl border border-gray-200 bg-white p-2">`;
+                statusEl.textContent = 'Signature ready for approval';
+                statusEl.className = 'text-[10px] font-bold uppercase tracking-widest text-green-600';
+            } else {
+                previewWrap.innerHTML = '<div class="w-full min-h-20 flex items-center justify-center rounded-xl border border-dashed border-gray-200 bg-gray-50 px-4 py-6 text-center"><p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">No verifier signature added yet.</p></div>';
+                statusEl.textContent = 'No signature uploaded';
+                statusEl.className = 'text-[10px] font-bold uppercase tracking-widest text-gray-400';
+            }
+        };
+
+        window.handleVerifierSignatureUpload = function(input) {
+            if (!input.files || !input.files[0]) return;
+
+            const file = input.files[0];
+            if (file.size > 500000) {
+                alert('Image is too large. Please upload a smaller signature image (below 500KB).');
+                input.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                currentVerifierSignature = e.target.result;
+                renderVerifierSignaturePreview(currentVerifierSignature);
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.handleVerifierSignatureUploadFromFrame = function(input) {
+            if (!input || !input.files || !input.files[0]) return;
+
+            const file = input.files[0];
+            if (file.size > 500000) {
+                alert('Image is too large. Please upload a smaller signature image (below 500KB).');
+                input.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                currentVerifierSignature = e.target.result;
+                renderVerifierSignaturePreview(currentVerifierSignature);
+
+                const frame = document.getElementById('reviewFrame');
+                const frameWin = frame?.contentWindow;
+                if (frameWin && frameWin.setVerifiedBySignature) {
+                    frameWin.setVerifiedBySignature(
+                        currentVerifierSignature,
+                        sessionStorage.getItem('userName') || 'Verifier',
+                        sessionStorage.getItem('userDept') === 'TSSO VERIFIER' ? 'Technical Verifier' : 'Verifier'
+                    );
+                }
+            };
+            reader.readAsDataURL(file);
+        };
 
         window.openReviewPanel = async function(docID, reqID, requestorName) {
             currentDocID = docID;
@@ -343,6 +711,13 @@
             if (remarksArea) remarksArea.value = '';
             document.querySelectorAll('#reviewPanel input[type="checkbox"]').forEach(cb => cb.checked = false);
             
+            // Resubmission Info UI reset
+            const resubInfo = document.getElementById('resubmissionInfo');
+            const justText = document.getElementById('displayJustification');
+            const attachCont = document.getElementById('displayAttachmentsContainer');
+            if (resubInfo) resubInfo.classList.add('hidden');
+            if (attachCont) attachCont.classList.add('hidden');
+            
             // Load Document into Iframe
             const frame = document.getElementById('reviewFrame');
             frame.src = 'about:blank';
@@ -354,6 +729,13 @@
                 if (snap.exists()) {
                     const data = snap.data();
 
+                    if (data.status === 'returned') {
+                        await window.showAlertModal(
+                            'Awaiting Revision',
+                            'The requestor has not resubmitted yet. This is view-only mode while waiting for the resubmission.'
+                        );
+                    }
+
                     // I-update ang status sa 'viewed' kapag binuksan ng verifier ang request (at kung pending pa ito)
                     if (data.status === 'pending') {
                         await updateDoc(docRef, {
@@ -363,6 +745,115 @@
                         });
                         console.log(`Request ${reqID} is now marked as VIEWED`);
                     }
+
+                    // Ipakita ang Justification kung mayroon
+                    if (data.requestorJustification) {
+                        if (justText) justText.textContent = `"${data.requestorJustification}"`;
+                        if (resubInfo) resubInfo.classList.remove('hidden');
+                    }
+
+                    currentVerifierSignature = data.verifierSignature || data.verifiedBySignature || data.verifiedBySign || '';
+                    renderVerifierSignaturePreview(currentVerifierSignature);
+
+                    // RENDER ATTACHMENTS/PROOF ON RIGHT SIDE UNDER THE TEMPLATE
+                    const attachmentsPanel = document.getElementById('reviewAttachmentsPanel');
+                    const attachmentsList = document.getElementById('displayAttachments');
+                    const attachmentsCount = document.getElementById('attachmentsCount');
+                    const rawAttachments = [
+                        ...(Array.isArray(data.proofUrls) ? data.proofUrls : []),
+                        ...(Array.isArray(data.supportingDocs) ? data.supportingDocs : [])
+                    ];
+
+                    const proofFiles = rawAttachments
+                        .filter(Boolean)
+                        .map((file, index) => {
+                            if (typeof file === 'string') {
+                                return {
+                                    url: file,
+                                    name: `Attachment ${index + 1}`
+                                };
+                            }
+
+                            return {
+                                url: file.url || file.secure_url || '',
+                                name: file.name || file.original_filename || `Attachment ${index + 1}`
+                            };
+                        })
+                        .filter(file => file.url || file.name)
+                        .map((file) => {
+                            const fileName = (file.name || '').toLowerCase();
+                            const fileUrl = (file.url || '').toLowerCase();
+                            const combined = `${fileName} ${fileUrl}`;
+                            const extension = (file.name || '').includes('.') ? (file.name || '').split('.').pop().toLowerCase() : '';
+                            const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?|$)/i.test(combined);
+                            const isPdf = /\.(pdf)(\?|$)/i.test(combined);
+                            const isCloudinaryFile = /res\.cloudinary\.com/i.test(file.url || '');
+                            const previewImageUrl = !isImage && isCloudinaryFile && file.url
+                                ? file.url.replace('/upload/', '/upload/pg_1,f_jpg,q_auto,w_1200/')
+                                : '';
+
+                            return {
+                                ...file,
+                                isImage,
+                                isPdf,
+                                extension,
+                                previewImageUrl
+                            };
+                        });
+
+                    if (attachmentsPanel && attachmentsList && attachmentsCount) {
+                        attachmentsCount.textContent = `${proofFiles.length} File${proofFiles.length === 1 ? '' : 's'}`;
+                        attachmentsPanel.classList.remove('hidden');
+
+                        if (proofFiles.length > 0) {
+                            attachmentsList.innerHTML = proofFiles.map((file, index) => `
+                                <div class="bg-gray-50 border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+                                    <div class="flex items-center justify-between gap-3 px-4 py-3 border-b border-gray-200 bg-white">
+                                        <div class="min-w-0 flex items-center gap-3">
+                                            <svg class="w-5 h-5 text-maroon-ltd shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.364 6.364a4 4 0 105.656 5.656l6.364-6.364a4 4 0 00-5.656-5.656l-1.272 1.272"></path></svg>
+                                            <div class="min-w-0">
+                                                <p class="text-xs font-bold text-gray-900 uppercase tracking-wide break-words">${file.name || `Attachment ${index + 1}`}</p>
+                                                <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">${file.isImage ? 'Image preview' : file.previewImageUrl ? 'Document preview' : (file.url ? 'Preview unavailable' : 'Attached file')}</p>
+                                            </div>
+                                        </div>
+                                        ${file.url ? `<a href="${file.url}" target="_blank" rel="noopener noreferrer" class="shrink-0 px-3 py-2 rounded-xl bg-maroon-ltd text-white text-[10px] font-bold uppercase tracking-widest hover:bg-black transition-colors">Open</a>` : ''}
+                                    </div>
+
+                                    <div class="p-4">
+                                        ${file.url ? (
+                                            file.isImage
+                                                ? `<img src="${file.url}" alt="${file.name || `Attachment ${index + 1}`}" class="w-full max-h-[500px] object-contain rounded-xl border border-gray-200 bg-white">`
+                                                : file.previewImageUrl
+                                                    ? `<div class="rounded-xl border border-gray-200 bg-white overflow-hidden">
+                                                            <img src="${file.previewImageUrl}" alt="${file.name || `Attachment ${index + 1}`}" class="w-full max-h-[700px] object-contain bg-white" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
+                                                            <div class="hidden flex items-center justify-center min-h-[220px] text-center p-6">
+                                                                <div>
+                                                                    <p class="text-xs font-bold text-gray-700 uppercase tracking-widest">Preview unavailable for this file</p>
+                                                                    <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-2">Use the Open button to view the original file</p>
+                                                                </div>
+                                                            </div>
+                                                       </div>`
+                                                    : `<div class="flex items-center justify-center min-h-[180px] rounded-xl border border-dashed border-gray-300 bg-white text-center p-6">
+                                                            <div>
+                                                                <p class="text-xs font-bold text-gray-700 uppercase tracking-widest">Preview not available for .${file.extension || 'file'}</p>
+                                                                <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-2">Inline preview is available only when the file can be rendered as an image preview</p>
+                                                            </div>
+                                                       </div>`
+                                        ) : `
+                                            <div class="flex items-center justify-center min-h-[180px] rounded-xl border border-dashed border-gray-300 bg-white text-center p-6">
+                                                <div>
+                                                    <p class="text-xs font-bold text-gray-700 uppercase tracking-widest">Attached file</p>
+                                                    <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-2">No preview URL available</p>
+                                                </div>
+                                            </div>
+                                        `}
+                                    </div>
+                                </div>
+                            `).join('');
+                        } else {
+                            attachmentsList.innerHTML = '<p class="text-center text-gray-400 italic py-4 uppercase text-[10px] font-bold tracking-widest">No proof / attachment files attached.</p>';
+                        }
+                    }
                     
                     // Siguraduhing tama ang path at i-set ang mode bilang review para hindi ma-overwrite ang pangalan ng requestor
                     frame.src = '../BTAF.html?mode=review';
@@ -371,12 +862,26 @@
                         if (frame.contentWindow && frame.contentWindow.setFormData) {
                             // I-set ang flag sa loob ng iframe bago i-load ang data
                             frame.contentWindow.isDataLoaded = true;
-                            frame.contentWindow.setFormData(data.formData);
+                            
+                            // --- ROBUST FALLBACK FOR METADATA ---
+                            const fd = data.formData || {};
+                            if (!fd.requestedByName && data.requestorName) fd.requestedByName = data.requestorName;
+                            if (!fd.empName && data.requestorName) fd.empName = data.requestorName;
+                            if (!fd.dept && data.department) fd.dept = data.department;
+                            if (!fd.designation && data.department === 'TSSO') fd.designation = 'System Support Engineer';
+                            if (!fd.requestedByRole && data.department === 'TSSO') fd.requestedByRole = 'System Support Engineer';
+
+                            frame.contentWindow.setFormData(fd);
                             
                             // Lock the form (Read-Only)
                             const frameDoc = frame.contentDocument || frame.contentWindow.document;
                             const elements = frameDoc.querySelectorAll('input, textarea, select');
                             elements.forEach(el => {
+                                if (el.id === 'verifiedByInput') {
+                                    el.disabled = false;
+                                    return;
+                                }
+
                                 if (el.type === 'file' || el.type === 'checkbox' || el.type === 'radio' || el.tagName === 'SELECT') {
                                     el.disabled = true;
                                 } else {
@@ -384,8 +889,55 @@
                                 }
                             });
                             
-                            // Hide "No-Print" buttons inside template
-                            frameDoc.querySelectorAll('.no-print').forEach(el => el.style.display = 'none');
+                            // Hide "No-Print" buttons inside template, but keep the verifier signature button visible
+                            frameDoc.querySelectorAll('.no-print').forEach(el => {
+                                if (el.id !== 'verifiedByAddSignatureBtn') {
+                                    el.style.display = 'none';
+                                }
+                            });
+
+                            const verifiedBySign = frameDoc.getElementById('verifiedBySign');
+                            const verifiedByName = frameDoc.getElementById('verifiedByName');
+                            const verifiedByRole = frameDoc.getElementById('verifiedByRole');
+                            if (verifiedByName) verifiedByName.textContent = sessionStorage.getItem('userName') || 'Verifier';
+                            if (verifiedByRole) verifiedByRole.textContent = userDept === 'TSSO VERIFIER' ? 'Technical Verifier' : 'Verifier';
+
+                            if (verifiedBySign) {
+                                verifiedBySign.innerHTML = '';
+                                if (currentVerifierSignature) {
+                                    const img = document.createElement('img');
+                                    img.src = currentVerifierSignature;
+                                    img.alt = 'Verifier signature';
+                                    img.style.maxHeight = '60px';
+                                    img.style.maxWidth = '100%';
+                                    img.style.objectFit = 'contain';
+                                    verifiedBySign.appendChild(img);
+                                } else {
+                                    verifiedBySign.innerHTML = '<span class="text-[10px] font-bold uppercase tracking-widest text-gray-300">No signature added</span>';
+                                }
+                            }
+
+                            // Auto-fit the iframe height so the whole file is visible in preview mode
+                            const fitReviewFrame = () => {
+                                try {
+                                    const docEl = frame.contentDocument?.documentElement;
+                                    const body = frame.contentDocument?.body;
+                                    const contentHeight = Math.max(
+                                        body?.scrollHeight || 0,
+                                        body?.offsetHeight || 0,
+                                        docEl?.scrollHeight || 0,
+                                        docEl?.offsetHeight || 0
+                                    );
+                                    if (contentHeight > 0) {
+                                        frame.style.height = `${contentHeight + 40}px`;
+                                    }
+                                } catch (e) {
+                                    console.warn('Unable to auto-fit review frame height:', e);
+                                }
+                            };
+
+                            setTimeout(fitReviewFrame, 200);
+                            setTimeout(fitReviewFrame, 700);
                         }
                     };
                 }
@@ -400,6 +952,8 @@
         window.closeReviewPanel = function() {
             document.getElementById('reviewPanel').classList.add('translate-x-full');
             document.getElementById('reviewFrame').src = 'about:blank';
+            currentVerifierSignature = '';
+            renderVerifierSignaturePreview('');
         }
 
         window.handleReturnForRevision = async function() {
@@ -407,40 +961,78 @@
             
             // Validation: Remarks are required so the requestor knows what to fix
             if (!remarks) {
-                alert("FEEDBACK REQUIRED: Please provide remarks explaining why this request is being returned so the requestor can make the necessary corrections.");
+                await window.showAlertModal(
+                    'Feedback Required',
+                    'Please provide remarks explaining why this request is being returned so the requestor can make the necessary corrections.'
+                );
                 document.getElementById('verifierRemarks').focus();
                 return;
             }
 
-            const confirmed = confirm(`Are you sure you want to return Request ${currentRequestID} for revision?`);
+            const confirmed = await window.showConfirm('Return for Revision', `Are you sure you want to return Request ${currentRequestID} to the requestor for corrections?`);
+            
             if (confirmed) {
-                // Simulated logic: This is where you would update Firestore status to 'returned'
                 try {
                     const docRef = doc(db, "submissions", currentDocID);
                     await updateDoc(docRef, {
                         status: 'returned',
                         verifierRemarks: remarks,
+                        returnedAt: serverTimestamp(),
                         updatedAt: serverTimestamp()
                     });
-                    alert(`Request ${currentRequestID} has been returned to the requestor.`);
                     closeReviewPanel();
-                } catch (e) { console.error(e); }
+                    console.log(`Request ${currentRequestID} returned successfully.`);
+                } catch (e) { console.error("Return error:", e); alert("Failed to return request."); }
             }
         }
 
         window.handleApproveRequest = async function() {
-            const confirmed = confirm(`Approve Request ${currentRequestID}? This will forward it to the next department.`);
-            if (confirmed) {
-                try {
-                    const docRef = doc(db, "submissions", currentDocID);
-                    await updateDoc(docRef, {
-                        status: 'verified', // Next status after verification
-                        verifiedAt: serverTimestamp()
-                    });
-                    alert(`Request ${currentRequestID} marked as VERIFIED.`);
-                    closeReviewPanel();
-                } catch (e) { console.error(e); }
+            const frame = document.getElementById('reviewFrame');
+            const frameWin = frame?.contentWindow;
+            const frameDoc = frame?.contentDocument || frameWin?.document;
+            const verifiedBySign = frameDoc?.getElementById('verifiedBySign');
+            const verifiedByImg = verifiedBySign?.querySelector('img');
+
+            if (!currentVerifierSignature || !verifiedByImg) {
+                await window.showAlertModal(
+                    'Signature Required',
+                    'Please add your signature in the VERIFIED BY section of the document before approving this request.'
+                );
+
+                const verifiedByBtn = frameDoc?.getElementById('verifiedByAddSignatureBtn');
+                if (verifiedByBtn) verifiedByBtn.focus();
+                return;
             }
+
+            const verifierRemarks = document.getElementById('verifierRemarks')?.value.trim() || '';
+            const verifierChecklist = Array.from(document.querySelectorAll('#reviewChecklistPanel input[type="checkbox"]:checked'))
+                .map((checkbox) => {
+                    const label = checkbox.closest('label');
+                    const labelText = label?.querySelector('span')?.textContent?.trim() || label?.textContent?.trim() || '';
+                    return labelText.replace(/\s+/g, ' ').trim();
+                })
+                .filter(Boolean);
+
+            const confirmed = await window.showConfirm('Approve Request', `Approve Request ${currentRequestID}? This will forward it to the AGM Approver queue.`);
+            if (!confirmed) return;
+
+            try {
+                const docRef = doc(db, "submissions", currentDocID);
+                await updateDoc(docRef, {
+                    status: 'verified',
+                    verifiedAt: serverTimestamp(),
+                    verifiedByName: sessionStorage.getItem('userName') || 'Verifier',
+                    verifiedByDept: sessionStorage.getItem('userDept') || 'VERIFIER',
+                    verifiedByRole: sessionStorage.getItem('userDept') === 'TSSO VERIFIER' ? 'Technical Verifier' : 'Verifier',
+                    verifierSignature: currentVerifierSignature,
+                    verifiedBySignature: currentVerifierSignature,
+                    verifierRemarks,
+                    verifierChecklist,
+                    updatedAt: serverTimestamp()
+                });
+                await window.showAlertModal('Verified Successfully', `Request ${currentRequestID} marked as VERIFIED and forwarded to AGM Approver.`);
+                closeReviewPanel();
+            } catch (e) { console.error(e); }
         }
     </script>
 </body>
